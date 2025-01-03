@@ -339,6 +339,7 @@ create table sys_user
     username     varchar(64)             not null comment '用户账号',
     nickname     varchar(32)             not null comment '用户昵称',
     user_type    smallint     default 0  null comment '用户类型（00系统用户）',
+    job_code    varchar(128)  DEFAULT '' COMMENT '工号',
     email        varchar(128) default '' null comment '用户邮箱',
     phone_number varchar(18)  default '' null comment '手机号码',
     sex          smallint     default 0  null comment '用户性别（0男 1女 2未知）',

@@ -590,8 +590,7 @@ CREATE TABLE manage_user_notification (
 
 CREATE TABLE manage_sop_equipment (
     `sop_id` BIGINT,
-    `equipment_id` BIGINT,
-    `sop_id` BIGINT
+    `equipment_id` BIGINT
 );
 CREATE TABLE manage_emergency_equipment (
     `emergency_id` BIGINT,
@@ -631,4 +630,3 @@ CREATE TABLE `manage_door` (
   `deleted` TINYINT(1) DEFAULT 0 COMMENT '删除标志（0代表存在 1代表删除）',
   PRIMARY KEY (`door_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='门禁表';
-ALTER TABLE biology.sys_user ADD job_code varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '' NULL COMMENT '工号';
