@@ -1,0 +1,32 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "CodeGenerator",
+      "request": "launch",
+      "mainClass": "com.biology.infrastructure.mybatisplus.CodeGenerator",
+      "projectName": "biology-infrastructure",
+      "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=14545 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=biology-infrastructure"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-BiologyAdminApplication<biology-admin>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.biology.admin.BiologyAdminApplication",
+      "projectName": "biology-admin",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-RsaKeyPairGenerator<biology-infrastructure>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.biology.infrastructure.security.RsaKeyPairGenerator",
+      "projectName": "biology-infrastructure",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
