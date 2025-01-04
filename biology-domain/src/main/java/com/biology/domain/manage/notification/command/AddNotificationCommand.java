@@ -27,6 +27,8 @@ public class AddNotificationCommand {
     @Schema(description = "接受者ID,一般不设置")
     private Long receiverId;
 
+    private Long eventId;
+
     // @Schema(description = "创建者ID")
     // private Long creatorId;
 

@@ -45,6 +45,17 @@ public class MaterialsEntity extends BaseEntity<MaterialsEntity> {
     @TableField(value = "stock")
     private double stock;
 
+    @ApiModelProperty("当前入库量")
+    @TableField(value = "last_stock")
+    private double lastStock;
+
+    @ApiModelProperty("当前出库量")
+    @TableField(value = "out_stock")
+    private double outStock;
+
+    @TableField(value = "tag")
+    private String tag;
+
     @ApiModelProperty("单位")
     @TableField(value = "unit")
     private String unit;

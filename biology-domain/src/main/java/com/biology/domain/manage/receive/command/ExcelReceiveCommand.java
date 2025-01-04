@@ -20,5 +20,8 @@ public class ExcelReceiveCommand {
     private String materialName;
 
     @ExcelColumn(name = "领用数量")
-    private Integer receiveNum;
+    private double receiveNum;
+
+    @ExcelColumn(name = "领用说明")
+    private String receiveExplain;
 }

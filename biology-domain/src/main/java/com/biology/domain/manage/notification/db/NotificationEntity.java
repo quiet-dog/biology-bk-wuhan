@@ -27,13 +27,17 @@ public class NotificationEntity extends BaseEntity<NotificationEntity> {
     @TableId(value = "notification_id", type = IdType.AUTO)
     private Long notificationId;
 
-    @ApiModelProperty("标题") 
+    @ApiModelProperty("标题")
     @TableField(value = "notification_title")
     private String notificationTitle;
 
     @ApiModelProperty("内容")
-    @TableField(value = "notification_content") 
+    @TableField(value = "notification_content")
     private String notificationContent;
+
+    @ApiModelProperty("事件id")
+    @TableField("event_id")
+    private Long eventId;
 
     @ApiModelProperty("类型")
     @TableField(value = "notification_type")
@@ -42,7 +46,7 @@ public class NotificationEntity extends BaseEntity<NotificationEntity> {
     @ApiModelProperty("重要程度")
     @TableField(value = "importance")
     private Integer importance;
-    
+
     @ApiModelProperty("发送时间")
     @TableField(value = "send_time")
     private Date sendTime;

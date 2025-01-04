@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.admin.customize.aop.accessLog.AccessLog;
 import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
@@ -47,6 +48,7 @@ import com.biology.domain.manage.receive.query.ReceiveStockQuery;
 import com.biology.domain.manage.receive.query.ScreenReceiveMaterialsStockQuery;
 import com.biology.domain.system.user.command.AddUserCommand;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.ListUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -116,19 +118,21 @@ public class ReceiveController extends BaseController {
         for (ExcelReceiveCommand command : commands) {
             // receiveApplicationService.create(command);
             AddReceiveCommand a = new AddReceiveCommand();
-            MaterialsEntity entity = materialsService.getMaterialsByCode(command.getMaterialCode());
+            QueryWrapper<MaterialsEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("code", command.getMaterialCode());
+            MaterialsEntity entity = materialsService.getOne(queryWrapper);
             if (entity == null) {
-                throw new ApiException(Business.DEPT_EXIST_CHILD_DEPT_NOT_ALLOW_DELETE, "s");
+                throw new ApiException(Business.MAT_SERVICE_UNAVAILABLE, command.getMaterialCode());
             }
-            a.setMaterialsId(a.getMaterialsId());
-            a.setReceiveNum(command.getReceiveNum());
 
             PersonnelEntity personnelEntity = personnelService.getPersonnelByCode(command.getReceiverCode());
             if (personnelEntity == null) {
-                throw new ApiException(Business.DEPT_EXIST_CHILD_DEPT_NOT_ALLOW_DELETE, "s");
+                throw new ApiException(Business.RECEIVER_SERVICE_UNAVAILABLE, command.getReceiverCode());
             }
             a.setReceiveUserId(personnelEntity.getPersonnelId());
             a.setReceiveNum(command.getReceiveNum());
+            a.setReceiveExplain(a.getReceiveExplain());
+            a.setMaterialsId(entity.getMaterialsId());
             addReceiveCommands.add(a);
         }
         for (AddReceiveCommand command : addReceiveCommands) {

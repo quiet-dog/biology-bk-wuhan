@@ -34,6 +34,9 @@ public class NotificationDTO {
     @Schema(description = "读取状态")
     private Integer readStatus;
 
+    @Schema(description = "事件Id")
+    private Long eventId;
+
     @Schema(description = "读取时间")
     private Date readTime;
 

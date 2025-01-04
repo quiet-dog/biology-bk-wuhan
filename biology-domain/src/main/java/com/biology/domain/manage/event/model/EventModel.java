@@ -103,6 +103,7 @@ public class EventModel extends EventEntity {
         } else {
             command.setNotificationType("提醒");
         }
+        command.setEventId(getEventId());
         command.setNotificationContent(eventDTO.getDescription());
         command.setNotificationTitle(eventDTO.getLevel());
         command.setImportance(2);

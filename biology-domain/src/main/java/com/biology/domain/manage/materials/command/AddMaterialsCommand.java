@@ -34,9 +34,21 @@ public class AddMaterialsCommand {
     @ExcelColumn(name = "物料类型")
     private String type;
 
-    @Schema(description = "库存量")
-    @ExcelColumn(name = "库存量")
+    @Schema(description = "入库量")
+    @ExcelColumn(name = "入库量")
     private double stock;
+
+    @Schema(description = "物料标签")
+    @ExcelColumn(name = "物料标签")
+    private String tag;
+
+    @ApiModelProperty("当前入库量")
+    // @ExcelColumn(name = "当前入库量")
+    private double lastStock;
+
+    // @ApiModelProperty("当前出库量")
+    // @TableField(value = "out_stock")
+    // private double outStock;
 
     @Schema(description = "单位")
     @ExcelColumn(name = "单位")

@@ -232,6 +232,8 @@ public enum ErrorCode implements ErrorCodeInterface {
         DOWNLOAD_SUBMIT_RECEIVE_FAILED(10518, "提交失败：{}", "Business.DOWNLOAD_SUBMIT_RECEIVE_FAILED"),
         VIDERO_CHANNEL_OPERATION(10519, "通道已经离线", "Business.UNSUPPORTED_OPERATION"),
         KOALA_SERVICE_UNAVAILABLE(10520, "考拉服务不可用,{}", "Business.KOALA_SERVICE_UNAVAILABLE"),
+        MAT_SERVICE_UNAVAILABLE(10521, "物料不存在,{}", "Business.MAT_SERVICE_UNAVAILABLE"),
+        RECEIVER_SERVICE_UNAVAILABLE(10522, "领用人不存在,{}", "Business.RECEIVER_SERVICE_UNAVAILABLE"),
         ;
 
         private final int code;

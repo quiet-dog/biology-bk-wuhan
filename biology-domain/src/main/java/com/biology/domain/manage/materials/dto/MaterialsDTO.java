@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.biology.common.annotation.ExcelColumn;
 import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.db.MaterialsValueEntity;
 
@@ -40,6 +41,18 @@ public class MaterialsDTO {
     @ApiModelProperty("库存量")
     @Schema(description = "库存量")
     private double stock;
+
+    @ApiModelProperty("物料标签")
+    @Schema(description = "物料标签")
+    private String tag;
+
+    @ApiModelProperty("当前入库量")
+    @ExcelColumn(name = "当前入库量")
+    private double lastStock;
+
+    @ApiModelProperty("当前出库量")
+    @ExcelColumn(name = "当前出库量")
+    private double outStock;
 
     @ApiModelProperty("单位")
     @Schema(description = "单位")

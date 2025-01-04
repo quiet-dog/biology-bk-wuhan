@@ -122,6 +122,7 @@ public class MaterialsController extends BaseController {
                     updateMaterialsCommand.setUnit(materialsEntity.getUnit());
                     updateMaterialsCommand.setMaterialsId(materialsEntity.getMaterialsId());
                     updateMaterialsCommand.setStock(materialsEntity.getStock() + command.getStock());
+                    updateMaterialsCommand.setLastStock(command.getStock());
                     materialsApplicationService.updateMaterials(updateMaterialsCommand);
                 } else {
                     materialsApplicationService.addMaterials(command);
