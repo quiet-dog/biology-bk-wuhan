@@ -30,6 +30,7 @@ import com.biology.domain.manage.environment.query.EnvironmentQuery;
 import com.biology.domain.manage.event.EventApplicationService;
 import com.biology.domain.manage.event.command.AddEventCommand;
 import com.biology.domain.manage.event.command.UpdateEventCommand;
+import com.biology.domain.manage.event.dto.AllEventEchartDTO;
 import com.biology.domain.manage.event.dto.AreaStatisticsDTO;
 import com.biology.domain.manage.event.dto.EnvironmentStockEchart;
 import com.biology.domain.manage.event.dto.EventDTO;
@@ -210,4 +211,23 @@ public class EventController extends BaseController {
     public ResponseDTO<EventEchartOneDTO> getAreaStatisticsTotal(StatisticsQuery query) {
         return ResponseDTO.ok(eventApplicationService.getAreaStatisticsTotal(query));
     }
+
+    @Operation(summary = "数据大屏根据获取不同类型的全部报警数量")
+    @GetMapping("/getAllEventEchart")
+    public ResponseDTO<List<AllEventEchartDTO>> getAllEventEchart() {
+        return ResponseDTO.ok(eventApplicationService.getAllEventEchart());
+    }
+
+    @Operation(summary = "数据大屏根据获取不同类型的全部报警数量")
+    @GetMapping("/getAllEquipmentAreaEchart")
+    public ResponseDTO<List<AllEventEchartDTO>> getAllEquipmentAreaEchart() {
+        return ResponseDTO.ok(eventApplicationService.getAllEquipmentAreaEchart());
+    }
+
+    @Operation(summary = "数据大屏根据获取不同类型的全部报警数量")
+    @GetMapping("/getAllEnvironmentAreaEchart")
+    public ResponseDTO<List<AllEventEchartDTO>> getAllEnvironmentAreaEchart() {
+        return ResponseDTO.ok(eventApplicationService.getAllEnvironmentAreaEchart());
+    }
+
 }

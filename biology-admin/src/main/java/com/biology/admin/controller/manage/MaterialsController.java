@@ -29,10 +29,12 @@ import com.biology.common.exception.error.ErrorCode.Internal;
 import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.materials.MaterialsApplicationService;
 import com.biology.domain.manage.materials.command.AddMaterialsCommand;
+import com.biology.domain.manage.materials.command.AddStockCommand;
 import com.biology.domain.manage.materials.command.UpdateMaterialsCommand;
 import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.db.MaterialsService;
 import com.biology.domain.manage.materials.dto.MaterialsDTO;
+import com.biology.domain.manage.materials.dto.NormalDTO;
 import com.biology.domain.manage.materials.dto.StockEchatDTO;
 import com.biology.domain.manage.materials.query.SearchMaterialsQuery;
 import com.biology.domain.manage.task.query.TaskStockQuery;
@@ -149,6 +151,18 @@ public class MaterialsController extends BaseController {
     public ResponseDTO<StockEchatDTO> stockMaterials(
             @PathVariable(value = "materialsId", required = false) Long materialsId, TaskStockQuery dateType) {
         return ResponseDTO.ok(materialsApplicationService.stockMaterials(materialsId, dateType.getDayType()));
+    }
+
+    @Operation(summary = "首页正常不正常统计")
+    @GetMapping("/getAllNormal")
+    public ResponseDTO<NormalDTO> getAllNormal() {
+        return ResponseDTO.ok(materialsService.getAllNormal());
+    }
+
+    @Operation(summary = "添加库存")
+    @PostMapping("/addStock")
+    public ResponseDTO<Void> AddStock(@RequestBody AddStockCommand command) {
+        return ResponseDTO.ok(materialsApplicationService.AddStock(command));
     }
 
 }

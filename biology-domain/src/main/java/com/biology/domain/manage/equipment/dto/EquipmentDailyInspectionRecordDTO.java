@@ -1,5 +1,6 @@
 package com.biology.domain.manage.equipment.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +27,9 @@ public class EquipmentDailyInspectionRecordDTO {
 
     @Schema(description = "巡检人员")
     private String inspector;
+
+    @Schema(description = "巡检结果")
+    private String inspectionResult;
 
     @Schema(description = "异常数")
     private Integer anomalyCount;

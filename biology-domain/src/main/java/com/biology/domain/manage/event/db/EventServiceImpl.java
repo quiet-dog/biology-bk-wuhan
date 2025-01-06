@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.biology.common.utils.time.DatePickUtil;
+import com.biology.domain.manage.event.dto.AllEventEchartDTO;
 import com.biology.domain.manage.event.dto.AreaStatisticsDTO;
 import com.biology.domain.manage.event.dto.EnvironmentStock;
 import com.biology.domain.manage.event.dto.EnvironmentStockEchart;
@@ -373,6 +374,18 @@ public class EventServiceImpl extends ServiceImpl<EventMapper, EventEntity> impl
             eDto.getData().add(a.getCount());
         }
         return eDto;
+    }
+
+    public List<AllEventEchartDTO> getAllEventEchart() {
+        return baseMapper.getAllEventEchart();
+    }
+
+    public List<AllEventEchartDTO> getAllEquipmentAreaEchart() {
+        return baseMapper.getAllEquipmentAreaEchart();
+    }
+
+    public List<AllEventEchartDTO> getAllEnvironmentAreaEchart() {
+        return baseMapper.getAllEnvironmentAreaEchart();
     }
 
 }

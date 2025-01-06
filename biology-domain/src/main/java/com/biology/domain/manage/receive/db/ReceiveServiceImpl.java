@@ -139,35 +139,51 @@ public class ReceiveServiceImpl extends ServiceImpl<ReceiveMapper, ReceiveEntity
             }
         }
         List<Double> productionValue = new ArrayList<>();
-        List<Double> researchValue = new ArrayList<>();
+        // List<Double> researchValue = new ArrayList<>();
+        List<Double> maintenanceValue = new ArrayList<>();
+        List<Double> experimentValue = new ArrayList<>();
+        List<Double> cleanValue = new ArrayList<>();
         List<Double> otherValue = new ArrayList<>();
 
         for (String s : result.getXData()) {
             Double other = 0.0;
             Double production = 0.0;
-            Double research = 0.0;
+            // Double research = 0.0;
+            Double maintenance = 0.0;
+            Double experiment = 0.0;
+            Double clean = 0.0;
             for (ReceiveMaterialsStockDTO r : list) {
                 if (s.equals(r.getName())) {
                     String receiveExplain = r.getReceiveExplain();
                     if (receiveExplain == null) {
                         other += r.getCount();
-                    } else if (receiveExplain.equals("生产领用")) {
+                    } else if (receiveExplain.equals("维修用量")) {
+                        maintenance = r.getCount();
+                    } else if (receiveExplain.equals("实验用量")) {
+                        experiment = r.getCount();
+                    } else if (receiveExplain.equals("清洁用量")) {
+                        clean = r.getCount();
+                    } else if (receiveExplain.equals("生产用量")) {
                         production = r.getCount();
-                    } else if (receiveExplain.equals("研发领用")) {
-                        research = r.getCount();
                     } else {
                         other += r.getCount();
                     }
                 }
             }
-            researchValue.add(research);
+            // researchValue.add(research);
             productionValue.add(production);
+            maintenanceValue.add(maintenance);
+            experimentValue.add(experiment);
+            cleanValue.add(clean);
             otherValue.add(other);
         }
 
         result.setProductionData(productionValue);
-        result.setResearchData(researchValue);
+        // result.setResearchData(researchValue);
         result.setOtherData(otherValue);
+        result.setMaintenanceData(maintenanceValue);
+        result.setExperimentData(experimentValue);
+        result.setCleanData(cleanValue);
         return result;
     }
 

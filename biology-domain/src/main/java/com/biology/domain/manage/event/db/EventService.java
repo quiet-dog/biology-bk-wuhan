@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.biology.domain.manage.event.dto.AllEventEchartDTO;
 import com.biology.domain.manage.event.dto.AreaStatisticsDTO;
 import com.biology.domain.manage.event.dto.EnvironmentStock;
 import com.biology.domain.manage.event.dto.EnvironmentStockEchart;
@@ -35,4 +36,10 @@ public interface EventService extends IService<EventEntity> {
     public EnvironmentStockEchart getEnvironmentEventById(EnvironmentEventQuery query);
 
     EventEchartOneDTO getAreaStatisticsTotal(StatisticsQuery query);
+
+    public List<AllEventEchartDTO> getAllEventEchart();
+
+    public List<AllEventEchartDTO> getAllEquipmentAreaEchart();
+
+    public List<AllEventEchartDTO> getAllEnvironmentAreaEchart();
 }

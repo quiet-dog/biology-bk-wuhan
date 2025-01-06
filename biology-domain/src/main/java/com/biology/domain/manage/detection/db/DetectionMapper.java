@@ -139,7 +139,7 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
         public List<PowerDTO> getHistoryWaterByTypeMonth();
 
         @Select("SELECT DATE_FORMAT(create_time, '%m') AS time,SUM(water_value) as data FROM manage_environment_detection"
-                        + " WHERE YEAR(create_time) = YEAR(CURDATE())"
+                        + " WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
                         + " GROUP BY MONTH(create_time)"
                         + " ORDER BY MONTH(create_time)")
         public List<PowerDTO> getHistoryWaterByTypeYear();
@@ -163,7 +163,7 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
         public List<PowerDTO> getHistoryElectricityByTypeMonth();
 
         @Select("SELECT DATE_FORMAT(create_time, '%m') AS time,SUM(electricity_value) as data FROM manage_environment_detection"
-                        + " WHERE YEAR(create_time) = YEAR(CURDATE())"
+                        + " WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
                         + " GROUP BY DATE_FORMAT(create_time, '%m')"
                         + " ORDER BY DATE_FORMAT(create_time, '%m')")
         public List<PowerDTO> getHistoryElectricityByTypeYear();
@@ -200,13 +200,13 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
 
         @Select("SELECT e.e_area AS time,SUM(d.water_value) as data FROM manage_environment_detection as d"
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
-                        + " WHERE YEAR(d.create_time) = YEAR(CURDATE())"
+                        + " WHERE d.create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
                         + " GROUP BY e.e_area")
         public List<PowerDTO> getHistoryWaterByAreaYear();
 
         @Select("SELECT e.e_area AS time,SUM(d.electricity_value) as data FROM manage_environment_detection as d"
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
-                        + " WHERE YEAR(d.create_time) = YEAR(CURDATE())"
+                        + " WHERE d.create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
                         + " GROUP BY e.e_area")
         public List<PowerDTO> getHistoryElectricityByAreaYear();
 

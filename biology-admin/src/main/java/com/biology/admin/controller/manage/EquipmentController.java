@@ -20,6 +20,8 @@ import com.biology.domain.manage.equipment.command.UpdateEquipmentCommand;
 import com.biology.domain.manage.equipment.dto.EquipmentDTO;
 import com.biology.domain.manage.equipment.model.EquipmentModel;
 import com.biology.domain.manage.equipment.query.SearchEquipmentQuery;
+import com.biology.domain.manage.event.dto.EventDTO;
+import com.biology.domain.manage.event.query.EventSearch;
 
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.StrUtil;
@@ -151,4 +153,10 @@ public class EquipmentController extends BaseController {
         return ResponseDTO.ok();
     }
 
+    @Operation(summary = "设备档案列表导出")
+    @GetMapping("/excel")
+    public void exportUserByExcel(HttpServletResponse response, SearchEquipmentQuery query) {
+        PageDTO<EquipmentDTO> userList = equipmentApplicationService.getEquipmentList(query);
+        CustomExcelUtil.writeToResponse(userList.getRows(), EquipmentDTO.class, response);
+    }
 }

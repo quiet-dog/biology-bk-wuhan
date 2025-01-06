@@ -1,9 +1,16 @@
 package com.biology.domain.manage.equipment.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.biology.domain.manage.equipment.command.AddEquipmentDailyInspectionRecordCommand;
 import com.biology.domain.manage.equipment.command.UpdateEquipmentDailyInspectionRecordCommand;
 import com.biology.domain.manage.equipment.db.EquipmentDailyInspectionRecordEntity;
 import com.biology.domain.manage.equipment.db.EquipmentDailyInspectionRecordService;
+import com.biology.domain.manage.notification.command.AddNotificationCommand;
+import com.biology.domain.manage.notification.db.NotificationEntity;
+import com.biology.domain.manage.notification.db.NotificationService;
+
 import cn.hutool.core.bean.BeanUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,14 +23,21 @@ public class EquipmentDailyInspectionRecordModel extends EquipmentDailyInspectio
 
     private EquipmentDailyInspectionRecordService equipmentDailyInspectionRecordService;
 
+    private NotificationService notificationService;
+
+    private List<Long> inspectorIds;
+
     public EquipmentDailyInspectionRecordModel(
-            EquipmentDailyInspectionRecordService equipmentDailyInspectionRecordService) {
+            EquipmentDailyInspectionRecordService equipmentDailyInspectionRecordService,
+            NotificationService notificationService) {
         this.equipmentDailyInspectionRecordService = equipmentDailyInspectionRecordService;
+        this.notificationService = notificationService;
     }
 
     public EquipmentDailyInspectionRecordModel(EquipmentDailyInspectionRecordEntity entity,
-            EquipmentDailyInspectionRecordService equipmentDailyInspectionRecordService) {
-        this(equipmentDailyInspectionRecordService);
+            EquipmentDailyInspectionRecordService equipmentDailyInspectionRecordService,
+            NotificationService notificationService) {
+        this(equipmentDailyInspectionRecordService, notificationService);
         if (entity != null) {
             BeanUtil.copyProperties(entity, this);
         }
@@ -41,8 +55,32 @@ public class EquipmentDailyInspectionRecordModel extends EquipmentDailyInspectio
         }
     }
 
+    // 发送通知
+
+    public boolean sendNotification() {
+        AddNotificationCommand command = new AddNotificationCommand();
+        List<NotificationEntity> notificationEntities = new ArrayList<>();
+        for (Long inspectorId : getInspectorIds()) {
+            command.setReceiverId(inspectorId);
+            command.setImportance(2);
+            command.setNotificationType("提醒");
+            command.setNotificationTitle("任务提醒");
+            command.setInspectionRecordId(getRecordId());
+            command.setNotificationContent(getTaskDescription());
+            NotificationEntity notificationEntity = new NotificationEntity();
+            BeanUtil.copyProperties(command, notificationEntity);
+            notificationEntities.add(notificationEntity);
+        }
+        if (notificationEntities.size() > 0) {
+            notificationService.saveBatch(notificationEntities);
+        }
+        return true;
+    }
+
     public boolean insert() {
-        return super.insert();
+        super.insert();
+        sendNotification();
+        return true;
     }
 
     public boolean update() {

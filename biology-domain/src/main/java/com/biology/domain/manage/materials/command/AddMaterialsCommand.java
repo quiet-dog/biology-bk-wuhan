@@ -46,6 +46,10 @@ public class AddMaterialsCommand {
     // @ExcelColumn(name = "当前入库量")
     private double lastStock;
 
+    @ApiModelProperty("批次")
+    @ExcelColumn(name = "批次")
+    private String batch;
+
     // @ApiModelProperty("当前出库量")
     // @TableField(value = "out_stock")
     // private double outStock;

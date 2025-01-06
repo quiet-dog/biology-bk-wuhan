@@ -54,6 +54,9 @@ public class MaterialsDTO {
     @ExcelColumn(name = "当前出库量")
     private double outStock;
 
+    @ApiModelProperty("批次")
+    private String batch;
+
     @ApiModelProperty("单位")
     @Schema(description = "单位")
     private String unit;

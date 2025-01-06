@@ -265,7 +265,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
 
             // LocalDate currentDate = firstDayOfMonth;
         } else if (query.getDayType().equals("year")) {
-            result.setTime(DatePickUtil.getYearNow());
+            result.setTime(DatePickUtil.getYearNowBefore());
             List<PowerDTO> data = new ArrayList<>();
             if (query.getType().equals("电")) {
                 data = baseMapper.getHistoryElectricityByTypeYear();
@@ -275,7 +275,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
             for (String time : result.getTime()) {
                 boolean isExit = false;
                 for (PowerDTO p : data) {
-                    if (p.getTime().equals(time)) {
+                    if (time.contains(p.getTime())) {
                         result.getData().add(p.getData());
                         isExit = true;
                         break;

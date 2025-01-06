@@ -53,8 +53,13 @@ public class MaterialsEntity extends BaseEntity<MaterialsEntity> {
     @TableField(value = "out_stock")
     private double outStock;
 
+    @ApiModelProperty("标签")
     @TableField(value = "tag")
     private String tag;
+
+    @ApiModelProperty("批次")
+    @TableField(value = "batch")
+    private String batch;
 
     @ApiModelProperty("单位")
     @TableField(value = "unit")

@@ -40,15 +40,15 @@ public class EquipmentDataEntity extends BaseEntity<EquipmentDataEntity> {
     @TableField("remark")
     private String remark;
 
-    @Schema(description = " 创建时间")
-    @TableField("create_time")
-    private Date createTime;
+    // @Schema(description = " 创建时间")
+    // @TableField("create_time")
+    // private Date createTime;
 
-    @Schema(description = "更新时间")
-    @TableField("update_time")
-    private Date updateTime;
+    // @Schema(description = "更新时间")
+    // @TableField("update_time")
+    // private Date updateTime;
 
-    @Schema(description = "删除标志")
-    @TableField("deleted")
-    private Boolean deleted;
+    // @Schema(description = "删除标志")
+    // @TableField("deleted")
+    // private Boolean deleted;
 }

@@ -70,15 +70,15 @@ public class EquipmentEntity extends BaseEntity<EquipmentEntity> {
     @TableField("usage_status")
     private String usageStatus;
 
-    @ApiModelProperty("创建时间")
-    @TableField("create_time")
-    private Date createTime;
+    // @ApiModelProperty("创建时间")
+    // @TableField("create_time")
+    // private Date createTime;
 
-    @ApiModelProperty("更新时间")
-    @TableField("update_time")
-    private Date updateTime;
+    // @ApiModelProperty("更新时间")
+    // @TableField("update_time")
+    // private Date updateTime;
 
-    @ApiModelProperty("删除标志")
-    @TableField("deleted")
-    private Boolean deleted;
+    // @ApiModelProperty("删除标志")
+    // @TableField("deleted")
+    // private Boolean deleted;
 }

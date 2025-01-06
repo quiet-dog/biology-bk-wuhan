@@ -55,9 +55,9 @@ public class NotificationEntity extends BaseEntity<NotificationEntity> {
     @TableField(value = "receiver_id")
     private Long receiverId;
 
-    @ApiModelProperty("创建者ID")
-    @TableField(value = "creator_id")
-    private Long creatorId;
+    @ApiModelProperty("巡检任务ID")
+    @TableField(value = "inspection_record_id")
+    private Long inspectionRecordId;;
 
     @Override
     public Serializable pkVal() {

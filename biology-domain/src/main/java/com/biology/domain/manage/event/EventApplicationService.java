@@ -26,6 +26,7 @@ import com.biology.domain.manage.event.command.AddEventCommand;
 import com.biology.domain.manage.event.command.UpdateEventCommand;
 import com.biology.domain.manage.event.db.EventEntity;
 import com.biology.domain.manage.event.db.EventService;
+import com.biology.domain.manage.event.dto.AllEventEchartDTO;
 import com.biology.domain.manage.event.dto.AreaStatisticsDTO;
 import com.biology.domain.manage.event.dto.EnvironmentStockEchart;
 import com.biology.domain.manage.event.dto.EventDTO;
@@ -210,6 +211,7 @@ public class EventApplicationService {
                 setType("设备报警");
                 setData(new ArrayList<>());
                 setTimes(new ArrayList<>());
+                setRate(new ArrayList<>());
 
             }
         });
@@ -262,11 +264,17 @@ public class EventApplicationService {
                         if (weekStatisticsDTO.getType().equals(eventEchartDTO.getType())
                                 && weekStatisticsDTO.getDataTime() != null
                                 && weekStatisticsDTO.getDataTime().contains(date)) {
+                            if (weekStatisticsDTO.getType().equals("设备报警")) {
+                                eventEchartDTO.getRate().add(weekStatisticsDTO.getRate());
+                            }
                             eventEchartDTO.getData().add(weekStatisticsDTO.getCount());
                             isExit = true;
                         }
                     }
                     if (!isExit) {
+                        if (eventEchartDTO.getType().equals("设备报警")) {
+                            eventEchartDTO.getRate().add(0.0);
+                        }
                         eventEchartDTO.getData().add(0.0);
                     }
                 }
@@ -312,11 +320,17 @@ public class EventApplicationService {
                         if (weekStatisticsDTO.getType().equals(eventEchartDTO.getType())
                                 && weekStatisticsDTO.getDataTime() != null
                                 && weekStatisticsDTO.getDataTime().contains(date)) {
+                            if (eventEchartDTO.getType().equals("设备报警")) {
+                                eventEchartDTO.getRate().add(weekStatisticsDTO.getRate());
+                            }
                             eventEchartDTO.getData().add(weekStatisticsDTO.getCount());
                             isExit = true;
                         }
                     }
                     if (!isExit) {
+                        if (eventEchartDTO.getType().equals("设备报警")) {
+                            eventEchartDTO.getRate().add(0.0);
+                        }
                         eventEchartDTO.getData().add(0.0);
                     }
                 }
@@ -388,11 +402,17 @@ public class EventApplicationService {
                         if (weekStatisticsDTO.getType().equals(eventEchartDTO.getType())
                                 && weekStatisticsDTO.getDataTime() != null
                                 && weekStatisticsDTO.getDataTime().equals(date)) {
+                            if (eventEchartDTO.getType().equals("设备报警")) {
+                                eventEchartDTO.getRate().add(weekStatisticsDTO.getRate());
+                            }
                             eventEchartDTO.getData().add(weekStatisticsDTO.getCount());
                             isExit = true;
                         }
                     }
                     if (!isExit) {
+                        if (eventEchartDTO.getType().equals("设备报警")) {
+                            eventEchartDTO.getRate().add(0.0);
+                        }
                         eventEchartDTO.getData().add(0.0);
                     }
                 }
@@ -454,5 +474,17 @@ public class EventApplicationService {
 
     public EventEchartOneDTO getAreaStatisticsTotal(StatisticsQuery query) {
         return eventService.getAreaStatisticsTotal(query);
+    }
+
+    public List<AllEventEchartDTO> getAllEventEchart() {
+        return eventService.getAllEventEchart();
+    }
+
+    public List<AllEventEchartDTO> getAllEquipmentAreaEchart() {
+        return eventService.getAllEquipmentAreaEchart();
+    }
+
+    public List<AllEventEchartDTO> getAllEnvironmentAreaEchart() {
+        return eventService.getAllEnvironmentAreaEchart();
     }
 }

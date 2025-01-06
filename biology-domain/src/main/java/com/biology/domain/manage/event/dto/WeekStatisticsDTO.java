@@ -9,4 +9,6 @@ public class WeekStatisticsDTO {
     private String dataTime;
 
     private double count;
+
+    private double rate;
 }

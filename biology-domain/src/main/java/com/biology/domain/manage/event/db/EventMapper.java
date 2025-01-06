@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.biology.domain.manage.event.dto.AllEventEchartDTO;
 import com.biology.domain.manage.event.dto.AreaStatisticsDTO;
 import com.biology.domain.manage.event.dto.EnvironmentStock;
 import com.biology.domain.manage.event.dto.HistoryEventAll;
@@ -31,7 +32,9 @@ public interface EventMapper extends BaseMapper<EventEntity> {
                         + " ORDER BY type")
         public List<WeekStatisticsDTO> getYearStatistics();
 
-        @Select("SELECT type,DATE_FORMAT(create_time,'%Y-%m-%d')  as data_time , COUNT(*) AS count from manage_event"
+        @Select("SELECT type,DATE_FORMAT(create_time,'%Y-%m-%d')  as data_time , COUNT(*) AS count,"
+                        + " FORMAT((COUNT(DISTINCT equipment_id) / (SELECT COUNT(*) FROM manage_equipment)),2) as rate"
+                        + " from manage_event"
                         + " WHERE create_time >= CURDATE() - INTERVAL 1 MONTH AND create_time <= NOW()"
                         + " AND YEAR(create_time) = YEAR(CURDATE())"
                         + " GROUP BY type,DATE_FORMAT(create_time, '%Y-%m-%d')"
@@ -46,7 +49,9 @@ public interface EventMapper extends BaseMapper<EventEntity> {
                         + " ORDER BY type")
         public List<WeekStatisticsDTO> getNowMonthStatisticsDeviceName(String eventType);
 
-        @Select("SELECT type,DATE_FORMAT(create_time,'%Y-%m')  as data_time , COUNT(*) AS count from manage_event"
+        @Select("SELECT type,DATE_FORMAT(create_time,'%Y-%m')  as data_time , COUNT(*) AS count,"
+                        + " FORMAT((COUNT(DISTINCT equipment_id) / (SELECT COUNT(*) FROM manage_equipment)),2) as rate"
+                        + " from manage_event"
                         + " WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 11 MONTH)"
                         + "  AND create_time < LAST_DAY(CURDATE()) + INTERVAL 1 DAY"
                         + " GROUP BY type,DATE_FORMAT(create_time, '%Y-%m')"
@@ -61,7 +66,9 @@ public interface EventMapper extends BaseMapper<EventEntity> {
                         + " ORDER BY type,DATE_FORMAT(create_time, '%Y-%m')")
         public List<WeekStatisticsDTO> getNowYearStatisticsDeviceName(String eventType);
 
-        @Select("SELECT type,DATE_FORMAT(create_time,'%m-%d')  as data_time , COUNT(*) AS count from manage_event"
+        @Select("SELECT type,DATE_FORMAT(create_time,'%m-%d')  as data_time , COUNT(*) AS count,"
+                        + " FORMAT((COUNT(DISTINCT equipment_id) / (SELECT COUNT(*) FROM manage_equipment)),2) as rate"
+                        + " from manage_event"
                         + " WHERE create_time >= CURDATE() - INTERVAL 6 DAY"
                         + " GROUP BY type,DATE_FORMAT(create_time, '%m-%d')"
                         + " ORDER BY type")
@@ -168,7 +175,7 @@ public interface EventMapper extends BaseMapper<EventEntity> {
         // getEnvrionmentEventAllYear(@Param("description") String description);
 
         @Select("SELECT n.unit_name,COUNT(*) as count FROM manage_event e JOIN manage_environment n on n.environment_id = e.environment_id"
-                        + " WHERE YEAR(e.create_time) = YEAR(CURDATE())"
+                        + " WHERE  e.create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
                         + " GROUP BY n.unit_name")
         public List<EnvironmentStock> getEnvrionmentEventAllYear();
 
@@ -233,4 +240,17 @@ public interface EventMapper extends BaseMapper<EventEntity> {
                         + " GROUP BY COALESCE(q.installation_location, n.e_area)")
         public List<AreaStatisticsDTO> getAreaStatisticsYear();
 
+        @Select("SELECT type as name,COUNT(*) as value from manage_event"
+                        + " GROUP BY type")
+        public List<AllEventEchartDTO> getAllEventEchart();
+
+        @Select("SELECT q.installation_location as name, COUNT(*) as value FROM manage_event as e LEFT JOIN manage_equipment q ON q.equipment_id = e.equipment_id"
+                        + " WHERE e.equipment_id > 0"
+                        + " GROUP BY q.installation_location")
+        List<AllEventEchartDTO> getAllEquipmentAreaEchart();
+
+        @Select("SELECT q.e_area as name, COUNT(*) as value FROM manage_event as e LEFT JOIN manage_environment q ON q.environment_id = e.environment_id"
+                        + " WHERE e.environment_id > 0"
+                        + " GROUP BY q.e_area")
+        List<AllEventEchartDTO> getAllEnvironmentAreaEchart();
 }

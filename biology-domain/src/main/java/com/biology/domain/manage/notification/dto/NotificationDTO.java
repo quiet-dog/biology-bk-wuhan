@@ -37,6 +37,9 @@ public class NotificationDTO {
     @Schema(description = "事件Id")
     private Long eventId;
 
+    @Schema(description = "巡检记录ID")
+    private Long inspectionRecordId;
+
     @Schema(description = "读取时间")
     private Date readTime;
 

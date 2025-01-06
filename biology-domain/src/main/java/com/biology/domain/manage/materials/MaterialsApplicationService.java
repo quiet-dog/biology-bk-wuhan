@@ -12,10 +12,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.materials.command.AddMaterialsCommand;
+import com.biology.domain.manage.materials.command.AddStockCommand;
 import com.biology.domain.manage.materials.command.UpdateMaterialsCommand;
 import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.db.MaterialsService;
 import com.biology.domain.manage.materials.dto.MaterialsDTO;
+import com.biology.domain.manage.materials.dto.NormalDTO;
 import com.biology.domain.manage.materials.dto.StockEchatDTO;
 import com.biology.domain.manage.materials.model.MaterialsFactory;
 import com.biology.domain.manage.materials.model.MaterialsModel;
@@ -114,5 +116,17 @@ public class MaterialsApplicationService {
         // }
         // }
 
+    }
+
+    public NormalDTO getAllNormal() {
+        return materialsService.getAllNormal();
+    }
+
+    public Void AddStock(AddStockCommand command) {
+        MaterialsModel materialsModel = materialsFactory.loadById(command.getMaterialsId());
+        materialsModel.setStock(materialsModel.getStock() + command.getStock());
+        materialsModel.setLastStock(command.getStock());
+        materialsModel.updateById();
+        return null;
     }
 }

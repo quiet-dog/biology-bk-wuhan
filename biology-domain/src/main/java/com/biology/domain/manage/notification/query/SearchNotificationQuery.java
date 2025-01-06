@@ -3,6 +3,8 @@ package com.biology.domain.manage.notification.query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.core.page.AbstractPageQuery;
 import com.biology.domain.manage.notification.db.NotificationEntity;
+import com.biology.domain.system.user.db.SysUserEntity;
+import com.biology.domain.system.user.dto.UserDetailDTO;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Data;

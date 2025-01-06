@@ -1,12 +1,15 @@
 package com.biology.domain.manage.equipment.command;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Data
@@ -34,4 +37,10 @@ public class AddEquipmentDailyInspectionRecordCommand {
 
     @Schema(description = "巡检图片路径")
     private JsonNode inspectionImagePath;
+
+    @Schema(description = "巡检人员ID")
+    private List<Long> inspectorIds;
+
+    @ApiModelProperty("巡检结果")
+    private String inspectionResult;
 }

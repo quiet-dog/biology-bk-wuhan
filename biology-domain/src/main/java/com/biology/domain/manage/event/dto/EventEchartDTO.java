@@ -14,4 +14,6 @@ public class EventEchartDTO {
     private List<String> times;
 
     private List<Double> data;
+
+    private List<Double> rate;
 }
