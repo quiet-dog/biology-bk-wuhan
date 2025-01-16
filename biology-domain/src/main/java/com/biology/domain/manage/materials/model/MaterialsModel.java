@@ -11,6 +11,7 @@ import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.db.MaterialsService;
 import com.biology.domain.manage.materials.db.MaterialsValueEntity;
 import com.biology.domain.manage.materials.db.MaterialsValueService;
+import com.biology.domain.manage.materials.db.WarehouseService;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
@@ -30,16 +31,19 @@ public class MaterialsModel extends MaterialsEntity {
 
     private List<ValueCommand> values;
 
+    private WarehouseService warehouseService;
+
     public MaterialsModel(MaterialsService materialsService, MaterialsValueService materialsValueService,
-            EventService eventService) {
+            EventService eventService, WarehouseService warehouseService) {
         this.materialsService = materialsService;
         this.materialsValueService = materialsValueService;
         this.eventService = eventService;
+        this.warehouseService = warehouseService;
     }
 
     public MaterialsModel(MaterialsEntity entity, MaterialsService materialsService,
-            MaterialsValueService materialsValueService, EventService eventService) {
-        this(materialsService, materialsValueService, eventService);
+            MaterialsValueService materialsValueService, EventService eventService, WarehouseService warehouseService) {
+        this(materialsService, materialsValueService, eventService, warehouseService);
         if (entity != null) {
             BeanUtil.copyProperties(entity, this);
         }

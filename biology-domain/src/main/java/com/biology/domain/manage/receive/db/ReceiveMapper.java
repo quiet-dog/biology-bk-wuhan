@@ -77,10 +77,10 @@ public interface ReceiveMapper extends BaseMapper<ReceiveEntity> {
         public List<ReceiveMaterialsStockDTO> getReceiveStockMonthByNameType(@Param("id") Long id);
 
         // 获取物料每年每月的接收数量
-        @Select("SELECT SUM(receive_num) as count,receive_explain as materials_type,DATE_FORMAT(create_time, '%Y:%m') as data_time FROM manage_receive"
+        @Select("SELECT SUM(receive_num) as count,receive_explain as materials_type,DATE_FORMAT(create_time, '%Y-%m') as data_time FROM manage_receive"
                         + " WHERE materials_id = #{id}"
-                        + " AND YEAR(create_time) = YEAR(CURDATE())"
-                        + " GROUP BY DATE_FORMAT(create_time, '%Y:%m'),receive_explain"
+                        + " AND create_time >= DATE_SUB(CURDATE(), INTERVAL 11 MONTH) AND create_time < LAST_DAY(CURDATE()) + INTERVAL 1 DAY"
+                        + " GROUP BY DATE_FORMAT(create_time, '%Y-%m'),receive_explain"
                         + " ORDER BY receive_explain")
         public List<ReceiveMaterialsStockDTO> getReceiveStockYearByNameType(@Param("id") Long id);
 }

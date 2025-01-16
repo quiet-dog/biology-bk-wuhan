@@ -4,9 +4,11 @@ import org.springframework.stereotype.Service;
 import com.biology.domain.manage.equipment.command.AddEquipmentDailyInspectionRecordCommand;
 import com.biology.domain.manage.equipment.command.UpdateEquipmentDailyInspectionRecordCommand;
 import com.biology.domain.manage.equipment.dto.EquipmentDailyInspectionRecordDTO;
+import com.biology.domain.manage.equipment.dto.EquipmentDataStockEchartDTO;
 import com.biology.domain.manage.equipment.model.EquipmentDailyInspectionRecordFactory;
 import com.biology.domain.manage.equipment.model.EquipmentDailyInspectionRecordModel;
 import com.biology.domain.manage.equipment.query.SearchEquipmentDailyInspectionRecordQuery;
+import com.biology.domain.manage.event.query.AreaStatisticsQuery;
 
 import cn.hutool.core.collection.CollectionUtil;
 
@@ -39,7 +41,8 @@ public class EquipmentDailyInspectionRecordApplicationService {
     }
 
     public void updateDailyInspectionRecord(UpdateEquipmentDailyInspectionRecordCommand command) {
-        EquipmentDailyInspectionRecordModel recordModel = equipmentDailyInspectionRecordFactory.loadById(command.getRecordId());
+        EquipmentDailyInspectionRecordModel recordModel = equipmentDailyInspectionRecordFactory
+                .loadById(command.getRecordId());
         recordModel.loadUpdateCommand(command);
         recordModel.update();
     }
@@ -51,13 +54,16 @@ public class EquipmentDailyInspectionRecordApplicationService {
         }
     }
 
-    public PageDTO<EquipmentDailyInspectionRecordDTO> getDailyInspectionRecordList(SearchEquipmentDailyInspectionRecordQuery query) {
+    public PageDTO<EquipmentDailyInspectionRecordDTO> getDailyInspectionRecordList(
+            SearchEquipmentDailyInspectionRecordQuery query) {
         if (CollectionUtil.isNotEmpty(query.getIds())) {
             query.setPageNum(1);
             query.setPageSize(query.getIds().size());
         }
-        Page<EquipmentDailyInspectionRecordEntity> page = equipmentDailyInspectionRecordService.page(query.toPage(), query.toQueryWrapper());
-        List<EquipmentDailyInspectionRecordDTO> records = page.getRecords().stream().map(EquipmentDailyInspectionRecordDTO::new)
+        Page<EquipmentDailyInspectionRecordEntity> page = equipmentDailyInspectionRecordService.page(query.toPage(),
+                query.toQueryWrapper());
+        List<EquipmentDailyInspectionRecordDTO> records = page.getRecords().stream()
+                .map(EquipmentDailyInspectionRecordDTO::new)
                 .collect(Collectors.toList());
         return new PageDTO<>(records, page.getTotal());
     }
@@ -70,5 +76,8 @@ public class EquipmentDailyInspectionRecordApplicationService {
     private String generateSerialNumber() {
         return UUID.randomUUID().toString().replace("-", "");
     }
+
+    public EquipmentDataStockEchartDTO getCishu(AreaStatisticsQuery query) {
+        return equipmentDailyInspectionRecordService.getCishu(query);
+    }
 }
-    

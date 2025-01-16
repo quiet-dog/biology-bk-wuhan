@@ -138,10 +138,10 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
         public List<PowerDTO> getHistoryWaterByTypeMonth();
 
-        @Select("SELECT DATE_FORMAT(create_time, '%m') AS time,SUM(water_value) as data FROM manage_environment_detection"
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m') AS time,SUM(water_value) as data FROM manage_environment_detection"
                         + " WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
-                        + " GROUP BY MONTH(create_time)"
-                        + " ORDER BY MONTH(create_time)")
+                        + " GROUP BY DATE_FORMAT(create_time, '%Y-%m')"
+                        + " ORDER BY DATE_FORMAT(create_time, '%Y-%m')")
         public List<PowerDTO> getHistoryWaterByTypeYear();
 
         @Select("SELECT CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00') AS time,SUM(electricity_value) as data FROM manage_environment_detection"
@@ -162,10 +162,10 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
         public List<PowerDTO> getHistoryElectricityByTypeMonth();
 
-        @Select("SELECT DATE_FORMAT(create_time, '%m') AS time,SUM(electricity_value) as data FROM manage_environment_detection"
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m') AS time,SUM(electricity_value) as data FROM manage_environment_detection"
                         + " WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
-                        + " GROUP BY DATE_FORMAT(create_time, '%m')"
-                        + " ORDER BY DATE_FORMAT(create_time, '%m')")
+                        + " GROUP BY DATE_FORMAT(create_time, '%Y-%m')"
+                        + " ORDER BY DATE_FORMAT(create_time, '%Y-%m')")
         public List<PowerDTO> getHistoryElectricityByTypeYear();
 
         @Select("SELECT CONCAT(LPAD(HOUR(d.create_time), 2, '0'), ':00') AS time,SUM(water_value) as data FROM manage_environment_detection as d"
@@ -246,4 +246,14 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " GROUP BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00') "
                         + " ORDER BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00') ")
         public List<PowerDTO> getHistoryDayByEnvironmentId(@Param("environmentId") Long environmentId);
+
+        @Select("SELECT description AS time, value AS data"
+                        + " FROM (SELECT d.value,e.description,ROW_NUMBER() OVER (PARTITION BY e.environment_id ORDER BY d.create_time DESC) AS rn"
+                        + " FROM manage_environment_detection AS d"
+                        + " LEFT JOIN manage_environment AS e ON e.environment_id = d.environment_id"
+                        + " WHERE e.e_area = #{area} AND e.unit_name = #{unitName}"
+                        + " ) AS RankedData"
+                        + "  WHERE rn = 1 AND value IS NOT NULL")
+        public List<PowerDTO> getZuiXinShuJu(@Param("area") String area,
+                        @Param("unitName") String unitName);
 }

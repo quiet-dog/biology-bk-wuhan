@@ -33,4 +33,6 @@ public interface DetectionService extends IService<DetectionEntity> {
     public DetectionCountEchartTypeDTO getAareUnitNameHistory(PowerQuery query);
 
     public DetectionCountEchartTypeDTO getHistoryDayByEnvironmentId(PowerQuery query);
+
+    public DetectionCountEchartTypeDTO getZuiXinShuJu(PowerQuery query);
 }

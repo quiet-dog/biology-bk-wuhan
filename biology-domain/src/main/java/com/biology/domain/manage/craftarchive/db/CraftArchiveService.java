@@ -11,4 +11,6 @@ public interface CraftArchiveService extends IService<CraftArchiveEntity> {
     CraftArchiveEntity getById(Long craftArchiveId);
 
     void importCraftArchive(MultipartFile file);
+
+    void getAlarmCraftArchive();
 }

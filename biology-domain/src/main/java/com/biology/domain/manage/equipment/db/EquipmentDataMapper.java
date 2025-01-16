@@ -2,6 +2,7 @@ package com.biology.domain.manage.equipment.db;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.biology.domain.manage.equipment.dto.EquipmentDataStockDTO;
+import com.biology.domain.manage.equipment.dto.TotalTimeDTO;
 
 import java.util.List;
 
@@ -17,4 +18,10 @@ public interface EquipmentDataMapper extends BaseMapper<EquipmentDataEntity> {
             + " GROUP BY time"
             + " ORDER BY time")
     public List<EquipmentDataStockDTO> getEquipmentDataStockDay(@Param("thresholdId") Long thresholdId);
+
+    @Select("SELECT SUM(CASE WHEN create_time < 60 THEN create_time ELSE 0 END) AS totalTime"
+            + " FROM (SELECT equipment_id,TIMESTAMPDIFF(MINUTE, LAG(create_time) OVER (PARTITION BY equipment_id ORDER BY create_time), create_time) AS create_time"
+            + " FROM manage_equipment_data WHERE monitoring_indicator = '电压' AND equipment_id = #{equipmentId}"
+            + " ) as subquery")
+    public Integer getTotalTime(@Param("equipmentId") Long equipmentId);
 }

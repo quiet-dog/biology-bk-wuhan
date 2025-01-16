@@ -8,6 +8,7 @@ import com.biology.domain.manage.event.db.EventService;
 import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.db.MaterialsService;
 import com.biology.domain.manage.materials.db.MaterialsValueService;
+import com.biology.domain.manage.materials.db.WarehouseService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +22,10 @@ public class MaterialsFactory {
 
     private final EventService eventService;
 
+    private final WarehouseService warehouseService;
+
     public MaterialsModel create() {
-        return new MaterialsModel(materialsService, materialsValueService, eventService);
+        return new MaterialsModel(materialsService, materialsValueService, eventService, warehouseService);
     }
 
     public MaterialsModel loadById(Long materialsId) {
@@ -32,8 +35,8 @@ public class MaterialsFactory {
             throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, materialsId, "物料");
         }
 
-        return new MaterialsModel(materialsModel, materialsService, materialsValueService, eventService);
+        return new MaterialsModel(materialsModel, materialsService, materialsValueService, eventService,
+                warehouseService);
     }
-
 
 }

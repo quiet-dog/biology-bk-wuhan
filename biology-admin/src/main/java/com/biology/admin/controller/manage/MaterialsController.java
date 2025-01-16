@@ -30,13 +30,16 @@ import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.materials.MaterialsApplicationService;
 import com.biology.domain.manage.materials.command.AddMaterialsCommand;
 import com.biology.domain.manage.materials.command.AddStockCommand;
+import com.biology.domain.manage.materials.command.AddWarehouseCommand;
 import com.biology.domain.manage.materials.command.UpdateMaterialsCommand;
 import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.db.MaterialsService;
 import com.biology.domain.manage.materials.dto.MaterialsDTO;
 import com.biology.domain.manage.materials.dto.NormalDTO;
 import com.biology.domain.manage.materials.dto.StockEchatDTO;
+import com.biology.domain.manage.materials.dto.WarehouseDTO;
 import com.biology.domain.manage.materials.query.SearchMaterialsQuery;
+import com.biology.domain.manage.materials.query.SearchWarehouseQuery;
 import com.biology.domain.manage.task.query.TaskStockQuery;
 import com.biology.domain.system.user.command.AddUserCommand;
 
@@ -83,6 +86,13 @@ public class MaterialsController extends BaseController {
     @GetMapping
     public ResponseDTO<PageDTO<MaterialsDTO>> list(SearchMaterialsQuery query) {
         PageDTO<MaterialsDTO> list = materialsApplicationService.getMaterialsList(query);
+        return ResponseDTO.ok(list);
+    }
+
+    @Operation(summary = "获取物料档案入库列表")
+    @GetMapping("/warehouse")
+    public ResponseDTO<PageDTO<WarehouseDTO>> list(SearchWarehouseQuery query) {
+        PageDTO<WarehouseDTO> list = materialsApplicationService.getWarehouseList(query);
         return ResponseDTO.ok(list);
     }
 
@@ -161,8 +171,18 @@ public class MaterialsController extends BaseController {
 
     @Operation(summary = "添加库存")
     @PostMapping("/addStock")
-    public ResponseDTO<Void> AddStock(@RequestBody AddStockCommand command) {
-        return ResponseDTO.ok(materialsApplicationService.AddStock(command));
+    public ResponseDTO<Void> AddStock(@RequestBody AddWarehouseCommand command) {
+        // return ResponseDTO.ok(materialsApplicationService.AddStock(command));
+        materialsApplicationService.addWarehouse(command);
+        return ResponseDTO.ok();
     }
+
+    // @Operation(summary = "添加库存")
+    // @PostMapping("/addStock")
+    // public ResponseDTO<Void> addWarehouse(@RequestBody AddWarehouseCommand
+    // command) {
+    // materialsApplicationService.addWarehouse(command);
+    // return ResponseDTO.ok();
+    // }
 
 }

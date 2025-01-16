@@ -99,4 +99,10 @@ public class DetectionController extends BaseController {
     public DetectionCountEchartTypeDTO getHistoryDayByEnvironmentId(PowerQuery query) {
         return detectionApplicationService.getHistoryDayByEnvironmentId(query);
     }
+
+    @Operation(summary = "数据大屏获取环境监测指标")
+    @GetMapping("/getZuiXinShuJu")
+    public ResponseDTO<DetectionCountEchartTypeDTO> getZuiXinShuJu(PowerQuery query) {
+        return ResponseDTO.ok(detectionApplicationService.getZuiXinShuJu(query));
+    }
 }

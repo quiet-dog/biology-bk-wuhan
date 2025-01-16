@@ -15,7 +15,9 @@ import com.biology.domain.manage.equipment.command.AddEquipmentDailyInspectionRe
 import com.biology.domain.manage.equipment.command.ExcelEquipmentDailyInspectionRecordCommand;
 import com.biology.domain.manage.equipment.command.UpdateEquipmentDailyInspectionRecordCommand;
 import com.biology.domain.manage.equipment.dto.EquipmentDailyInspectionRecordDTO;
+import com.biology.domain.manage.equipment.dto.EquipmentDataStockEchartDTO;
 import com.biology.domain.manage.equipment.query.SearchEquipmentDailyInspectionRecordQuery;
+import com.biology.domain.manage.event.query.AreaStatisticsQuery;
 
 import cn.hutool.core.collection.ListUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -111,5 +113,11 @@ public class EquipmentDailyInspectionRecordController extends BaseController {
         }
 
         return ResponseDTO.ok();
+    }
+
+    @Operation(summary = "获取设备日常巡检记录统计")
+    @GetMapping("/getCishu")
+    public ResponseDTO<EquipmentDataStockEchartDTO> getCishu(AreaStatisticsQuery query) {
+        return ResponseDTO.ok(equipmentDailyInspectionRecordApplicationService.getCishu(query));
     }
 }

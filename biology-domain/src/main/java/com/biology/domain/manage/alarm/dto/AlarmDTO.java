@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.biology.domain.manage.alarm.db.AlarmEntity;
 import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.dto.MaterialsDTO;

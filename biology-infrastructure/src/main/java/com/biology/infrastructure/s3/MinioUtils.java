@@ -2,6 +2,7 @@ package com.biology.infrastructure.s3;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,11 +60,17 @@ public class MinioUtils {
     }
 
     // 预览文件
-    public String preview(String bucketName, String objectName) {
+    public String preview(String bucketName, String objectName, String endpoint, String target, String clientIp) {
         try {
             String url = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder().bucket(bucketName)
                     .object(objectName).method(Method.GET).expiry(60 * 60).build());
-            return url;
+            url = url.replace(endpoint, target);
+            // 去掉?后面的内容
+            URL urlOb = new URL(url);
+            String urlWithoutQuery = new URL(urlOb.getProtocol(), clientIp, urlOb.getPort(), urlOb.getPath())
+                    .toString();
+            // 退出系统
+            return urlWithoutQuery;
         } catch (Exception e) {
             throw new ApiException(Business.PREVIEW_FILE_FAILED, e.getMessage());
         }

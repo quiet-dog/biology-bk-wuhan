@@ -112,4 +112,8 @@ public class DetectionApplicationService {
         return detectionService.getHistoryDayByEnvironmentId(query);
     }
 
+    public DetectionCountEchartTypeDTO getZuiXinShuJu(PowerQuery query) {
+        return detectionService.getZuiXinShuJu(query);
+    }
+
 }

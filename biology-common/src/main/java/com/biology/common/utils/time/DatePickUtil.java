@@ -173,4 +173,37 @@ public class DatePickUtil {
 
         return dates;
     }
+
+    // YYYY-MM-DD
+    public static List<String> getStartEndTime(String startTime, String endTime) {
+        // 获取开始和结束时间的所有日期
+
+        // 获取时间范围内的所有日期
+        List<String> dateList = getDatesBetween(startTime, endTime);
+
+        // 输出结果
+        dateList.forEach(System.out::println);
+        return dateList;
+    }
+
+    public static List<String> getDatesBetween(String startDateStr, String endDateStr) {
+        // 定义日期格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // 转换为 LocalDate
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+
+        // 准备结果列表
+        List<String> dates = new ArrayList<>();
+        LocalDate currentDate = startDate;
+
+        // 生成日期范围
+        while (!currentDate.isAfter(endDate)) { // 包含结束日期
+            dates.add(currentDate.format(formatter)); // 格式化为字符串
+            currentDate = currentDate.plusDays(1); // 加一天
+        }
+
+        return dates;
+    }
 }

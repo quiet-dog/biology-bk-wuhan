@@ -16,6 +16,7 @@ public class MinioConfig {
     String accessKey;
     String secretKey;
     String bucketName;
+    String targetUrl;
 
     @Bean
     MinioClient getMinioClient() throws Exception {

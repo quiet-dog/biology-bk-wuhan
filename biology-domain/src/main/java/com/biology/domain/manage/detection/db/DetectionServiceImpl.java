@@ -546,4 +546,16 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         return result;
     }
 
+    public DetectionCountEchartTypeDTO getZuiXinShuJu(PowerQuery query) {
+        DetectionCountEchartTypeDTO result = new DetectionCountEchartTypeDTO();
+        result.setData(new ArrayList<>());
+        result.setTime(new ArrayList<>());
+        List<PowerDTO> list = baseMapper.getZuiXinShuJu(query.getArea(), query.getUnitName());
+        for (PowerDTO p : list) {
+            result.getData().add(p.getData());
+            result.getTime().add(p.getTime());
+        }
+        return result;
+    }
+
 }

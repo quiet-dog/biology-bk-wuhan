@@ -3,11 +3,13 @@ package com.biology.domain.manage.equipment.db;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.biology.common.utils.time.DatePickUtil;
 import com.biology.domain.manage.equipment.dto.EquipmentDataStockDTO;
 import com.biology.domain.manage.equipment.dto.EquipmentDataStockEchartDTO;
+import com.biology.domain.manage.equipment.dto.TotalTimeDTO;
 
 @Service
 public class EquipmentDataServiceImpl extends ServiceImpl<EquipmentDataMapper, EquipmentDataEntity>
@@ -43,5 +45,12 @@ public class EquipmentDataServiceImpl extends ServiceImpl<EquipmentDataMapper, E
         // echartDTO.getTime().add(equipmentDataStockDTO.getTime());
         // }
         return echartDTO;
+    }
+
+    public TotalTimeDTO getTotalTime(Long equipmentId) {
+        TotalTimeDTO timeDTO = new TotalTimeDTO();
+        Integer value = baseMapper.getTotalTime(equipmentId);
+        timeDTO.setTotalTime(value);
+        return timeDTO;
     }
 }

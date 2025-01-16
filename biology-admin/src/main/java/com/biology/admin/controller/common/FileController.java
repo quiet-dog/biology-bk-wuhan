@@ -3,6 +3,8 @@ package com.biology.admin.controller.common;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.extra.servlet.ServletUtil;
+
 import com.biology.common.constant.Constants.UploadSubDir;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.exception.ApiException;
@@ -25,9 +27,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -186,10 +192,37 @@ public class FileController {
     // 文件预览
     @Operation(summary = "文件预览")
     @GetMapping("/preview")
-    public void preview(String fileName, HttpServletResponse response) throws Exception {
-        String url = minioUtils.preview(minioConfig.getBucketName(), fileName);
+    public void preview(String fileName, HttpServletResponse response, HttpServletRequest request) throws Exception {
+        // 获取请求的ip
+
+        String clientUrl = ServletUtil.getClientIP(request);
+        // 获取origin
+        String origin = request.getHeader("Origin");
+        String referer = request.getHeader("Referer");
+        String targetUrl = "";
+        Boolean isExit = false;
+        if (origin != null) {
+            targetUrl = origin;
+        }
+        if (!isExit && referer != null) {
+            targetUrl = referer;
+        }
+        if (referer == null && origin == null) {
+            targetUrl = clientUrl;
+        }
+
+        System.out.println("targetUrl: " + targetUrl);
+        URL url = new URL(targetUrl);
+        String a = URLEncoder.encode(fileName, "UTF-8");
+        String urlWithoutQuery = new URL(url.getProtocol(), url.getHost(), url.getPort(),
+                "/minioapi/" + minioConfig.getBucketName() + "/" + a)
+                .toString();
+        System.out.println("urlWithoutQuery: " + urlWithoutQuery);
+        // String url = minioUtils.preview(minioConfig.getBucketName(), fileName,
+        // minioConfig.getEndpoint(),
+        // minioConfig.getTargetUrl(), targetUrl);
         if (url != null) {
-            response.sendRedirect(url);
+            response.sendRedirect(urlWithoutQuery);
             return;
         }
     }

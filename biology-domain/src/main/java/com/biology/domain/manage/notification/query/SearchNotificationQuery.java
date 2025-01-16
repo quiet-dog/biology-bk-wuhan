@@ -19,6 +19,7 @@ public class SearchNotificationQuery extends AbstractPageQuery<NotificationEntit
     private Integer importance;
     private Long userId;
     private Boolean isPersonal;
+    private Boolean isNotRead;
 
     @Override
     public QueryWrapper<NotificationEntity> addQueryCondition() {
@@ -31,6 +32,10 @@ public class SearchNotificationQuery extends AbstractPageQuery<NotificationEntit
             queryWrapper.eq("receiver_id", userId);
         } else {
             queryWrapper.and(wrapper -> wrapper.isNull("receiver_id").or().eq("receiver_id", 0));
+        }
+        if (isNotRead != null && isNotRead) {
+            queryWrapper.notInSql("notification_id",
+                    "SELECT notification_id FROM manage_user_notification WHERE user_id = " + userId);
         }
 
         this.timeRangeColumn = "create_time";

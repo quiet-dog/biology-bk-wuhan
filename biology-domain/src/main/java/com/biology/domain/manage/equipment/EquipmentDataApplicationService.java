@@ -6,6 +6,7 @@ import com.biology.domain.manage.equipment.command.UpdateEquipmentDataCommand;
 import com.biology.domain.manage.equipment.dto.EquipmentDTO;
 import com.biology.domain.manage.equipment.dto.EquipmentDataDTO;
 import com.biology.domain.manage.equipment.dto.EquipmentDataStockEchartDTO;
+import com.biology.domain.manage.equipment.dto.TotalTimeDTO;
 import com.biology.domain.manage.equipment.model.EquipmentFactory;
 import com.biology.domain.manage.equipment.model.EquipmentDataFactory;
 import com.biology.domain.manage.equipment.model.EquipmentDataModel;
@@ -84,5 +85,9 @@ public class EquipmentDataApplicationService {
 
     public EquipmentDataStockEchartDTO getEquipmentDataStockDay(Long thresholdId) {
         return equipmentDataService.getEquipmentDataStockDay(thresholdId);
+    }
+
+    public TotalTimeDTO getTotalTime(Long equipmentId) {
+        return equipmentDataService.getTotalTime(equipmentId);
     }
 }

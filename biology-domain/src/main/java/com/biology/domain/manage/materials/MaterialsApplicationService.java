@@ -11,17 +11,26 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
+import com.biology.common.exception.ApiException;
+import com.biology.common.exception.error.ErrorCode.Business;
 import com.biology.domain.manage.materials.command.AddMaterialsCommand;
 import com.biology.domain.manage.materials.command.AddStockCommand;
+import com.biology.domain.manage.materials.command.AddWarehouseCommand;
 import com.biology.domain.manage.materials.command.UpdateMaterialsCommand;
 import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.db.MaterialsService;
+import com.biology.domain.manage.materials.db.WarehouseEntity;
+import com.biology.domain.manage.materials.db.WarehouseService;
 import com.biology.domain.manage.materials.dto.MaterialsDTO;
 import com.biology.domain.manage.materials.dto.NormalDTO;
 import com.biology.domain.manage.materials.dto.StockEchatDTO;
+import com.biology.domain.manage.materials.dto.WarehouseDTO;
 import com.biology.domain.manage.materials.model.MaterialsFactory;
 import com.biology.domain.manage.materials.model.MaterialsModel;
+import com.biology.domain.manage.materials.model.WarehouseFactory;
+import com.biology.domain.manage.materials.model.WarehouseModel;
 import com.biology.domain.manage.materials.query.SearchMaterialsQuery;
+import com.biology.domain.manage.materials.query.SearchWarehouseQuery;
 import com.biology.domain.manage.task.db.MaterialsTaskEntity;
 import com.biology.domain.manage.task.db.MaterialsTaskService;
 
@@ -37,10 +46,28 @@ public class MaterialsApplicationService {
 
     private final MaterialsTaskService materialsTaskService;
 
+    private final WarehouseService warehouseService;
+
+    private final WarehouseFactory warehouseFactory;
+
     public void addMaterials(AddMaterialsCommand command) {
         MaterialsModel materialsModel = materialsFactory.create();
         materialsModel.loadAddMaterialsCommand(command);
         materialsModel.insert();
+    }
+
+    public void addWarehouse(AddWarehouseCommand command) {
+        WarehouseModel wModel = warehouseFactory.create();
+        MaterialsEntity materialsEntity = materialsService.getById(command.getMaterialsId());
+        if (materialsEntity == null) {
+            throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, command.getMaterialsId(), "物料");
+        }
+        wModel.loadAddMaterialsCommand(command);
+        wModel.setRemainStock(materialsEntity.getStock());
+        wModel.insert();
+
+        materialsEntity.setStock(materialsEntity.getStock() + command.getStock());
+        materialsEntity.updateById();
     }
 
     public void updateMaterials(UpdateMaterialsCommand command) {
@@ -63,6 +90,12 @@ public class MaterialsApplicationService {
     public PageDTO<MaterialsDTO> getMaterialsList(SearchMaterialsQuery query) {
         Page<MaterialsEntity> page = materialsService.page(query.toPage(), query.toQueryWrapper());
         List<MaterialsDTO> records = page.getRecords().stream().map(MaterialsDTO::new).collect(Collectors.toList());
+        return new PageDTO<>(records, page.getTotal());
+    }
+
+    public PageDTO<WarehouseDTO> getWarehouseList(SearchWarehouseQuery query) {
+        Page<WarehouseEntity> page = warehouseService.page(query.toPage(), query.toQueryWrapper());
+        List<WarehouseDTO> records = page.getRecords().stream().map(WarehouseDTO::new).collect(Collectors.toList());
         return new PageDTO<>(records, page.getTotal());
     }
 

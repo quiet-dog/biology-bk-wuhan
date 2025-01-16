@@ -13,6 +13,7 @@ import com.biology.domain.manage.equipment.command.AddEquipmentDataCommand;
 import com.biology.domain.manage.equipment.command.UpdateEquipmentDataCommand;
 import com.biology.domain.manage.equipment.dto.EquipmentDataDTO;
 import com.biology.domain.manage.equipment.dto.EquipmentDataStockEchartDTO;
+import com.biology.domain.manage.equipment.dto.TotalTimeDTO;
 import com.biology.domain.manage.equipment.query.EquipmentDataEchartDTO;
 import com.biology.domain.manage.equipment.query.SearchEquipmentDataQuery;
 import cn.hutool.core.collection.ListUtil;
@@ -72,6 +73,12 @@ public class EquipmentDataController extends BaseController {
     @GetMapping("/history")
     public EquipmentDataStockEchartDTO getEquipmentDataStockDay(EquipmentDataEchartDTO query) {
         return equipmentDataApplicationService.getEquipmentDataStockDay(query.getThresholdId());
+    }
+
+    @Operation(summary = "获取设备数据历史统计当天详情")
+    @GetMapping("/totalTime")
+    public ResponseDTO<TotalTimeDTO> getTotalTime(Long equipmentId) {
+        return ResponseDTO.ok(equipmentDataApplicationService.getTotalTime(equipmentId));
     }
 
     // @Operation(summary = "下载设备数据导入模板")

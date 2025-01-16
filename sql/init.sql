@@ -346,6 +346,19 @@ CREATE TABLE `manage_materials` (
   `deleted` TINYINT(1) DEFAULT 0 COMMENT '删除标志（0代表存在 1代表删除）',
   PRIMARY KEY (`materials_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='物料档案';
+CREATE TABLE `manage_warehouse` (
+  `warehouse_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '入库ID',
+  `materials_id` BIGINT COMMENT '物料ID',
+  `stock`   DOUBLE COMMENT '库存量',
+  `batch` VARCHAR(255) COMMENT '批次',
+  `remain_stock` DOUBLE COMMENT '剩余库存',
+  `creator_id` BIGINT COMMENT '创建者ID',
+  `create_time` DATETIME COMMENT '创建时间',
+  `updater_id` BIGINT COMMENT '更新者ID',
+  `update_time` DATETIME COMMENT '更新时间',
+  `deleted` TINYINT(1) DEFAULT 0 COMMENT '删除标志（0代表存在 1代表删除）',
+  PRIMARY KEY (`warehouse_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='物料档案';
 CREATE TABLE `manage_materials_task` (
   `materials_task_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '物料档案ID',
   `materials_id` BIGINT COMMENT '物料ID',
@@ -512,6 +525,7 @@ create table manage_event_file (
 CREATE TABLE manage_alarm (
     `alarm_id` BIGINT AUTO_INCREMENT PRIMARY KEY,  
     `materials_id` BIGINT,
+    `receive_id` BIGINT,
     `stock` DOUBLE,
     `level` VARCHAR(255),                         
     `creator_id` BIGINT COMMENT '创建者ID',
