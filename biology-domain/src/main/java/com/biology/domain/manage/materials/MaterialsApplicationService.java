@@ -22,6 +22,7 @@ import com.biology.domain.manage.materials.db.MaterialsService;
 import com.biology.domain.manage.materials.db.WarehouseEntity;
 import com.biology.domain.manage.materials.db.WarehouseService;
 import com.biology.domain.manage.materials.dto.MaterialsDTO;
+import com.biology.domain.manage.materials.dto.MaterialsEasyDTO;
 import com.biology.domain.manage.materials.dto.NormalDTO;
 import com.biology.domain.manage.materials.dto.StockEchatDTO;
 import com.biology.domain.manage.materials.dto.WarehouseDTO;
@@ -161,5 +162,9 @@ public class MaterialsApplicationService {
         materialsModel.setLastStock(command.getStock());
         materialsModel.updateById();
         return null;
+    }
+
+    public List<MaterialsEasyDTO> getMaterialsEasy() {
+        return materialsService.getMaterialsEasy();
     }
 }

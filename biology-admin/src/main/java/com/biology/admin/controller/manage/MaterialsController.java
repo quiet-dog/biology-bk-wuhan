@@ -35,6 +35,7 @@ import com.biology.domain.manage.materials.command.UpdateMaterialsCommand;
 import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.db.MaterialsService;
 import com.biology.domain.manage.materials.dto.MaterialsDTO;
+import com.biology.domain.manage.materials.dto.MaterialsEasyDTO;
 import com.biology.domain.manage.materials.dto.NormalDTO;
 import com.biology.domain.manage.materials.dto.StockEchatDTO;
 import com.biology.domain.manage.materials.dto.WarehouseDTO;
@@ -175,6 +176,12 @@ public class MaterialsController extends BaseController {
         // return ResponseDTO.ok(materialsApplicationService.AddStock(command));
         materialsApplicationService.addWarehouse(command);
         return ResponseDTO.ok();
+    }
+
+    @Operation(summary = "获取正常和不正常的物料")
+    @GetMapping("/getMaterialsEasy")
+    public ResponseDTO<List<MaterialsEasyDTO>> getMaterialsEasy() {
+        return ResponseDTO.ok(materialsApplicationService.getMaterialsEasy());
     }
 
     // @Operation(summary = "添加库存")

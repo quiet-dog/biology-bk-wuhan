@@ -158,6 +158,12 @@ public class WebsocketController {
         }
 
         if (deviceDTO.getDeviceType().equals("设备档案")) {
+            QueryWrapper<ThresholdEntity> queryWrapper1 = new QueryWrapper<>();
+            queryWrapper1.eq("threshold_id",
+                    deviceDTO.getEquipmentInfo().getThresholdId());
+            ThresholdEntity thresholdEntity = new ThresholdEntity().selectOne(queryWrapper1);
+            deviceDTO.getEquipmentInfo().setEquipmentId(thresholdEntity.getEquipmentId());
+
             if (deviceDTO.getEquipmentInfo().getEquipmentId() != null) {
                 redisId = "equipment-" + deviceDTO.getEquipmentInfo().getEquipmentId();
                 oDto.setEquipmentId(deviceDTO.getEquipmentInfo().getEquipmentId());
@@ -165,21 +171,20 @@ public class WebsocketController {
             }
 
             if (deviceDTO.getEquipmentInfo().getThresholdId() != null) {
+                System.out.printf(
+                        "进入到设备档案获取阈值设置当中========================================================= \n");
                 redisId = "threshold-" + deviceDTO.getEquipmentInfo().getThresholdId();
                 oDto.setThresholdData(deviceDTO.getEquipmentInfo().getValue());
                 oDto.setThresholdId(deviceDTO.getEquipmentInfo().getThresholdId());
                 CacheCenter.onlineCache.set(redisId, oDto);
             }
 
-            QueryWrapper<ThresholdEntity> queryWrapper1 = new QueryWrapper<>();
-            queryWrapper1.eq("threshold_id",
-                    deviceDTO.getEquipmentInfo().getThresholdId());
-            ThresholdEntity thresholdEntity = new ThresholdEntity().selectOne(queryWrapper1);
-
             QueryWrapper<EquipmentEntity> queryWrapper2 = new QueryWrapper<>();
             queryWrapper2.eq("equipment_id", deviceDTO.getEquipmentInfo().getEquipmentId());
             EquipmentEntity equipmentEntity = new EquipmentEntity().selectOne(queryWrapper2);
 
+            System.out.printf(
+                    "找到设备档案的阈值设置========================================================= \n");
             // 添加数据
             AddEquipmentDataCommand addCommand = new AddEquipmentDataCommand();
             addCommand.setEquipmentId((deviceDTO.getEquipmentInfo().getEquipmentId()));
@@ -189,6 +194,10 @@ public class WebsocketController {
             }
             addCommand.setEquipmentData(deviceDTO.getEquipmentInfo().getValue());
             EquipmentDataModel equipmentDataModel = equipmentDataApplicationService.addEquipmentData(addCommand);
+            System.out.printf(
+                    "添加设备档案的阈值设置=========================================================%s \n",
+                    equipmentDataModel.toString());
+            // equipmentDataModel.insert();
 
             // 检查是否报警
             ThresholdValueEntity thresholdValueEntity = thresholdApplicationService.checkEquipmentInfo(

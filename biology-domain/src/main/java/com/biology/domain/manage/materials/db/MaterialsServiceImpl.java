@@ -1,11 +1,13 @@
 package com.biology.domain.manage.materials.db;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.biology.domain.manage.materials.dto.MaterialsEasyDTO;
 import com.biology.domain.manage.materials.dto.NormalDTO;
 
 import lombok.NoArgsConstructor;
@@ -69,6 +71,15 @@ public class MaterialsServiceImpl extends ServiceImpl<MaterialsMapper, Materials
             if (!flag) {
                 result.setNormal(result.getNormal() + 1);
             }
+        }
+        return result;
+    }
+
+    public List<MaterialsEasyDTO> getMaterialsEasy() {
+        List<MaterialsEasyDTO> result = new ArrayList<>();
+        List<MaterialsEntity> materialsEntities = baseMapper.selectList(null);
+        for (MaterialsEntity materialsEntity : materialsEntities) {
+            result.add(new MaterialsEasyDTO(materialsEntity));
         }
         return result;
     }
