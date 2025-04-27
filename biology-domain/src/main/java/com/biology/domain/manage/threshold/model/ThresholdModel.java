@@ -79,7 +79,7 @@ public class ThresholdModel extends ThresholdEntity {
     }
 
     public void addEmergencys() {
-        if (getEmergencyIds().isEmpty()) {
+        if (getEmergencyIds() == null || getEmergencyIds().isEmpty()) {
             return;
         }
         List<ThresholdEmergencyEntity> emergencyEntities = new ArrayList<>();
@@ -99,7 +99,7 @@ public class ThresholdModel extends ThresholdEntity {
     }
 
     public void addSops() {
-        if (getSopIds().isEmpty()) {
+        if (getSopIds() == null || getSopIds().isEmpty()) {
             return;
         }
         List<ThresholdSopEntity> sopEntities = new ArrayList<>();

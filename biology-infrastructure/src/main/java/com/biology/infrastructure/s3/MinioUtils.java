@@ -31,9 +31,9 @@ public class MinioUtils {
      * @param file   上传的文件
      * @return 文件名称
      */
-    public ObjectWriteResponse upload(String subDir, MultipartFile file, String bucketName) {
+    public ObjectWriteResponse upload(String subDir, MultipartFile file, String bucketName, String mimeType) {
         try {
-            return upload(subDir, file, FileUploadUtils.ALLOWED_EXTENSIONS, bucketName);
+            return upload(subDir, file, FileUploadUtils.ALLOWED_EXTENSIONS, bucketName, mimeType);
         } catch (Exception e) {
             throw new ApiException(Business.UPLOAD_FILE_FAILED, e.getMessage());
         }
@@ -49,12 +49,13 @@ public class MinioUtils {
      * @throws IOException 比如读写文件出错时
      */
     public ObjectWriteResponse upload(String subDir, MultipartFile file, String[] allowedExtension,
-            String bucketName)
+            String bucketName, String mimeType)
             throws Exception {
         FileUploadUtils.isAllowedUpload(file, allowedExtension);
         String fileName = FileUploadUtils.generateFilename(file);
         ObjectWriteResponse objectWriteResponse = minioClient
                 .putObject(PutObjectArgs.builder().bucket(bucketName).object(subDir + "/" + fileName)
+                        .contentType(mimeType)
                         .stream(file.getInputStream(), file.getSize(), -1).build());
         return objectWriteResponse;
     }

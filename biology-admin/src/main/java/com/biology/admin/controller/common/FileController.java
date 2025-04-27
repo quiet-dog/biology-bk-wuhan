@@ -128,8 +128,10 @@ public class FileController {
         String fileName;
         System.out.println(type == "minio");
         if ("minio".equals(type)) {
+            // String mimeType = file.getContentType();
+            String mimeType = file.getContentType();
             ObjectWriteResponse objectWriteResponse = minioUtils.upload(UploadSubDir.UPLOAD_PATH, file,
-                    minioConfig.getBucketName());
+                    minioConfig.getBucketName(), mimeType);
             fileName = objectWriteResponse.object();
             fileName = "/" + fileName;
         } else {
@@ -137,6 +139,7 @@ public class FileController {
         }
         String url = ServletHolderUtil.getContextUrl() + fileName;
 
+        // 获取mimeType
         UploadDTO uploadDTO = UploadDTO.builder()
                 // 全路径
                 .url(url)
@@ -145,7 +148,8 @@ public class FileController {
                 // 新生成的文件名
                 .newFileName(FileNameUtil.getName(fileName))
                 // 原始的文件名
-                .originalFilename(file.getOriginalFilename()).build();
+                .originalFilename(file.getOriginalFilename())
+                .build();
 
         return ResponseDTO.ok(uploadDTO);
     }
@@ -168,8 +172,10 @@ public class FileController {
                 // 上传并返回新文件名称
                 String fileName;
                 if (type == "minio") {
+                    String mimeType = file.getContentType();
+
                     ObjectWriteResponse objectWriteResponse = minioUtils.upload(UploadSubDir.UPLOAD_PATH, file,
-                            minioConfig.getBucketName());
+                            minioConfig.getBucketName(), mimeType);
                     fileName = objectWriteResponse.object();
                     fileName = "/" + fileName;
                 } else {
@@ -194,36 +200,25 @@ public class FileController {
     @GetMapping("/preview")
     public void preview(String fileName, HttpServletResponse response, HttpServletRequest request) throws Exception {
         // 获取请求的ip
+        // 获取param参数
+        String ip = request.getParameter("ip");
+        // 获取源的scheme
 
-        String clientUrl = ServletUtil.getClientIP(request);
-        // 获取origin
-        String origin = request.getHeader("Origin");
-        String referer = request.getHeader("Referer");
-        String targetUrl = "";
-        Boolean isExit = false;
-        if (origin != null) {
-            targetUrl = origin;
-        }
-        if (!isExit && referer != null) {
-            targetUrl = referer;
-        }
-        if (referer == null && origin == null) {
-            targetUrl = clientUrl;
-        }
-
-        System.out.println("targetUrl: " + targetUrl);
-        URL url = new URL(targetUrl);
-        String a = URLEncoder.encode(fileName, "UTF-8");
-        String urlWithoutQuery = new URL(url.getProtocol(), url.getHost(), url.getPort(),
-                "/minioapi/" + minioConfig.getBucketName() + "/" + a)
-                .toString();
-        System.out.println("urlWithoutQuery: " + urlWithoutQuery);
+        // System.out.println("targetUrl: " + targetUrl);
+        // URL url = new URL(targetUrl);
+        // String a = URLEncoder.encode(fileName, "UTF-8");
+        // String urlWithoutQuery = new URL(url.getProtocol(), url.getHost(),
+        // url.getPort(),
+        // "/minioapi/" + minioConfig.getBucketName() + "/" + a)
+        // .toString();
+        // System.out.println("urlWithoutQuery: " + urlWithoutQuery);
         // String url = minioUtils.preview(minioConfig.getBucketName(), fileName,
         // minioConfig.getEndpoint(),
         // minioConfig.getTargetUrl(), targetUrl);
-        if (url != null) {
-            response.sendRedirect(urlWithoutQuery);
-            return;
-        }
+        // if (url != null) {
+        // response.sendRedirect(ip + "/minioapi/" + minioConfig.getBucketName() + "/" +
+        // fileName);
+        return;
+        // }
     }
 }

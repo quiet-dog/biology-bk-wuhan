@@ -1,3 +1,216 @@
-:9000 {
-	    reverse_proxy http://192.168.0.11:9000
+:9080 {
+	header Access-Control-Allow-Origin "http://jessibuca.monibuca.com"
+	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+	header Access-Control-Allow-Headers "Content-Type, Authorization"
+	header Access-Control-Max-Age "3600"
+	# API 路径代理
+	handle_path /api/* {
+		reverse_proxy http://127.0.0.1:9020
+	}
+
+	handle_path /minioapi/* {
+		reverse_proxy http://192.168.0.11:9000
+	}
+
+	handle_path /kkfile/* {
+		reverse_proxy http://192.168.0.11:8012
+	}
+
+	handle_path /kkfile/kkfile/* {
+		reverse_proxy http://192.168.0.11:8012
+	}
+
+	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
+	@ws {
+		path /ws-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	@videows {
+		path /videows/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @videows {
+		uri strip_prefix /videows
+		# 重写路径，去掉 /videows 前缀
+		reverse_proxy http://127.0.0.1:8080 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	handle @ws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /ws-api
+		reverse_proxy http://127.0.0.1:9020 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	handle_path /threed/* {
+		reverse_proxy http://127.0.0.1:8080
+	}	
+
+	# 静态文件处理
+	handle {
+		root * /home/zks/Projects/private/biology-fd-wuhan/dist
+		# root /home/zks/Projects/test/vite-project/dist
+		try_files {path}.html {path} /index.html
+		file_server
+		encode gzip zstd
+	}
+}
+
+
+:7677 {
+
+	handle_path /api/* {
+		reverse_proxy http://127.0.0.1:9020
+	}
+
+	handle_path /minioapi/* {
+		reverse_proxy http://127.0.0.1:9004
+	}
+
+	@ws {
+		path /ws-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+	@videows {
+		path /videows/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @videows {
+		uri strip_prefix /videows
+		# 重写路径，去掉 /videows 前缀
+		reverse_proxy http://127.0.0.1:8080 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	handle @ws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /ws-api
+		reverse_proxy http://127.0.0.1:9020 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	
+
+	handle {
+		root * /www/bk/screen
+		try_files {path}.html {path} /index.html
+		file_server
+		encode gzip zstd
+	}
+}
+
+
+:7678 {
+	# API 路径代理
+	handle_path /api/* {
+		reverse_proxy http://127.0.0.1:9021
+	}
+
+	handle_path /minioapi/* {
+		reverse_proxy http://127.0.0.1:9004
+	}
+
+	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
+	@ws {
+		path /ws-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	@videows {
+		path /videows/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @videows {
+		uri strip_prefix /videows
+		# 重写路径，去掉 /videows 前缀
+		reverse_proxy http://127.0.0.1:8080 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	handle @ws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /ws-api
+		reverse_proxy http://127.0.0.1:9021 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	# 静态文件处理
+	handle {
+		root * /www/bj-bk/dist
+		try_files {path}.html {path} /index.html
+		file_server
+		encode gzip zstd
+	}
+}
+
+:7679 {
+
+	handle_path /api/* {
+		reverse_proxy http://127.0.0.1:9021
+	}
+
+	handle_path /minioapi/* {
+		reverse_proxy http://127.0.0.1:9004
+	}
+
+	@ws {
+		path /ws-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+	@videows {
+		path /videows/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @videows {
+		uri strip_prefix /videows
+		# 重写路径，去掉 /videows 前缀
+		reverse_proxy http://127.0.0.1:8080 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	handle @ws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /ws-api
+		reverse_proxy http://127.0.0.1:9021 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	
+
+	handle {
+		root * /www/bj-bk/screen
+		try_files {path}.html {path} /index.html
+		file_server
+		encode gzip zstd
+	}
 }

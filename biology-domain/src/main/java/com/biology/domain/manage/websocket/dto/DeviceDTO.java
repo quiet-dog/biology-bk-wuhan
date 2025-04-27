@@ -19,4 +19,7 @@ public class DeviceDTO {
     @Schema(description = "设备信息")
     private EquipmentInfoDTO equipmentInfo;
 
+    @Schema(description = "数据时间")
+    private String DateSource;
+
 }
