@@ -29,6 +29,9 @@ public class ThresholdSearch extends AbstractPageQuery<ThresholdEntity> {
     @Schema(description = "设备指标")
     private String equipmentIndex;
 
+    @Schema(description = "设备Id")
+    private Long equipmentId;
+
     public QueryWrapper<ThresholdEntity> addQueryCondition() {
         QueryWrapper<ThresholdEntity> queryWrapper = new QueryWrapper<ThresholdEntity>();
 
@@ -38,6 +41,7 @@ public class ThresholdSearch extends AbstractPageQuery<ThresholdEntity> {
                         "select equipment_id from manage_equipment where model like '%" + model + "%'")
                 .eq(StrUtil.isNotEmpty(sensorModel), "sensor_model", sensorModel)
                 .eq(StrUtil.isNotEmpty(sensorName), "sensor_name", sensorName)
+                .eq(equipmentId != null && equipmentId != 0, "equipment_id", equipmentId)
                 .like(StrUtil.isNotEmpty(equipmentIndex), "equipment_index", equipmentIndex);
         setTimeRangeColumn("create_time");
 
