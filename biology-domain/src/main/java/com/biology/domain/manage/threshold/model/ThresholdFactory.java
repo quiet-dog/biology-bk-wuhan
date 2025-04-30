@@ -1,6 +1,7 @@
 package com.biology.domain.manage.threshold.model;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
@@ -24,9 +25,11 @@ public class ThresholdFactory {
 
     private final ThresholdSopService thresholdSopService;
 
+    private final WebClient opcClient;
+
     public ThresholdModel create() {
         return new ThresholdModel(thresholdService, thresholdValueService, thresholdEmergencyService,
-                thresholdSopService);
+                thresholdSopService, opcClient);
     }
 
     public ThresholdModel loadById(Long thresholdId) {
@@ -35,6 +38,6 @@ public class ThresholdFactory {
             throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, thresholdId, "Threshold");
         }
         return new ThresholdModel(thresholdModel, thresholdService, thresholdValueService, thresholdEmergencyService,
-                thresholdSopService);
+                thresholdSopService, opcClient);
     }
 }

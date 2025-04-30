@@ -342,7 +342,7 @@ public class MoniApplicationService {
     public void sendOpc(DeviceDTO deviceDTO) {
         // 只发送，不处理响应
         opcClient.post()
-                .uri("/opc/data")
+                .uri("/recDataApi")
                 .bodyValue(deviceDTO)
                 .retrieve()
                 .bodyToMono(String.class)

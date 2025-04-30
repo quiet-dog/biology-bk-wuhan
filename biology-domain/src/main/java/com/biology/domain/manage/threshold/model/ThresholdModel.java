@@ -3,6 +3,8 @@ package com.biology.domain.manage.threshold.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.domain.manage.threshold.command.AddThresholdCommand;
 import com.biology.domain.manage.threshold.command.AddThresholdValue;
@@ -14,6 +16,7 @@ import com.biology.domain.manage.threshold.db.ThresholdSopEntity;
 import com.biology.domain.manage.threshold.db.ThresholdSopService;
 import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
 import com.biology.domain.manage.threshold.db.ThresholdValueService;
+import com.biology.domain.manage.threshold.dto.SendThresholdDTO;
 
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,22 +38,26 @@ public class ThresholdModel extends ThresholdEntity {
 
     private ThresholdSopService thresholdSopService;
 
+    private WebClient opcClient;
+
     @Schema(description = "应急预案Ids")
     private List<Long> emergencyIds;
 
     private List<Long> sopIds;
 
     public ThresholdModel(ThresholdService thresholdService, ThresholdValueService thresholdValueService,
-            ThresholdEmergencyService thresholdEmergencyService, ThresholdSopService thresholdSopService) {
+            ThresholdEmergencyService thresholdEmergencyService, ThresholdSopService thresholdSopService,
+            WebClient opcClient) {
         this.thresholdService = thresholdService;
         this.thresholdValueService = thresholdValueService;
         this.thresholdEmergencyService = thresholdEmergencyService;
         this.thresholdSopService = thresholdSopService;
+        this.opcClient = opcClient;
     }
 
     public ThresholdModel(ThresholdEntity entity, ThresholdService thresholdService,
             ThresholdValueService thresholdValueService, ThresholdEmergencyService thresholdEmergencyService,
-            ThresholdSopService thresholdSopService) {
+            ThresholdSopService thresholdSopService, WebClient opcClient) {
         if (entity != null) {
             BeanUtil.copyProperties(entity, this);
         }
@@ -58,6 +65,7 @@ public class ThresholdModel extends ThresholdEntity {
         this.thresholdValueService = thresholdValueService;
         this.thresholdEmergencyService = thresholdEmergencyService;
         this.thresholdSopService = thresholdSopService;
+        this.opcClient = opcClient;
     }
 
     public void loadAddThresholdCommand(AddThresholdCommand command) {
@@ -129,6 +137,20 @@ public class ThresholdModel extends ThresholdEntity {
             valueEntities.add(valueEntity);
         }
         thresholdValueService.saveBatch(valueEntities);
+        // 发送消息
+        SendThresholdDTO sDto = new SendThresholdDTO();
+        sDto.setThreshold(this);
+        sDto.setThresholdValues(valueEntities);
+        sendMsg(sDto);
+    }
+
+    public void sendMsg(SendThresholdDTO sDto) {
+        opcClient.post()
+                .uri("/recYuZhiApi")
+                .bodyValue(sDto)
+                .retrieve()
+                .bodyToMono(String.class)
+                .subscribe();
     }
 
     public boolean insert() {
