@@ -66,4 +66,18 @@ public class MoniController extends BaseController {
         PageDTO<MoniDTO> page = moniApplicationService.getMoniList(query);
         return ResponseDTO.ok(page);
     }
+
+    @Operation(summary = "开启推送")
+    @GetMapping("/start/{moniId}")
+    public ResponseDTO<Void> startPush(@PathVariable("moniId") Long moniId) {
+        moniApplicationService.startPush(moniId);
+        return ResponseDTO.ok();
+    }
+
+    @Operation(summary = "停止推送")
+    @GetMapping("/stop/{moniId}")
+    public ResponseDTO<Void> stopPush(@PathVariable("moniId") Long moniId) {
+        moniApplicationService.stopPush(moniId);
+        return ResponseDTO.ok();
+    }
 }

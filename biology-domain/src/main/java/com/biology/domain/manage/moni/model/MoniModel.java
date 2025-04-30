@@ -26,7 +26,7 @@ public class MoniModel extends MoniEntity {
 
     private List<Long> thresholdIds;
 
-    private List<Long> equipmentIds;
+    private List<Long> environmentIds;
 
     public MoniModel(MoniService moniService, MoniThresholdService moniThresholdService) {
         this.moniService = moniService;
@@ -70,11 +70,11 @@ public class MoniModel extends MoniEntity {
                 moniThresholdService.save(entity);
             }
         }
-        if (getMoniId() != null && equipmentIds != null) {
-            for (Long equipmentId : equipmentIds) {
+        if (getMoniId() != null && environmentIds != null) {
+            for (Long equipmentId : environmentIds) {
                 MoniThresholdEntity entity = new MoniThresholdEntity();
                 entity.setMoniId(getMoniId());
-                entity.setEquipmentId(equipmentId);
+                entity.setEnvironmentId(equipmentId);
                 moniThresholdService.save(entity);
             }
         }

@@ -39,7 +39,7 @@ public class MoniDTO {
     private List<Long> thresholdIds;
 
     @Schema(description = "环境IDs")
-    private List<Long> equipmentIds;
+    private List<Long> environmentIds;
 
     public MoniDTO(MoniEntity moniEntity) {
         this.moniId = moniEntity.getMoniId();
@@ -66,14 +66,14 @@ public class MoniDTO {
         return null;
     }
 
-    public void setEquipmentIdsQ() {
-        this.setEquipmentIds(new ArrayList<>());
+    public void setEnvironmentIdsQ() {
+        this.setEnvironmentIds(new ArrayList<>());
         if (this.getMoniId() != null && this.getPushType() != null && this.getPushType().equals("1")) {
             QueryWrapper<MoniThresholdEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("moni_id", this.getMoniId());
             List<MoniThresholdEntity> moniThresholdEntities = new MoniThresholdEntity().selectList(queryWrapper);
             for (MoniThresholdEntity moniThresholdEntity : moniThresholdEntities) {
-                this.equipmentIds.add(moniThresholdEntity.getEquipmentId());
+                this.environmentIds.add(moniThresholdEntity.getEnvironmentId());
             }
         }
     }

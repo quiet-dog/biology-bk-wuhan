@@ -30,7 +30,7 @@ public class MoniThresholdEntity extends Model<MoniThresholdEntity> {
 
     @ApiModelProperty("环境ID")
     @TableField(value = "environment_id")
-    private Long equipmentId;
+    private Long environmentId;
 
     @Override
     public Serializable pkVal() {

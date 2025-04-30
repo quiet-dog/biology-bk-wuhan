@@ -49,6 +49,10 @@ public class MoniEntity extends BaseEntity<MaterialsEntity> {
     @TableField(value = "max")
     private Double max;
 
+    @ApiModelProperty("是否推送")
+    @TableField(value = "is_push")
+    private Boolean isPush;
+
     @Override
     public Serializable pkVal() {
         return this.moniId;
