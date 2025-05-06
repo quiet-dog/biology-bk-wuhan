@@ -234,6 +234,7 @@ public enum ErrorCode implements ErrorCodeInterface {
         KOALA_SERVICE_UNAVAILABLE(10520, "考拉服务不可用,{}", "Business.KOALA_SERVICE_UNAVAILABLE"),
         MAT_SERVICE_UNAVAILABLE(10521, "物料不存在,{}", "Business.MAT_SERVICE_UNAVAILABLE"),
         RECEIVER_SERVICE_UNAVAILABLE(10522, "领用人不存在,{}", "Business.RECEIVER_SERVICE_UNAVAILABLE"),
+        PERSONNOT_SERVICE_UNAVAILABLE(10523, "{}", "Business.PERSONNOT_SERVICE_UNAVAILABLE"),
         ;
 
         private final int code;

@@ -5,12 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
-import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailService;
-import com.biology.domain.manage.alarmlevel.db.AlarmlevelService;
-import com.biology.domain.manage.environment.db.EnvironmentService;
 import com.biology.domain.manage.door.command.AddDoorCommand;
 import com.biology.domain.manage.door.command.UpdateDoorCommand;
 import com.biology.domain.manage.door.db.DoorEntity;
@@ -19,8 +15,6 @@ import com.biology.domain.manage.door.dto.DoorDTO;
 import com.biology.domain.manage.door.model.DoorFactory;
 import com.biology.domain.manage.door.model.DoorModel;
 import com.biology.domain.manage.door.query.DoorQuery;
-import com.biology.domain.manage.materials.db.MaterialsValueService;
-import com.biology.domain.manage.threshold.db.ThresholdValueService;
 
 import lombok.RequiredArgsConstructor;
 

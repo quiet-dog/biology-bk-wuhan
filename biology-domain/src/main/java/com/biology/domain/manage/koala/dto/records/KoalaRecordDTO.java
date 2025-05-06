@@ -9,7 +9,7 @@ public class KoalaRecordDTO {
     private Integer id;
     private Integer check_in_time;
     private Integer clock_out;
-    private Integer date;
+    private Long date;
     private Integer check_out_time;
     private KoalaSubjectDTO subject;
 }

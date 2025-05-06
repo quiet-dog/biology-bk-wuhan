@@ -385,4 +385,28 @@ public class TaskApplicationService {
         }
     }
 
+    // 每天的0点0分0秒执行
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void createDoor() {
+        // 查询未删除的人员
+        QueryWrapper<PersonnelEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("deleted", 0);
+        List<PersonnelEntity> pList = personnelService.list(queryWrapper);
+        if (pList != null && pList.size() > 0) {
+            for (PersonnelEntity pEntity : pList) {
+                DoorModel doorModel = doorFactory.create();
+                AddDoorCommand command = new AddDoorCommand();
+                command.setClockIn(0);
+                command.setClockOut(0);
+                command.setCheckInTime(0);
+                command.setCheckOutTime(0);
+                command.setDepartment(pEntity.getDepartment());
+                command.setName(pEntity.getName());
+                command.setPersonnelId(pEntity.getPersonnelId());
+                doorModel.loadAddDoorCommand(command);
+                doorModel.insert();
+            }
+        }
+    }
+
 }

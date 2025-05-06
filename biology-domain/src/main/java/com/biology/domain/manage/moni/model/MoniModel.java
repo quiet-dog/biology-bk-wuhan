@@ -54,7 +54,7 @@ public class MoniModel extends MoniEntity {
     }
 
     public void cleanThresholds() {
-        if (getMoniId() != null) {
+        if (getMoniId() != null && getThresholdIds() != null) {
             QueryWrapper<MoniThresholdEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("moni_id", getMoniId());
             moniThresholdService.remove(queryWrapper);

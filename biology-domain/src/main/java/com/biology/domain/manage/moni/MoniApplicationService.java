@@ -107,6 +107,7 @@ public class MoniApplicationService {
 
     public void deleteMoni(List<Long> moniIds) {
         for (Long moniId : moniIds) {
+            stopPush(moniId);
             MoniModel moniModel = moniFactory.loadById(moniId);
             moniModel.deleteById();
         }
@@ -129,12 +130,16 @@ public class MoniApplicationService {
             QueryWrapper<MoniThresholdEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("moni_id", moniId);
             List<MoniThresholdEntity> moniThresholdEntities = new MoniThresholdEntity().selectList(queryWrapper);
+            System.out.printf(
+                    "开始推送模拟数据========================================================= \n");
+            System.out.printf("推送频率为：%s \n", moniModel.getPushFrequency());
             for (MoniThresholdEntity moniThresholdEntity : moniThresholdEntities) {
                 DeviceDTO dto = new DeviceDTO();
                 double min = moniModel.getMin();
                 double max = moniModel.getMax();
                 double randomValue = min + (Math.random() * (max - min));
                 if (moniThresholdEntity.getEnvironmentId() != null && moniThresholdEntity.getEnvironmentId() != 0) {
+                    dto.setDeviceType("环境档案");
                     EnvironmentAlarmInfoDTO eDto = new EnvironmentAlarmInfoDTO();
                     eDto.setEnvironmentId(moniThresholdEntity.getEnvironmentId());
                     eDto.setValue(randomValue);
@@ -142,12 +147,14 @@ public class MoniApplicationService {
                 }
 
                 if (moniThresholdEntity.getThresholdId() != null && moniThresholdEntity.getThresholdId() != 0) {
+                    dto.setDeviceType("设备档案");
                     EquipmentInfoDTO eDto = new EquipmentInfoDTO();
                     eDto.setThresholdId(moniThresholdEntity.getThresholdId());
                     eDto.setValue(randomValue);
                     dto.setEquipmentInfo(eDto);
                 }
                 sendMsg(dto);
+                System.out.printf("推送数据为：%s \n", dto.toString());
             }
 
         }, 0, moniModel.getPushFrequency(), TimeUnit.SECONDS);
@@ -165,7 +172,10 @@ public class MoniApplicationService {
     public void sendMsg(DeviceDTO deviceDTO) {
 
         websocketService.sendTopicData(deviceDTO);
-        sendOpc(deviceDTO);
+        try {
+            sendOpc(deviceDTO);
+        } catch (Exception e) {
+        }
 
         AddEventCommand command = new AddEventCommand();
         OnlineDTO oDto = new OnlineDTO();

@@ -20,6 +20,7 @@ import com.biology.domain.manage.materials.dto.MaterialsDTO;
 import com.biology.domain.manage.materials.query.SearchMaterialsQuery;
 import com.biology.domain.manage.moni.MoniApplicationService;
 import com.biology.domain.manage.moni.command.AddMoniCommand;
+import com.biology.domain.manage.moni.command.DeleteMoniCommand;
 import com.biology.domain.manage.moni.command.UpdateMoniCommand;
 import com.biology.domain.manage.moni.dto.MoniDTO;
 import com.biology.domain.manage.moni.query.SearchMoniQuery;
@@ -54,9 +55,9 @@ public class MoniController extends BaseController {
     }
 
     @Operation(summary = "删除模拟")
-    @DeleteMapping
-    public ResponseDTO<Void> deleteMoni(@RequestBody List<Long> moniIds) {
-        moniApplicationService.deleteMoni(moniIds);
+    @PostMapping("/delete")
+    public ResponseDTO<Void> deleteMoni(@RequestBody DeleteMoniCommand moniIds) {
+        moniApplicationService.deleteMoni(moniIds.getMoniIds());
         return ResponseDTO.ok();
     }
 

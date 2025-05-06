@@ -35,7 +35,7 @@ public class AddDoorCommand {
 
     @Schema(description = "门禁记录时间")
     @TableField("door_date")
-    private Integer doorDate;
+    private Long doorDate;
 
     @Schema(description = "门禁人员部门")
     @TableField("department")
@@ -82,5 +82,4 @@ public class AddDoorCommand {
 
     @TableField("verification_mode")
     private String verificationMode;
-
 }

@@ -51,7 +51,7 @@ public class DoorEntity extends BaseEntity<DoorEntity> {
 
     @Schema(description = "门禁记录时间")
     @TableField("door_date")
-    private Integer doorDate;
+    private Long doorDate;
 
     @Schema(description = "门禁人员部门")
     @TableField("department")

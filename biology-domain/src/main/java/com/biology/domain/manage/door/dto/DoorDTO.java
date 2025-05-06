@@ -45,7 +45,7 @@ public class DoorDTO {
 
     @Schema(description = "门禁记录时间")
     @TableField("door_date")
-    private Integer doorDate;
+    private Long doorDate;
 
     @Schema(description = "门禁人员部门")
     @TableField("department")
@@ -88,9 +88,14 @@ public class DoorDTO {
     @TableField("verification_mode")
     private String verificationMode;
 
+    private Boolean isChuQin;
+
     public DoorDTO(DoorEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
+        }
+        if (this.doorDate != null && this.doorDate > 0) {
+            this.isChuQin = true;
         }
         addPersonnel();
     }

@@ -9,7 +9,7 @@ import lombok.Data;
 public class KoalaEventDTO {
     private String confidence;
     private Integer eventType;
-    private Integer timestamp;
+    private Long timestamp;
     private Integer gender;
     private Integer age;
     private String photo;
