@@ -1,9 +1,18 @@
 package com.biology.admin.controller.manage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,10 +55,19 @@ import com.biology.domain.manage.event.query.AreaStatisticsQuery;
 import com.biology.domain.manage.event.query.EnvironmentEventQuery;
 import com.biology.domain.manage.event.query.EventSearch;
 import com.biology.domain.manage.event.query.StatisticsQuery;
+import com.biology.domain.manage.personnel.dto.PersonnelDTO;
 import com.biology.domain.manage.threshold.ThresholdApplicationService;
 import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
 import com.biology.domain.manage.threshold.db.ThresholdValueService;
 import com.biology.domain.manage.websocket.dto.DeviceDTO;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -116,9 +134,138 @@ public class EventController extends BaseController {
 
     @Operation(summary = "报警事件列表导出")
     @GetMapping("/excelDeviceName")
-    public void exportDeviceNameByExcel(HttpServletResponse response, EventSearch query) {
+    public void exportDeviceNameByExcel(HttpServletResponse response, EventSearch query) throws IOException {
         PageDTO<EventDeviceNameDTO> userList = eventApplicationService.getEventDeviceNameList(query);
-        CustomExcelUtil.writeToResponse(userList.getRows(), EventDeviceNameDTO.class, response);
+        if (query.getExportType() != null && query.getExportType().equals("pdf")) {
+            // 生成pdf
+            if (userList.getRows() == null || userList.getRows().isEmpty()) {
+                throw new IllegalArgumentException("事件列表不能为空");
+            }
+
+            // 设置中文字体
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PdfWriter writer = new PdfWriter(baos);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+
+            // 设置中文字体
+            PdfFont font;
+            try {
+                font = PdfFontFactory.createFont("STSong-Light", "UniGB-UCS2-H",
+                        PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
+            } catch (IOException e) {
+                document.close();
+                throw new IOException("无法加载中文字体: " + e.getMessage(), e);
+            }
+            document.setFont(font);
+
+            // 添加标题
+            document.add(new Paragraph("事件信息")
+                    .setFontSize(18)
+                    .setBold()
+                    .setTextAlignment(TextAlignment.CENTER));
+
+            // 创建表格
+            Table table = new Table(new float[] { 100, 100, 50, 100, 100, 100, 150, 100, 100, 100, 100 });
+            table.setWidth(500);
+            table.addHeaderCell("报警编号");
+            table.addHeaderCell("报警类型");
+            table.addHeaderCell("报警级别");
+            table.addHeaderCell("报警描述");
+            table.addHeaderCell("报警时间");
+
+            // 填充数据
+            for (EventDTO eventDTO : userList.getRows()) {
+                table.addCell(eventDTO.getEventId() != null ? eventDTO.getEventId().toString() : "");
+                table.addCell(eventDTO.getType() != null ? eventDTO.getType() : "");
+                table.addCell(eventDTO.getLevel() != null ? eventDTO.getLevel() : "");
+                table.addCell(eventDTO.getDescription() != null ? eventDTO.getDescription() : "");
+                table.addCell(eventDTO.getCreateTime() != null ? eventDTO.getCreateTime().toString() : "");
+            }
+
+            document.add(table);
+            document.close();
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=personnel.pdf");
+            response.setContentLength(baos.size());
+            try {
+                baos.writeTo(response.getOutputStream());
+            } catch (IOException e) {
+                throw new RuntimeException("无法写入PDF到响应: " + e.getMessage(), e);
+            } finally {
+                baos.close();
+            }
+        } else if (query.getExportType() != null && query.getExportType().equals("word")) {
+            // 生成 Word 文档
+            if (userList.getRows() == null || userList.getRows().isEmpty()) {
+                throw new IllegalArgumentException("事件列表不能为空");
+            }
+
+            // 创建 Word 文档
+            XWPFDocument document = new XWPFDocument();
+
+            // 添加标题
+            XWPFParagraph titleParagraph = document.createParagraph();
+            titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+            XWPFRun titleRun = titleParagraph.createRun();
+            titleRun.setText("事件信息");
+            titleRun.setFontSize(18);
+            titleRun.setBold(true);
+            titleRun.setFontFamily("SimSong"); // 使用宋体支持中文
+            titleRun.addBreak();
+
+            // 创建表格
+            XWPFTable table = document.createTable(1, 11); // 1行（表头）, 11列
+            table.setWidth(5000); // 设置表格宽度（单位：1/50 英寸）
+
+            // 设置表头
+            XWPFTableRow headerRow = table.getRow(0);
+            String[] headers = { "报警编号", "报警类型", "报警级别", "报警描述", "报警时间" };
+            for (int i = 0; i < headers.length; i++) {
+                XWPFTableCell cell = headerRow.getCell(i);
+                cell.setText(headers[i]);
+                XWPFParagraph cellParagraph = cell.getParagraphs().get(0);
+                cellParagraph.setAlignment(ParagraphAlignment.CENTER);
+                XWPFRun cellRun = cellParagraph.getRuns().get(0);
+                cellRun.setFontFamily("SimSong");
+                cellRun.setBold(true);
+            }
+
+            // 填充数据
+            for (EventDTO eDto : userList.getRows()) {
+                XWPFTableRow row = table.createRow();
+                row.getCell(0).setText(eDto.getEventId() != null ? eDto.getEventId().toString() : "");
+                row.getCell(1).setText(eDto.getType() != null ? eDto.getType() : "");
+                row.getCell(2).setText(eDto.getLevel() != null ? eDto.getLevel() : "");
+                row.getCell(3).setText(eDto.getDescription() != null ? eDto.getDescription() : "");
+                row.getCell(4).setText(eDto.getCreateTime() != null ? eDto.getCreateTime().toString() : "");
+
+                // 设置单元格字体
+                for (int i = 0; i < 5; i++) {
+                    XWPFParagraph cellParagraph = row.getCell(i).getParagraphs().get(0);
+                    cellParagraph.setAlignment(ParagraphAlignment.CENTER);
+                    XWPFRun cellRun = cellParagraph.createRun();
+                    cellRun.setFontFamily("SimSong");
+                }
+            }
+
+            // 设置响应头
+            response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            response.setHeader("Content-Disposition", "attachment; filename=personnel.docx");
+
+            // 写入文档到响应流
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                document.write(baos);
+                response.setContentLength(baos.size());
+                baos.writeTo(response.getOutputStream());
+            } catch (IOException e) {
+                throw new RuntimeException("无法写入Word到响应: " + e.getMessage(), e);
+            } finally {
+                document.close();
+            }
+        } else {
+            CustomExcelUtil.writeToResponse(userList.getRows(), EventDeviceNameDTO.class, response);
+        }
     }
 
     @Operation(summary = "报警事件所有类型")

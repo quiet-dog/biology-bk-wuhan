@@ -30,6 +30,9 @@ public class EventSearch extends AbstractPageQuery<EventEntity> {
         @Schema(description = "区域")
         private String area;
 
+        @Schema(description = "导出类型")
+        private String exportType;
+
         @Override
         public QueryWrapper<EventEntity> addQueryCondition() {
                 QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<EventEntity>();

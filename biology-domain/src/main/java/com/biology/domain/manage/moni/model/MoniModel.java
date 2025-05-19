@@ -24,7 +24,7 @@ public class MoniModel extends MoniEntity {
 
     private MoniThresholdService moniThresholdService;
 
-    private List<Long> thresholdIds;
+    private List<List<Long>> thresholdIds;
 
     private List<Long> environmentIds;
 
@@ -63,11 +63,14 @@ public class MoniModel extends MoniEntity {
 
     public void addThresholds() {
         if (getMoniId() != null && thresholdIds != null) {
-            for (Long thresholdId : thresholdIds) {
-                MoniThresholdEntity entity = new MoniThresholdEntity();
-                entity.setMoniId(getMoniId());
-                entity.setThresholdId(thresholdId);
-                moniThresholdService.save(entity);
+            for (List<Long> thresholdId : thresholdIds) {
+                if (thresholdId != null && thresholdId.size() == 2) {
+                    MoniThresholdEntity entity = new MoniThresholdEntity();
+                    entity.setMoniId(getMoniId());
+                    entity.setThresholdId(thresholdId.get(1));
+                    entity.setEquipmentId(thresholdId.get(0));
+                    moniThresholdService.save(entity);
+                }
             }
         }
         if (getMoniId() != null && environmentIds != null) {

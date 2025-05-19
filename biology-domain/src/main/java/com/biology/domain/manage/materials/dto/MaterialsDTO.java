@@ -24,41 +24,52 @@ public class MaterialsDTO {
 
     @ApiModelProperty("物料名称")
     @Schema(description = "物料名称")
+    @ExcelColumn(name = "物料名称")
     private String name;
 
     @ApiModelProperty("物料编号")
     @Schema(description = "物料编号")
+    @ExcelColumn(name = "物料编号")
     private String code;
 
     @ApiModelProperty("物料规格")
     @Schema(description = "物料规格")
+    @ExcelColumn(name = "物料规格")
     private String specification;
 
     @ApiModelProperty("物料类型")
     @Schema(description = "物料类型")
+    @ExcelColumn(name = "物料类型")
     private String type;
 
     @ApiModelProperty("库存量")
     @Schema(description = "库存量")
+    @ExcelColumn(name = "库存量")
     private double stock;
 
     @ApiModelProperty("物料标签")
     @Schema(description = "物料标签")
+    @ExcelColumn(name = "物料标签")
     private String tag;
 
     @ApiModelProperty("当前入库量")
+    @Schema(description = "当前入库量")
     @ExcelColumn(name = "当前入库量")
     private double lastStock;
 
     @ApiModelProperty("当前出库量")
+    @Schema(description = "当前出库量")
     @ExcelColumn(name = "当前出库量")
     private double outStock;
 
     @ApiModelProperty("批次")
+    @Schema(description = "批次")
+    @ExcelColumn(name = "批次")
     private String batch;
 
     @ApiModelProperty("单位")
     @Schema(description = "单位")
+    @ExcelColumn(name = "单位")
     private String unit;
 
     @Schema(description = "创建时间")

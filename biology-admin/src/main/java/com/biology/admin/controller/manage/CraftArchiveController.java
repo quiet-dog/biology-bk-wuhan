@@ -24,7 +24,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +78,7 @@ public class CraftArchiveController extends BaseController {
     @Operation(summary = "导出工艺档案")
     @PostMapping("/export")
     public void export(HttpServletResponse response, @RequestBody SearchCraftArchiveQuery query)
-            throws UnsupportedEncodingException {
+            throws IOException {
         craftArchiveApplicationService.export(response, query);
     }
 

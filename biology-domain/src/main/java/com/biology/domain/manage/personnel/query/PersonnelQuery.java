@@ -30,6 +30,9 @@ public class PersonnelQuery extends AbstractPageQuery<PersonnelEntity> {
 
     private List<Long> personnelIds;
 
+    @Schema(description = "导出类型")
+    private String exportType;
+
     @Override
     public QueryWrapper<PersonnelEntity> addQueryCondition() {
         QueryWrapper<PersonnelEntity> queryWrapper = new QueryWrapper<PersonnelEntity>();

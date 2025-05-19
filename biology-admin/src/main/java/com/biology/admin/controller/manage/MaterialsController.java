@@ -41,6 +41,8 @@ import com.biology.domain.manage.materials.dto.StockEchatDTO;
 import com.biology.domain.manage.materials.dto.WarehouseDTO;
 import com.biology.domain.manage.materials.query.SearchMaterialsQuery;
 import com.biology.domain.manage.materials.query.SearchWarehouseQuery;
+import com.biology.domain.manage.personnel.dto.PersonnelDTO;
+import com.biology.domain.manage.personnel.query.PersonnelQuery;
 import com.biology.domain.manage.task.query.TaskStockQuery;
 import com.biology.domain.system.user.command.AddUserCommand;
 
@@ -182,6 +184,13 @@ public class MaterialsController extends BaseController {
     @GetMapping("/getMaterialsEasy")
     public ResponseDTO<List<MaterialsEasyDTO>> getMaterialsEasy() {
         return ResponseDTO.ok(materialsApplicationService.getMaterialsEasy());
+    }
+
+    @Operation(summary = "物料档案列表导出")
+    @GetMapping("/excel")
+    public void exportPersonnelByExcel(HttpServletResponse response, SearchMaterialsQuery query) {
+        PageDTO<MaterialsDTO> personnelList = materialsApplicationService.getMaterialsList(query);
+        CustomExcelUtil.writeToResponse(personnelList.getRows(), MaterialsDTO.class, response);
     }
 
     // @Operation(summary = "添加库存")

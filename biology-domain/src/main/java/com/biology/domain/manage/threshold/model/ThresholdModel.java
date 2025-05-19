@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.threshold.command.AddThresholdCommand;
 import com.biology.domain.manage.threshold.command.AddThresholdValue;
 import com.biology.domain.manage.threshold.db.ThresholdEmergencyEntity;
@@ -137,6 +138,7 @@ public class ThresholdModel extends ThresholdEntity {
             valueEntities.add(valueEntity);
         }
         thresholdValueService.saveBatch(valueEntities);
+        CacheCenter.thresholdValuesCache.set(getThresholdId(), valueEntities);
         // 发送消息
         SendThresholdDTO sDto = new SendThresholdDTO();
         sDto.setThreshold(this);
@@ -146,7 +148,7 @@ public class ThresholdModel extends ThresholdEntity {
 
     public void sendMsg(SendThresholdDTO sDto) {
         opcClient.post()
-                .uri("/recYuZhiApi")
+                .uri("/api/recYuZhiApi")
                 .bodyValue(sDto)
                 .retrieve()
                 .bodyToMono(String.class)

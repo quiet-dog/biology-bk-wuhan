@@ -1,24 +1,27 @@
+{
+    debug
+    auto_https off
+    http_port 0
+}
 :9080 {
 	header Access-Control-Allow-Origin "http://jessibuca.monibuca.com"
 	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
 	header Access-Control-Allow-Headers "Content-Type, Authorization"
 	header Access-Control-Max-Age "3600"
+	#tls internal
 	# API 路径代理
 	handle_path /api/* {
 		reverse_proxy http://127.0.0.1:9020
 	}
 
 	handle_path /minioapi/* {
-		reverse_proxy http://192.168.0.11:9000
+		reverse_proxy http://127.0.0.1:9000
 	}
 
-	handle_path /kkfile/* {
-		reverse_proxy http://192.168.0.11:8012
+	handle /kkfile/* {
+		reverse_proxy http://127.0.0.1:8012
 	}
 
-	handle_path /kkfile/kkfile/* {
-		reverse_proxy http://192.168.0.11:8012
-	}
 
 	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
 	@ws {
@@ -53,7 +56,19 @@
 
 	handle_path /threed/* {
 		reverse_proxy http://127.0.0.1:8080
-	}	
+	}
+
+	@postfoo {
+                method GET
+                path /api/file/preview*
+    }
+
+	handle @postfoo {
+		# 加上/biology
+		uri replace /api/file/preview /biology
+		reverse_proxy http://192.168.0.11:9000
+	}
+
 
 	# 静态文件处理
 	handle {
@@ -76,11 +91,16 @@
 		reverse_proxy http://127.0.0.1:9004
 	}
 
+	handle_path /kkfile/* {
+		reverse_proxy http://127.0.0.1:8012
+	}
+
 	@ws {
 		path /ws-api/*
 		header Connection *Upgrade*
 		header Upgrade websocket
 	}
+
 	@videows {
 		path /videows/*
 		header Connection *Upgrade*
@@ -105,7 +125,16 @@
 		}
 	}
 
-	
+	@postfoo {
+                method GET
+                path /api/file/preview*
+    }
+
+	handle @postfoo {
+		# 加上/biology
+		uri replace /api/file/preview /biology
+		reverse_proxy http://192.168.0.11:9000
+	}
 
 	handle {
 		root * /www/bk/screen
@@ -124,6 +153,10 @@
 
 	handle_path /minioapi/* {
 		reverse_proxy http://127.0.0.1:9004
+	}
+
+	handle_path /kkfile/* {
+		reverse_proxy http://127.0.0.1:8012
 	}
 
 	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀

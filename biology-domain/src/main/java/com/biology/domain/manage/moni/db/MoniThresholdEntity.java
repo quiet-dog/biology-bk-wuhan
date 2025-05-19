@@ -28,6 +28,10 @@ public class MoniThresholdEntity extends Model<MoniThresholdEntity> {
     @TableField(value = "threshold_id")
     private Long thresholdId;
 
+    @ApiModelProperty("设备Id")
+    @TableField(value = "equipment_id")
+    private Long equipmentId;
+
     @ApiModelProperty("环境ID")
     @TableField(value = "environment_id")
     private Long environmentId;

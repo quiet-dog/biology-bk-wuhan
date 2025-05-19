@@ -13,7 +13,6 @@ import com.alibaba.excel.annotation.ExcelProperty;
 
 import java.util.Date;
 
-
 @Data
 @ExcelSheet(name = "工艺档案表")
 public class CraftArchiveDTO {

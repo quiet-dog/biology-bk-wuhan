@@ -20,6 +20,8 @@ public class SearchCraftArchiveQuery extends AbstractPageQuery<CraftArchiveEntit
 
     private Long craftArchiveId;
 
+    private String exportType;
+
     @Override
     public QueryWrapper<CraftArchiveEntity> addQueryCondition() {
         QueryWrapper<CraftArchiveEntity> queryWrapper = new QueryWrapper<>();

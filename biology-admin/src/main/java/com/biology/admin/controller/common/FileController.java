@@ -201,23 +201,6 @@ public class FileController {
     public void preview(String fileName, HttpServletResponse response, HttpServletRequest request) throws Exception {
         // 获取请求的ip
         // 获取param参数
-        String ip = request.getParameter("ip");
-        // 获取源的scheme
-
-        // System.out.println("targetUrl: " + targetUrl);
-        // URL url = new URL(targetUrl);
-        // String a = URLEncoder.encode(fileName, "UTF-8");
-        // String urlWithoutQuery = new URL(url.getProtocol(), url.getHost(),
-        // url.getPort(),
-        // "/minioapi/" + minioConfig.getBucketName() + "/" + a)
-        // .toString();
-        // System.out.println("urlWithoutQuery: " + urlWithoutQuery);
-        // String url = minioUtils.preview(minioConfig.getBucketName(), fileName,
-        // minioConfig.getEndpoint(),
-        // minioConfig.getTargetUrl(), targetUrl);
-        // if (url != null) {
-        // response.sendRedirect(ip + "/minioapi/" + minioConfig.getBucketName() + "/" +
-        // fileName);
         return;
         // }
     }

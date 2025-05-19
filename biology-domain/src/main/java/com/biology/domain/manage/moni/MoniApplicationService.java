@@ -138,6 +138,8 @@ public class MoniApplicationService {
                 double min = moniModel.getMin();
                 double max = moniModel.getMax();
                 double randomValue = min + (Math.random() * (max - min));
+                // 保留2位小数
+                randomValue = Math.round(randomValue * 100.0) / 100.0;
                 if (moniThresholdEntity.getEnvironmentId() != null && moniThresholdEntity.getEnvironmentId() != 0) {
                     dto.setDeviceType("环境档案");
                     EnvironmentAlarmInfoDTO eDto = new EnvironmentAlarmInfoDTO();
@@ -352,7 +354,7 @@ public class MoniApplicationService {
     public void sendOpc(DeviceDTO deviceDTO) {
         // 只发送，不处理响应
         opcClient.post()
-                .uri("/recDataApi")
+                .uri("/api/recDataApi")
                 .bodyValue(deviceDTO)
                 .retrieve()
                 .bodyToMono(String.class)

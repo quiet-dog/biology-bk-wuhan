@@ -36,10 +36,13 @@ public class MoniDTO {
     private Date createTime;
 
     @Schema(description = "阈值IDs")
-    private List<Long> thresholdIds;
+    private List<List<Long>> thresholdIds;
 
     @Schema(description = "环境IDs")
     private List<Long> environmentIds;
+
+    @Schema(description = "是否推送")
+    private Boolean isPush;
 
     public MoniDTO(MoniEntity moniEntity) {
         this.moniId = moniEntity.getMoniId();
@@ -49,8 +52,9 @@ public class MoniDTO {
         this.pushFrequency = moniEntity.getPushFrequency();
         this.min = moniEntity.getMin();
         this.max = moniEntity.getMax();
-        // setThresholdIdsQ();
-        // setEquipmentIdsQ();
+        this.isPush = moniEntity.getIsPush();
+        setThresholdIdsQ();
+        setEnvironmentIdsQ();
     }
 
     public Void setThresholdIdsQ() {
@@ -60,7 +64,10 @@ public class MoniDTO {
             queryWrapper.eq("moni_id", this.getMoniId());
             List<MoniThresholdEntity> moniThresholdEntities = new MoniThresholdEntity().selectList(queryWrapper);
             for (MoniThresholdEntity moniThresholdEntity : moniThresholdEntities) {
-                this.thresholdIds.add(moniThresholdEntity.getThresholdId());
+                List<Long> thresholdIds = new ArrayList<>();
+                thresholdIds.add(moniThresholdEntity.getEquipmentId());
+                thresholdIds.add(moniThresholdEntity.getThresholdId());
+                this.thresholdIds.add(thresholdIds);
             }
         }
         return null;
@@ -68,7 +75,7 @@ public class MoniDTO {
 
     public void setEnvironmentIdsQ() {
         this.setEnvironmentIds(new ArrayList<>());
-        if (this.getMoniId() != null && this.getPushType() != null && this.getPushType().equals("1")) {
+        if (this.getMoniId() != null && this.getPushType() != null && this.getPushType().equals("2")) {
             QueryWrapper<MoniThresholdEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("moni_id", this.getMoniId());
             List<MoniThresholdEntity> moniThresholdEntities = new MoniThresholdEntity().selectList(queryWrapper);

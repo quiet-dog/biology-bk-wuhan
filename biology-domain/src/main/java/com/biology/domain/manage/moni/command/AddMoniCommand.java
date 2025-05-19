@@ -12,10 +12,13 @@ public class AddMoniCommand {
     private String description;
 
     @Schema(description = "阈值ID")
-    private List<Long> thresholdIds;
+    private List<List<Long>> thresholdIds;
 
     @Schema(description = "环境Ids")
     private List<Long> equipmentIds;
+
+    @Schema(description = "环境Ids")
+    private List<Long> environmentIds;
 
     @Schema(description = "最小")
     private Double min;
