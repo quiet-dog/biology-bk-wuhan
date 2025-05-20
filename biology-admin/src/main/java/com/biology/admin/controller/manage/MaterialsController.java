@@ -36,6 +36,7 @@ import com.biology.domain.manage.materials.db.MaterialsEntity;
 import com.biology.domain.manage.materials.db.MaterialsService;
 import com.biology.domain.manage.materials.dto.MaterialsDTO;
 import com.biology.domain.manage.materials.dto.MaterialsEasyDTO;
+import com.biology.domain.manage.materials.dto.MhistoryDTO;
 import com.biology.domain.manage.materials.dto.NormalDTO;
 import com.biology.domain.manage.materials.dto.StockEchatDTO;
 import com.biology.domain.manage.materials.dto.WarehouseDTO;
@@ -97,6 +98,13 @@ public class MaterialsController extends BaseController {
     public ResponseDTO<PageDTO<WarehouseDTO>> list(SearchWarehouseQuery query) {
         PageDTO<WarehouseDTO> list = materialsApplicationService.getWarehouseList(query);
         return ResponseDTO.ok(list);
+    }
+
+    @Operation(summary = "获取物料档案历史入库列表")
+    @GetMapping("/history/{materialsId}")
+    public ResponseDTO<List<MhistoryDTO>> list(
+            @PathVariable(value = "materialsId", required = false) Long materialsId) {
+        return ResponseDTO.ok(materialsApplicationService.getMaterialsHistory(materialsId));
     }
 
     @Operation(summary = "更新物料档案")
@@ -163,7 +171,8 @@ public class MaterialsController extends BaseController {
     @GetMapping("/stock/{materialsId}")
     public ResponseDTO<StockEchatDTO> stockMaterials(
             @PathVariable(value = "materialsId", required = false) Long materialsId, TaskStockQuery dateType) {
-        return ResponseDTO.ok(materialsApplicationService.stockMaterials(materialsId, dateType.getDayType()));
+        return ResponseDTO.ok(
+                materialsApplicationService.stockMaterials(materialsId, dateType.getDayType(), dateType.getIsUnit()));
     }
 
     @Operation(summary = "首页正常不正常统计")

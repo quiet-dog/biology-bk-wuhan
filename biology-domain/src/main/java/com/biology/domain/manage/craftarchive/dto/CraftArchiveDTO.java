@@ -5,11 +5,13 @@ import com.biology.common.annotation.ExcelSheet;
 import com.biology.domain.manage.craftarchive.db.CraftArchiveEntity;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import org.springframework.beans.BeanUtils;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.util.Date;
 
@@ -50,6 +52,21 @@ public class CraftArchiveDTO {
     // @ExcelColumn(name = "附件地址", showInImportTemplate = false)
     @ExcelProperty("附件地址")
     private JsonNode attachmentPath;
+
+    @ApiModelProperty("标签名称")
+    @ExcelProperty("标签名称")
+    @ExcelColumn(name = "标签名称")
+    private String labelName;
+
+    @ApiModelProperty("标签颜色")
+    @ExcelProperty("标签颜色")
+    @ExcelColumn(name = "标签颜色")
+    private String color;
+
+    @ApiModelProperty("标签描述")
+    @ExcelProperty("标签描述")
+    @ExcelColumn(name = "标签描述")
+    private String colorDescription;
 
     public CraftArchiveDTO(CraftArchiveEntity entity) {
         BeanUtils.copyProperties(entity, this);

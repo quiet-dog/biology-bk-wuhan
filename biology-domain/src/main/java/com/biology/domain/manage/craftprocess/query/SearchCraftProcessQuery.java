@@ -20,6 +20,7 @@ public class SearchCraftProcessQuery extends AbstractPageQuery<CraftProcessEntit
     private Long craftArchiveId;
     // 根据ids查询
     private List<Long> ids;
+    private String exportType;
 
     @Override
     public QueryWrapper<CraftProcessEntity> addQueryCondition() {

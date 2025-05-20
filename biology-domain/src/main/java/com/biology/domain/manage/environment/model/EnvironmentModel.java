@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.domain.manage.alarmlevel.command.AlarmDetail;
@@ -16,6 +17,8 @@ import com.biology.domain.manage.environment.db.EnvironmentEntity;
 import com.biology.domain.manage.environment.db.EnvironmentService;
 import com.biology.domain.manage.environment.db.EnvironmentSopEntity;
 import com.biology.domain.manage.environment.db.EnvironmentSopService;
+import com.biology.domain.manage.environment.dto.SendEnvironmentDTO;
+import com.biology.domain.manage.threshold.dto.SendThresholdDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -35,6 +38,8 @@ public class EnvironmentModel extends EnvironmentEntity {
 
     private EnvironmentEmergencyService environmentEmergencyService;
 
+    private WebClient opcClient;
+
     @Schema(description = "报警级别信息")
     private List<AlarmDetail> alarmLevels;
 
@@ -45,16 +50,18 @@ public class EnvironmentModel extends EnvironmentEntity {
     private List<Long> sopIds;
 
     public EnvironmentModel(EnvironmentService environmentService, AlarmlevelDetailService alarmlevelDetailService,
-            EnvironmentSopService environmentSopService, EnvironmentEmergencyService environmentEmergencyService) {
+            EnvironmentSopService environmentSopService, EnvironmentEmergencyService environmentEmergencyService,
+            WebClient opcClient) {
         this.environmentService = environmentService;
         this.alarmlevelDetailService = alarmlevelDetailService;
         this.environmentSopService = environmentSopService;
         this.environmentEmergencyService = environmentEmergencyService;
+        this.opcClient = opcClient;
     }
 
     public EnvironmentModel(EnvironmentEntity environmentEntity, EnvironmentService environmentService,
             AlarmlevelDetailService alarmlevelDetailService, EnvironmentSopService environmentSopService,
-            EnvironmentEmergencyService environmentEmergencyService) {
+            EnvironmentEmergencyService environmentEmergencyService, WebClient opcClient) {
         if (environmentEntity != null) {
             BeanUtils.copyProperties(environmentEntity, this);
         }
@@ -62,6 +69,7 @@ public class EnvironmentModel extends EnvironmentEntity {
         this.alarmlevelDetailService = alarmlevelDetailService;
         this.environmentSopService = environmentSopService;
         this.environmentEmergencyService = environmentEmergencyService;
+        this.opcClient = opcClient;
     }
 
     public void loadAddEnvironmentCommand(AddEnvironmentCommand command) {
@@ -88,7 +96,12 @@ public class EnvironmentModel extends EnvironmentEntity {
                 alarmlevelDetails.add(alarmlevelDetailEntity);
             }
             alarmlevelDetailService.saveBatch(alarmlevelDetails);
+            SendEnvironmentDTO sDto = new SendEnvironmentDTO();
+            sDto.setValues(alarmlevelDetails);
+            sDto.setEnvironment(this);
+            sendMsg(sDto);
         }
+
     }
 
     public void cleanLevels() {
@@ -133,6 +146,15 @@ public class EnvironmentModel extends EnvironmentEntity {
         QueryWrapper<EnvironmentEmergencyEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("environment_id", getEnvironmentId());
         environmentEmergencyService.remove(queryWrapper);
+    }
+
+    public void sendMsg(SendEnvironmentDTO sDto) {
+        opcClient.post()
+                .uri("/api/recHuanYuZhiApi")
+                .bodyValue(sDto)
+                .retrieve()
+                .bodyToMono(String.class)
+                .subscribe();
     }
 
     public boolean insert() {

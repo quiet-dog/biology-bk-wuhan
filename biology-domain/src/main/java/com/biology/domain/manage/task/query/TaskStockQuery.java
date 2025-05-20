@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class TaskStockQuery {
     private String dayType;
+    private Boolean isUnit;
 }

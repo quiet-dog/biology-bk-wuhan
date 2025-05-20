@@ -87,7 +87,7 @@ public class TaskApplicationService {
     // }
 
     // 每天统计一次库存
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 50 23 * * ?")
     public void statistics() {
         QueryWrapper<MaterialsEntity> queryWrapper = new QueryWrapper<MaterialsEntity>();
         List<MaterialsEntity> list = materialsService.list(queryWrapper);

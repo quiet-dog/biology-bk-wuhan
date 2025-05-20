@@ -55,6 +55,9 @@ public class ReceiveDTO {
     @Schema(description = "领用说明")
     private String receiveExplain;
 
+    @Schema(description = "当时库存数量")
+    private double stock;
+
     public ReceiveDTO(ReceiveEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);

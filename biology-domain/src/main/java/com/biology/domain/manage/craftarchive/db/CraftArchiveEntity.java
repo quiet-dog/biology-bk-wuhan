@@ -48,4 +48,16 @@ public class CraftArchiveEntity extends BaseEntity<CraftArchiveEntity> {
     @ApiModelProperty("附件地址")
     @TableField(value = "attachment_path", typeHandler = JacksonTypeHandler.class)
     private JsonNode attachmentPath;
+
+    @ApiModelProperty("标签名称")
+    @TableField("label_name")
+    private String labelName;
+
+    @ApiModelProperty("标签颜色")
+    @TableField("color")
+    private String color;
+
+    @ApiModelProperty("标签描述")
+    @TableField("color_description")
+    private String colorDescription;
 }

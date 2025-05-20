@@ -23,6 +23,7 @@ import com.biology.domain.manage.materials.db.WarehouseEntity;
 import com.biology.domain.manage.materials.db.WarehouseService;
 import com.biology.domain.manage.materials.dto.MaterialsDTO;
 import com.biology.domain.manage.materials.dto.MaterialsEasyDTO;
+import com.biology.domain.manage.materials.dto.MhistoryDTO;
 import com.biology.domain.manage.materials.dto.NormalDTO;
 import com.biology.domain.manage.materials.dto.StockEchatDTO;
 import com.biology.domain.manage.materials.dto.WarehouseDTO;
@@ -105,8 +106,8 @@ public class MaterialsApplicationService {
         return new MaterialsDTO(materialsModel);
     }
 
-    public StockEchatDTO stockMaterials(Long materialsId, String dayType) {
-        return materialsTaskService.getStockMaterials(materialsId, dayType);
+    public StockEchatDTO stockMaterials(Long materialsId, String dayType, Boolean isUnit) {
+        return materialsTaskService.getStockMaterials(materialsId, dayType, isUnit);
         // StockEchatDTO stockEchatDTO = new StockEchatDTO();
         // stockEchatDTO.setSeriesData(new ArrayList<>());
         // stockEchatDTO.setXAxisData(new ArrayList<>());
@@ -166,5 +167,9 @@ public class MaterialsApplicationService {
 
     public List<MaterialsEasyDTO> getMaterialsEasy() {
         return materialsService.getMaterialsEasy();
+    }
+
+    public List<MhistoryDTO> getMaterialsHistory(Long materialsId) {
+        return materialsService.getMaterialsHistory(materialsId);
     }
 }

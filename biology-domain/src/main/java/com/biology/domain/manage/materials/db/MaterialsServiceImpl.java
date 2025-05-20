@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.biology.domain.manage.materials.dto.MaterialsEasyDTO;
+import com.biology.domain.manage.materials.dto.MhistoryDTO;
 import com.biology.domain.manage.materials.dto.NormalDTO;
 
 import lombok.NoArgsConstructor;
@@ -82,6 +83,11 @@ public class MaterialsServiceImpl extends ServiceImpl<MaterialsMapper, Materials
             result.add(new MaterialsEasyDTO(materialsEntity));
         }
         return result;
+    }
+
+    @Override
+    public List<MhistoryDTO> getMaterialsHistory(Long materialsId) {
+        return baseMapper.getMaterialsHistory(materialsId);
     }
 
 }

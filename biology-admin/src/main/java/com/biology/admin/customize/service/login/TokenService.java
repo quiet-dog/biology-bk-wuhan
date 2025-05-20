@@ -121,6 +121,8 @@ public class TokenService {
     private String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
+                // 20天过期
+                .setExpiration(new java.util.Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(20)))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 

@@ -1,6 +1,7 @@
 package com.biology.domain.manage.environment.model;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
@@ -23,9 +24,11 @@ public class EnvironmentFactory {
 
     private final EnvironmentEmergencyService environmentEmergencyService;
 
+    private final WebClient opcClient;
+
     public EnvironmentModel create() {
         return new EnvironmentModel(environmentService, alarmlevelDetailService, environmentSopService,
-                environmentEmergencyService);
+                environmentEmergencyService, opcClient);
     }
 
     public EnvironmentModel loadById(Long environmentId) {
@@ -35,7 +38,7 @@ public class EnvironmentFactory {
         }
         return new EnvironmentModel(environmentModel, environmentService, alarmlevelDetailService,
                 environmentSopService,
-                environmentEmergencyService);
+                environmentEmergencyService, opcClient);
     }
 
 }

@@ -10,5 +10,5 @@ import com.biology.domain.manage.task.dto.TaskMaterialsDTO;
 
 public interface MaterialsTaskService extends IService<MaterialsTaskEntity> {
 
-    public StockEchatDTO getStockMaterials(Long marterialsId, String dayType);
+    public StockEchatDTO getStockMaterials(Long marterialsId, String dayType, Boolean isUnit);
 }

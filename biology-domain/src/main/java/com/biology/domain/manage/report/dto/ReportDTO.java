@@ -68,6 +68,9 @@ public class ReportDTO {
     @Schema(description = "更新时间")
     private Date updateTime;
 
+    @Schema(description = "当时库存数量")
+    private double stock;
+
     public ReportDTO(ReportEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);

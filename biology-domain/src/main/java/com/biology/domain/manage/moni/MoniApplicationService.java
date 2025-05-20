@@ -138,8 +138,11 @@ public class MoniApplicationService {
                 double min = moniModel.getMin();
                 double max = moniModel.getMax();
                 double randomValue = min + (Math.random() * (max - min));
+                // 保留1位小数
+                randomValue = Math.round(randomValue * 10.0) / 10.0;
                 // 保留2位小数
-                randomValue = Math.round(randomValue * 100.0) / 100.0;
+                // randomValue = Math.round(randomValue * 100.0) / 100.0;
+
                 if (moniThresholdEntity.getEnvironmentId() != null && moniThresholdEntity.getEnvironmentId() != 0) {
                     dto.setDeviceType("环境档案");
                     EnvironmentAlarmInfoDTO eDto = new EnvironmentAlarmInfoDTO();

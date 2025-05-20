@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.annotation.ExcelColumn;
 import com.biology.domain.manage.materials.db.MaterialsEntity;
@@ -77,6 +78,23 @@ public class MaterialsDTO {
 
     @Schema(description = "更新时间")
     private Date updateTime;
+
+    @ApiModelProperty("型号")
+    @ExcelColumn(name = "型号")
+    private String model;
+
+    @ApiModelProperty("供应商")
+    @ExcelColumn(name = "供应商")
+    private String supplier;
+
+    @ApiModelProperty("标签颜色")
+    @ExcelColumn(name = "标签颜色")
+    private String color;
+
+    @ApiModelProperty("标签颜色描述")
+    @Schema(description = "标签颜色描述")
+    @ExcelColumn(name = "标签颜色描述")
+    private String colorDescription;
 
     @Schema(description = "阈值信息")
     private List<ValueDTO> values;

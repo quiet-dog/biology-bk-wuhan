@@ -1,5 +1,7 @@
 package com.biology.domain.manage.materials.query;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.core.page.AbstractPageQuery;
 import com.biology.domain.manage.knowledge.db.KnowledgeEntity;
@@ -17,11 +19,14 @@ public class SearchMaterialsQuery extends AbstractPageQuery<MaterialsEntity> {
 
     private String materialsType;
 
+    private List<Long> materialsIds;
+
     @Override
     public QueryWrapper<MaterialsEntity> addQueryCondition() {
         QueryWrapper<MaterialsEntity> queryWrapper = new QueryWrapper<MaterialsEntity>();
         queryWrapper.like(StrUtil.isNotEmpty(name), "name", name)
-                .like(StrUtil.isNotEmpty(materialsType), "materials_type", materialsType);
+                .like(StrUtil.isNotEmpty(materialsType), "materials_type", materialsType)
+                .in(materialsIds != null && materialsIds.size() > 0, "materials_id", materialsIds);
         setTimeRangeColumn("create_time");
 
         return queryWrapper;

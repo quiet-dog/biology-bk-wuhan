@@ -21,7 +21,7 @@ import cn.hutool.core.util.StrUtil;
 public class MaterialsTaskServiceImpl extends ServiceImpl<MaterialsTaskMapper, MaterialsTaskEntity>
                 implements MaterialsTaskService {
 
-        public StockEchatDTO getStockMaterials(Long materialsId, String dayType) {
+        public StockEchatDTO getStockMaterials(Long materialsId, String dayType, Boolean isUnit) {
                 StockEchatDTO result = new StockEchatDTO();
                 result.setXAxisData(new ArrayList<>());
                 result.setSeriesData(new ArrayList<>());
@@ -48,7 +48,7 @@ public class MaterialsTaskServiceImpl extends ServiceImpl<MaterialsTaskMapper, M
                         MaterialsEntity materialsEntity = new MaterialsEntity().selectOne(queryWrapper);
                         if (materialsEntity != null) {
                                 result.getSeriesData().set(6, materialsEntity.getStock());
-                        } 
+                        }
 
                         // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
 

@@ -116,6 +116,12 @@ public class ReportModel extends ReportEntity {
     }
 
     public boolean insert() {
+        MaterialsEntity materialsEntity = materialsService.getById(getMaterialsId());
+        if (materialsEntity.getStock() - getReportNum() < 0) {
+            this.setReportNum(0);
+        } else {
+            materialsEntity.setStock(materialsEntity.getStock() - getReportNum());
+        }
         super.insert();
         checkAlarm();
         addFiles();

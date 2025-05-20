@@ -90,6 +90,8 @@ public class ReceiveModel extends ReceiveEntity {
 
     public boolean insert() {
         checkReceiveNum();
+        MaterialsEntity materialsEntity = materialsService.getById(getMaterialsId());
+        this.setStock(materialsEntity.getStock());
         return super.insert();
     }
 

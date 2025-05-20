@@ -45,6 +45,10 @@ public class ReceiveEntity extends BaseEntity<ReceiveEntity> {
     @TableField("out_id")
     private Long outId;
 
+    @ApiModelProperty("当时库存数量")
+    @TableField("stock")
+    private double stock;
+
     @Override
     public Serializable pkVal() {
         return this.receiveId;

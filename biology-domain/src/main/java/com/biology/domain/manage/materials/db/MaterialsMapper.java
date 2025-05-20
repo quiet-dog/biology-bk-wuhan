@@ -1,8 +1,11 @@
 package com.biology.domain.manage.materials.db;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.biology.domain.manage.materials.dto.MhistoryDTO;
 
 public interface MaterialsMapper extends BaseMapper<MaterialsEntity> {
 
@@ -11,6 +14,57 @@ public interface MaterialsMapper extends BaseMapper<MaterialsEntity> {
             + "WHERE code = #{code} ")
     MaterialsEntity getMaterialsByCode(String code);
 
-    // public void getMaterialsByUseType();
+    /**
+     * SELECT
+     * materials_id,
+     * stock,
+     * create_time,
+     * receive_num AS num
+     * FROM manage_receive Where materials_id =1
+     * UNION ALL
+     * SELECT
+     * materials_id ,
+     * stock,
+     * create_time,
+     * report_num AS num
+     * FROM manage_report Where materials_id =1
+     * UNION ALL
+     * SELECT
+     * materials_id,
+     * stock,
+     * create_time,
+     * remain_stock AS num
+     * FROM manage_warehouse Where materials_id =1;
+     * 
+     * @param materialsId
+     * @return
+     */
+    @Select("SELECT "
+            + "    materials_id, "
+            + "    stock, "
+            + "    create_time, "
+            + "    NULL AS batch,"
+            + "    receive_num AS num, "
+            + "  '出库' AS type "
+            + "FROM manage_receive Where materials_id = #{materialsId} "
+            + "UNION ALL "
+            + "SELECT "
+            + "    materials_id ,"
+            + "    stock,"
+            + "    create_time,"
+            + "    NULL AS batch,"
+            + "    report_num AS num, "
+            + "  '出库' AS type "
+            + "FROM manage_report Where materials_id = #{materialsId} "
+            + "UNION ALL "
+            + "SELECT "
+            + "    materials_id,"
+            + "    stock AS num,"
+            + "    create_time,"
+            + "    batch,"
+            + "    remain_stock AS stock, "
+            + "  '入库' AS type "
+            + "FROM manage_warehouse Where materials_id = #{materialsId};")
+    List<MhistoryDTO> getMaterialsHistory(Long materialsId);
 
 }

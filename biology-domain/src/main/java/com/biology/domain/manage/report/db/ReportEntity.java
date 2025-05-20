@@ -43,6 +43,10 @@ public class ReportEntity extends BaseEntity<ReportEntity> {
     @TableField("report_reason")
     private String reportReason;
 
+    @ApiModelProperty("当时库存数量")
+    @TableField("stock")
+    private double stock;
+
     @Override
     public Long pkVal() {
         return this.reportId;

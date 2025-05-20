@@ -58,6 +58,20 @@ public class AddMaterialsCommand {
     @ExcelColumn(name = "单位")
     private String unit;
 
+    @ApiModelProperty("型号")
+    @ExcelColumn(name = "型号")
+    private String model;
+
+    @ApiModelProperty("供应商")
+    @ExcelColumn(name = "供应商")
+    private String supplier;
+
+    @ApiModelProperty("标签颜色")
+    private String color;
+
+    @ApiModelProperty("标签颜色描述")
+    private String colorDescription;
+
     @Schema(description = "阈值设置")
     List<ValueCommand> values;
 }

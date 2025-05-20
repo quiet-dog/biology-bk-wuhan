@@ -1,18 +1,18 @@
 package com.biology.domain.manage.craftprocess.dto;
 
-import com.biology.common.annotation.ExcelColumn;
+import org.springframework.beans.BeanUtils;
+
 import com.biology.domain.manage.craftarchive.dto.CraftArchiveDTO;
 import com.biology.domain.manage.craftnode.dto.CraftNodeDTO;
 import com.biology.domain.manage.craftprocess.db.CraftProcessEntity;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
 @Data
-public class CraftProcessDTO {
-
+public class CraftProcessExcelDTO {
     @Schema(description = "工艺流程图ID")
-    @ExcelColumn(name = "序号", showInImportTemplate = false)
+    // @ExcelColumn(name = "工艺流程图ID", showInImportTemplate = false)
     private Long craftProcessId;
 
     @Schema(description = "所属工艺档案ID")
@@ -25,34 +25,27 @@ public class CraftProcessDTO {
     private Long craftNodeId;
 
     @Schema(description = "工艺节点")
-    @ExcelColumn(name = "工艺节点")
     private CraftNodeDTO craftNode;
 
     @Schema(description = "节点顺序")
-    @ExcelColumn(name = "节点顺序")
     private Integer nodeOrder;
 
     @Schema(description = "人员要素")
-    @ExcelColumn(name = "人员要素")
     private String personnelFactors;
 
     @Schema(description = "设备要素")
-    @ExcelColumn(name = "设备要素")
     private String equipmentFactors;
 
     @Schema(description = "原料要素")
-    @ExcelColumn(name = "原料要素")
     private String materialFactors;
 
     @Schema(description = "环境要素")
-    @ExcelColumn(name = "环境要素")
     private String environmentFactors;
 
     @Schema(description = "所属工艺档案名称")
-    @ExcelColumn(name = "所属工艺档案名称")
     private String craftArchiveName;
 
-    public CraftProcessDTO(CraftProcessEntity entity) {
+    public CraftProcessExcelDTO(CraftProcessDTO entity) {
         BeanUtils.copyProperties(entity, this);
     }
 }

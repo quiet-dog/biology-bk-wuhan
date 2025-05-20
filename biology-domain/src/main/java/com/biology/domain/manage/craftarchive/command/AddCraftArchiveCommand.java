@@ -1,5 +1,6 @@
 package com.biology.domain.manage.craftarchive.command;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -10,6 +11,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.biology.common.annotation.ExcelColumn;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Data
@@ -42,4 +45,13 @@ public class AddCraftArchiveCommand {
 
     @Schema(description = "附件地址")
     private JsonNode attachmentPath;
+
+    @Schema(description = "标签名称")
+    private String labelName;
+
+    @Schema(description = "标签颜色")
+    private String color;
+
+    @Schema(description = "标签描述")
+    private String colorDescription;
 }

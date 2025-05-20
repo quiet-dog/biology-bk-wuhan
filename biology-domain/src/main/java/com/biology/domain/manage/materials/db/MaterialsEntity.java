@@ -65,6 +65,22 @@ public class MaterialsEntity extends BaseEntity<MaterialsEntity> {
     @TableField(value = "unit")
     private String unit;
 
+    @ApiModelProperty("型号")
+    @TableField(value = "model")
+    private String model;
+
+    @ApiModelProperty("供应商")
+    @TableField(value = "supplier")
+    private String supplier;
+
+    @ApiModelProperty("标签颜色")
+    @TableField(value = "color")
+    private String color;
+
+    @ApiModelProperty("标签颜色描述")
+    @TableField(value = "color_description")
+    private String colorDescription;
+
     @Override
     public Serializable pkVal() {
         return this.materialsId;
