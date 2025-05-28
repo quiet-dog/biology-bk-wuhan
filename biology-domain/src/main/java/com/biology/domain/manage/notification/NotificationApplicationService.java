@@ -26,6 +26,7 @@ import com.biology.domain.manage.notification.model.NotificationModel;
 import com.biology.infrastructure.user.AuthenticationUtils;
 import com.biology.infrastructure.user.web.SystemLoginUser;
 import com.biology.domain.manage.notification.query.SearchNotificationQuery;
+import com.biology.domain.system.user.db.SysUserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,11 +39,23 @@ public class NotificationApplicationService {
     private final NotificationFactory notificationFactory;
     private final NotificationService notificationService;
     private final UserNotificationService userNotificationService;
+    private final SysUserService sysUserService;
     public Object baseMapper;
 
     public void addNotification(AddNotificationCommand command) {
         // 创建者
         Long userId = getUserIdSafely();
+        if (command.getIsAdminCreate() != null && command.getIsAdminCreate()) {
+            // 管理员创建
+            sysUserService.list().forEach(user -> {
+                NotificationModel notificationModel = notificationFactory.create();
+                notificationModel.loadAddNotificationCommand(command);
+                notificationModel.setCreatorId(userId);
+                notificationModel.setReceiverId(user.getUserId());
+                notificationModel.insert();
+            });
+            return;
+        }
         // command.setCreatorId(userId);
         NotificationModel notificationModel = notificationFactory.create();
         notificationModel.loadAddNotificationCommand(command);
@@ -96,10 +109,9 @@ public class NotificationApplicationService {
         }
         // 检查用户是否已读,不存在则创建
         UserNotificationEntity userNotification = userNotificationService.getOne(
-            Wrappers.<UserNotificationEntity>lambdaQuery()
-                .eq(UserNotificationEntity::getUserId, userId)
-                .eq(UserNotificationEntity::getNotificationId, notificationId)
-        );
+                Wrappers.<UserNotificationEntity>lambdaQuery()
+                        .eq(UserNotificationEntity::getUserId, userId)
+                        .eq(UserNotificationEntity::getNotificationId, notificationId));
         if (userNotification == null) {
             userNotification = new UserNotificationEntity();
             userNotification.setUserId(userId);

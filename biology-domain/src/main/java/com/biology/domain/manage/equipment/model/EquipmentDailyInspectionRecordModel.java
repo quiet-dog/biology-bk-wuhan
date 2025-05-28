@@ -65,6 +65,8 @@ public class EquipmentDailyInspectionRecordModel extends EquipmentDailyInspectio
             command.setImportance(2);
             command.setNotificationType("提醒");
             command.setNotificationTitle("任务提醒");
+            // command.setNotificationType("通知");
+            // command.setNotificationTitle("报警通知");
             command.setInspectionRecordId(getRecordId());
             command.setNotificationContent(getTaskDescription());
             NotificationEntity notificationEntity = new NotificationEntity();

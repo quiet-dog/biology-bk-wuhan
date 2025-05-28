@@ -127,7 +127,7 @@ public class AlarmModel extends AlarmEntity {
         for (MaterialsValueEntity materialsValueEntity : materialsValueEntities) {
 
             // if(materialsValueEntity.getLevel().equals("轻微")){
-            //     continue;
+            // continue;
             // }
 
             if (materialsValueEntity.getSCondition().equals("大于")
@@ -144,14 +144,14 @@ public class AlarmModel extends AlarmEntity {
                 isExit = true;
             }
 
-            if ( materialsValueEntity.getSCondition().equals("大于等于")
+            if (materialsValueEntity.getSCondition().equals("大于等于")
                     && haveStock >= materialsValueEntity.getValue()) {
                 setLevel(materialsValueEntity.getLevel());
                 materialsValue = materialsValueEntity;
                 isExit = true;
             }
 
-            if ( materialsValueEntity.getSCondition().equals("小于等于")
+            if (materialsValueEntity.getSCondition().equals("小于等于")
                     && haveStock <= materialsValueEntity.getValue()) {
                 setLevel(materialsValueEntity.getLevel());
                 materialsValue = materialsValueEntity;
@@ -182,9 +182,13 @@ public class AlarmModel extends AlarmEntity {
         addEventCommand.setMaterialsId(getMaterialsId());
         addEventCommand.setType("物料报警");
         addEventCommand.setLevel(materialsValue.getLevel());
-        addEventCommand.setDescription(
-                materials.getName() + materialsValue.getSCondition() + materialsValue.getValue() + "报警");
-        eventModel.loadAddEventCommand(addEventCommand);
+        // addEventCommand.setDescription(
+        // materials.getName() + materialsValue.getSCondition() +
+        // materialsValue.getValue() + "报警");
+        // eventModel.loadAddEventCommand(addEventCommand);
+        addEventCommand
+                .setDescription(String.format("物料编号为%s的%s库存量为%.2f%s,触发报警", materials.getCode(), materials.getName(),
+                        materialsValue, materials.getUnit()));
         eventModel.insert();
 
         return materialsValue;

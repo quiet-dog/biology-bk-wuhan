@@ -390,7 +390,9 @@ public class TaskApplicationService {
     public void createDoor() {
         // 查询未删除的人员
         QueryWrapper<PersonnelEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("deleted", 0);
+        // queryWrapper.inSql("personnel_id",
+        // "select personnel_id from manage_door where DATE(created_at) = CURDATE() and
+        // deleted = 0");
         List<PersonnelEntity> pList = personnelService.list(queryWrapper);
         if (pList != null && pList.size() > 0) {
             for (PersonnelEntity pEntity : pList) {
@@ -400,12 +402,23 @@ public class TaskApplicationService {
                 command.setClockOut(0);
                 command.setCheckInTime(0);
                 command.setCheckOutTime(0);
+                command.setEnterStatus("不通行");
                 command.setDepartment(pEntity.getDepartment());
                 command.setName(pEntity.getName());
                 command.setPersonnelId(pEntity.getPersonnelId());
                 doorModel.loadAddDoorCommand(command);
                 doorModel.insert();
             }
+        }
+    }
+
+    // 每天统计一次库存
+    @Scheduled(cron = "0 50 23 * * ?")
+    public void cleanDoor() {
+        QueryWrapper<PersonnelEntity> queryWrapper = new QueryWrapper<>();
+        // queryWrapper.eq("deleted", 0);
+        List<PersonnelEntity> pList = personnelService.list(queryWrapper);
+        if (pList != null && pList.size() > 0) {
         }
     }
 

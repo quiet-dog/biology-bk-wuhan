@@ -1788,11 +1788,7 @@ CREATE TABLE `manage_user_notification` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `updater_id` bigint DEFAULT NULL COMMENT '更新者ID',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标志（0代表存在 1代表删除）',
-  PRIMARY KEY (`user_notification_id`),
-  KEY `idx_user_notification_id` (`user_notification_id`),
-  KEY `idx_notification` (`notification_id`),
-  KEY `idx_user` (`user_id`)
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '删除标志（0代表存在 1代表删除）'
 ) ENGINE=InnoDB AUTO_INCREMENT=9398 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户通知状态表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 

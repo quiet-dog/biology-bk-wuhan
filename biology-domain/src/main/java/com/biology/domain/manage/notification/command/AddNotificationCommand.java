@@ -31,6 +31,8 @@ public class AddNotificationCommand {
 
     private Long inspectionRecordId;
 
+    private Boolean isAdminCreate;
+
     // @Schema(description = "创建者ID")
     // private Long creatorId;
 

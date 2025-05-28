@@ -4,10 +4,6 @@
     http_port 0
 }
 :9080 {
-	header Access-Control-Allow-Origin "http://jessibuca.monibuca.com"
-	header Access-Control-Allow-Methods "GET, POST, OPTIONS"
-	header Access-Control-Allow-Headers "Content-Type, Authorization"
-	header Access-Control-Max-Age "3600"
 	#tls internal
 	# API 路径代理
 	handle_path /api/* {
@@ -28,6 +24,22 @@
 		path /ws-api/*
 		header Connection *Upgrade*
 		header Upgrade websocket
+	}
+
+	# sw websocket 
+	@swws {
+		path /sw-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @swws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /sw-api
+		reverse_proxy http://127.0.0.1:8020 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
 	}
 
 	@videows {
@@ -81,7 +93,7 @@
 }
 
 
-:7677 {
+:17772 {
 
 	handle_path /api/* {
 		reverse_proxy http://127.0.0.1:9020
@@ -137,7 +149,7 @@
 	}
 
 	handle {
-		root * /www/bk/screen
+		root * /home/zks/Projects/private/screen/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd

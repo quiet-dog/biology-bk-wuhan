@@ -175,7 +175,7 @@ public class EventDTO {
             environment.getAlarmlevels().forEach(alarmlevel -> {
                 if (alarmlevel.getMin() < environmentValue && environmentValue < alarmlevel.getMax()) {
                     setDescription(String.format("位号为%s的%s-%s数值为%.2f,触发报警", environment.getTag(),
-                            environment.getMonitoringPoint(), environment.getUnitName(), getEnvironmentValue()));
+                            environment.getDescription(), environment.getUnitName(), getEnvironmentValue()));
                 }
             });
             return;

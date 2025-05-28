@@ -7,6 +7,7 @@ import com.biology.domain.manage.notification.db.NotificationEntity;
 import com.biology.domain.manage.notification.db.NotificationService;
 import com.biology.domain.manage.notification.db.UserNotificationService;
 import com.biology.domain.manage.websocket.db.WebsocketService;
+import com.biology.domain.system.user.db.SysUserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,9 +18,10 @@ public class NotificationFactory {
     private final NotificationService notificationService;
     private final UserNotificationService userNotificationService;
     private final WebsocketService websocketService;
+    private final SysUserService sysUserService;
 
     public NotificationModel create() {
-        return new NotificationModel(notificationService, userNotificationService, websocketService);
+        return new NotificationModel(notificationService, userNotificationService, websocketService, sysUserService);
     }
 
     public NotificationModel loadById(Long notificationId) {
@@ -29,6 +31,7 @@ public class NotificationFactory {
             throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, notificationId, "通知");
         }
 
-        return new NotificationModel(notification, notificationService, userNotificationService, websocketService);
+        return new NotificationModel(notification, notificationService, userNotificationService, websocketService,
+                sysUserService);
     }
 }

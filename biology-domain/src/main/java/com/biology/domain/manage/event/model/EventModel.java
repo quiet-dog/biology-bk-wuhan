@@ -1,6 +1,7 @@
 package com.biology.domain.manage.event.model;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.exception.ApiException;
@@ -51,9 +52,12 @@ public class EventModel extends EventEntity {
 
     private ThresholdService thresholdService;
 
+    private WebClient opcClient;
+
     public EventModel(EventFileService eventFileService, EventService eventService, EquipmentService equipmentService,
             WebsocketService websocketService, ThresholdSopService thresholdSopService,
-            ThresholdEmergencyService thresholdEmergencyService, NotificationFactory notificationFactory) {
+            ThresholdEmergencyService thresholdEmergencyService, NotificationFactory notificationFactory,
+            WebClient opcClient) {
         this.eventFileService = eventFileService;
         this.eventService = eventService;
         this.equipmentService = equipmentService;
@@ -61,12 +65,13 @@ public class EventModel extends EventEntity {
         this.thresholdSopService = thresholdSopService;
         this.thresholdEmergencyService = thresholdEmergencyService;
         this.notificationFactory = notificationFactory;
+        this.opcClient = opcClient;
     }
 
     public EventModel(EventEntity entity, EventFileService eventFileService, EventService eventService,
             EquipmentService equipmentService, WebsocketService websocketService,
             ThresholdSopService thresholdSopService, ThresholdEmergencyService thresholdEmergencyService,
-            NotificationFactory notificationFactory) {
+            NotificationFactory notificationFactory, WebClient opcClient) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
         }
@@ -77,6 +82,7 @@ public class EventModel extends EventEntity {
         this.thresholdSopService = thresholdSopService;
         this.thresholdEmergencyService = thresholdEmergencyService;
         this.notificationFactory = notificationFactory;
+        this.opcClient = opcClient;
     }
 
     public void loadAddEventCommand(AddEventCommand command) {
@@ -101,7 +107,8 @@ public class EventModel extends EventEntity {
                 || eventDTO.getLevel().equals("中度")) {
             command.setNotificationType("通知");
         } else {
-            command.setNotificationType("提醒");
+            // command.setNotificationType("提醒");
+            command.setNotificationType("通知");
         }
         command.setEventId(getEventId());
         command.setNotificationContent(eventDTO.getDescription());
@@ -110,6 +117,14 @@ public class EventModel extends EventEntity {
         NotificationModel noticeModel = notificationFactory.create();
         noticeModel.loadAddNotificationCommand(command);
         noticeModel.insert();
+        if (eventDTO.getType().equals("设备报警") || eventDTO.getType().equals("环境报警")) {
+            opcClient.post()
+                    .uri("/api/recSheBeiBaoJingApi")
+                    .bodyValue(eventDTO)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .subscribe();
+        }
 
     }
 

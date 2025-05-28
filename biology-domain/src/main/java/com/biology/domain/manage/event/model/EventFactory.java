@@ -1,6 +1,7 @@
 package com.biology.domain.manage.event.model;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
@@ -33,9 +34,11 @@ public class EventFactory {
 
     private final NotificationFactory notificationFactory;
 
+    private final WebClient opcClient;
+
     public EventModel create() {
         return new EventModel(eventFileService, eventService, equipmentService, websocketService, thresholdSopService,
-                thresholdEmergencyService, notificationFactory);
+                thresholdEmergencyService, notificationFactory, opcClient);
     }
 
     public EventModel loadById(Long id) {
@@ -44,6 +47,6 @@ public class EventFactory {
             throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, id, "⌚");
         }
         return new EventModel(eventEntity, eventFileService, eventService, equipmentService, websocketService,
-                thresholdSopService, thresholdEmergencyService, notificationFactory);
+                thresholdSopService, thresholdEmergencyService, notificationFactory, opcClient);
     }
 }
