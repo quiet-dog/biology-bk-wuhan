@@ -45,15 +45,16 @@ public class NotificationApplicationService {
     public void addNotification(AddNotificationCommand command) {
         // 创建者
         Long userId = getUserIdSafely();
-        if (command.getIsAdminCreate() != null && command.getIsAdminCreate()) {
+        if (command.getIsAdminCreate() != null && command.getIsAdminCreate() && command.getUserIds() != null
+                && !command.getUserIds().isEmpty()) {
             // 管理员创建
-            sysUserService.list().forEach(user -> {
+            for (Long receiverId : command.getUserIds()) {
                 NotificationModel notificationModel = notificationFactory.create();
+                command.setReceiverId(receiverId);
                 notificationModel.loadAddNotificationCommand(command);
                 notificationModel.setCreatorId(userId);
-                notificationModel.setReceiverId(user.getUserId());
                 notificationModel.insert();
-            });
+            }
             return;
         }
         // command.setCreatorId(userId);

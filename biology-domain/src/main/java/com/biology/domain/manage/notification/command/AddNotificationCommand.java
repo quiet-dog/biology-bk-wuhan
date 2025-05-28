@@ -1,5 +1,7 @@
 package com.biology.domain.manage.notification.command;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,6 +34,8 @@ public class AddNotificationCommand {
     private Long inspectionRecordId;
 
     private Boolean isAdminCreate;
+
+    private List<Long> userIds;
 
     // @Schema(description = "创建者ID")
     // private Long creatorId;
