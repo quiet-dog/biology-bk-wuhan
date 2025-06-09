@@ -28,4 +28,7 @@ public class AddReportCommand {
 
     @Schema(description = "上报文件列表")
     private List<String> paths;
+
+    // @Schema(description = "批次")
+    // private String batch;
 }

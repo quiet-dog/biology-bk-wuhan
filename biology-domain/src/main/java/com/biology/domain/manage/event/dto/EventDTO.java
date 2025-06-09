@@ -166,12 +166,13 @@ public class EventDTO {
     }
 
     public void addDescription() {
-        if (getType().equals("设备报警") && getEquipment() != null && getThreshold() != null) {
+        if (getType() != null && getType().equals("设备报警") && getEquipment() != null && getThreshold() != null) {
             setDescription(String.format("设备编号为%s的%s-%s为%.2f,触发报警", getEquipment().getEquipmentCode(),
                     getEquipment().getEquipmentName(), getThreshold().getEquipmentIndex(), getEquipmentValue()));
         }
 
-        if (getType().equals("环境报警") && environment != null && environment.getAlarmlevels() != null) {
+        if (getType() != null && getType().equals("环境报警") && environment != null
+                && environment.getAlarmlevels() != null) {
             environment.getAlarmlevels().forEach(alarmlevel -> {
                 if (alarmlevel.getMin() < environmentValue && environmentValue < alarmlevel.getMax()) {
                     setDescription(String.format("位号为%s的%s-%s数值为%.2f,触发报警", environment.getTag(),
@@ -181,7 +182,8 @@ public class EventDTO {
             return;
         }
 
-        if (getType().equals("物料报警") && materials != null && materials.getValues() != null && materialsValue != null) {
+        if (getType() != null && getType().equals("物料报警") && materials != null && materials.getValues() != null
+                && materialsValue != null) {
 
             setDescription(String.format("物料编号为%s的%s库存量为%.2f%s,触发报警", materials.getCode(), materials.getName(),
                     materialsValue, materials.getUnit()));
@@ -207,7 +209,7 @@ public class EventDTO {
             return;
         }
 
-        if (getType().equals("工艺节点报警") && craftNode != null) {
+        if (getType() != null && getType().equals("工艺节点报警") && craftNode != null) {
             CraftArchiveEntity craftArchiveEntity = new CraftArchiveEntity().selectById(craftNode.getCraftArchiveId());
             if (craftArchiveEntity == null) {
                 return;

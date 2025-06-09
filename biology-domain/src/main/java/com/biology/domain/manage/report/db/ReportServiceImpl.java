@@ -10,19 +10,35 @@ import com.biology.domain.manage.report.dto.StockReportDTO;
 @Service
 public class ReportServiceImpl extends ServiceImpl<ReportMapper, ReportEntity> implements ReportService {
 
+    // @Override
+    // public List<StockReportDTO> getWeekStock() {
+    // return baseMapper.getWeekStock();
+    // }
+
+    // @Override
+    // public List<StockReportDTO> getMonthStock() {
+    // return baseMapper.getMonthStock();
+    // }
+
+    // @Override
+    // public List<StockReportDTO> getYearStock() {
+    // return baseMapper.getYearStock();
+
+    // }
+
     @Override
-    public List<StockReportDTO> getWeekStock() {
-        return baseMapper.getWeekStock();
+    public List<StockReportDTO> getWeekStock(Long id) {
+        return baseMapper.getWeekStock(id);
     }
 
     @Override
-    public List<StockReportDTO> getMonthStock() {
-        return baseMapper.getMonthStock();
+    public List<StockReportDTO> getMonthStock(Long id) {
+        return baseMapper.getMonthStock(id);
     }
 
     @Override
-    public List<StockReportDTO> getYearStock() {
-        return baseMapper.getYearStock();
+    public List<StockReportDTO> getYearStock(Long id) {
+        return baseMapper.getYearStock(id);
 
     }
 

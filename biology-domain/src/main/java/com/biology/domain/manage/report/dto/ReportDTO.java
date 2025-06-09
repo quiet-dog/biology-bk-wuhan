@@ -71,6 +71,9 @@ public class ReportDTO {
     @Schema(description = "当时库存数量")
     private double stock;
 
+    @Schema(description = "批次")
+    private String batch;
+
     public ReportDTO(ReportEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);

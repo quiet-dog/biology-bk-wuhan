@@ -103,6 +103,9 @@ public class EventModel extends EventEntity {
         websocketService.sendTopicInfo(eventDTO);
 
         AddNotificationCommand command = new AddNotificationCommand();
+        if (eventDTO.getLevel() == null) {
+            return;
+        }
         if (eventDTO.getLevel().equals("紧急") || eventDTO.getLevel().equals("重要")
                 || eventDTO.getLevel().equals("中度")) {
             command.setNotificationType("通知");
@@ -117,7 +120,7 @@ public class EventModel extends EventEntity {
         NotificationModel noticeModel = notificationFactory.create();
         noticeModel.loadAddNotificationCommand(command);
         noticeModel.insert();
-        if (eventDTO.getType().equals("设备报警") || eventDTO.getType().equals("环境报警")) {
+        if (eventDTO.getType() != null && eventDTO.getType().equals("设备报警") || eventDTO.getType().equals("环境报警")) {
             opcClient.post()
                     .uri("/api/recSheBeiBaoJingApi")
                     .bodyValue(eventDTO)

@@ -35,13 +35,25 @@ public class EquipmentRepairRecordServiceImpl
         List<RepairRecordEchartDTO> list = new ArrayList<>();
         if (query.getDayType().equals("week") && query.getCode() != null) {
             eventEchartDTO.setTimes(DatePickUtil.getWeekNowMMDD());
-            list = baseMapper.getCountByEquipmentCodeWeek(query.getCode());
+            if (query.getCode().isEmpty() || query.getCode() == null) {
+                list = baseMapper.getCountByEquipmentWeek();
+            } else {
+                list = baseMapper.getCountByEquipmentCodeWeek(query.getCode());
+            }
         } else if (query.getDayType().equals("month") && query.getCode() != null) {
             eventEchartDTO.setTimes(DatePickUtil.getMonthNowMMDD());
-            list = baseMapper.getCountByEquipmentCodeMonth(query.getCode());
+            if (query.getCode().isEmpty() || query.getCode() == null) {
+                list = baseMapper.getCountByEquipmentMonth();
+            } else {
+                list = baseMapper.getCountByEquipmentCodeMonth(query.getCode());
+            }
         } else if (query.getDayType().equals("year") && query.getCode() != null) {
             eventEchartDTO.setTimes(DatePickUtil.getYearNowBefore());
-            list = baseMapper.getCountByEquipmentCodeYear(query.getCode());
+            if (query.getCode().isEmpty() || query.getCode() == null) {
+                list = baseMapper.getCountByEquipmentYear();
+            } else {
+                list = baseMapper.getCountByEquipmentCodeYear(query.getCode());
+            }
         }
         for (String time : eventEchartDTO.getTimes()) {
             boolean flag = false;

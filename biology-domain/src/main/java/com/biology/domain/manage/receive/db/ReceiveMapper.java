@@ -61,7 +61,7 @@ public interface ReceiveMapper extends BaseMapper<ReceiveEntity> {
         public List<ReceiveMaterialsStockDTO> getReceiveAllReceiveExplain();
 
         // 获取物料每周每天的接收数量
-        @Select("SELECT Count(*) as count,receive_explain as materials_type,DATE_FORMAT(create_time, '%Y:%m') as data_time FROM manage_receive"
+        @Select("SELECT SUM(receive_num) as count,receive_explain as materials_type,DATE_FORMAT(create_time, '%Y:%m') as data_time FROM manage_receive"
                         + " WHERE create_time >= CURDATE() - INTERVAL 6 DAY AND create_time < CURDATE() + INTERVAL 1 DAY"
                         + " AND materials_id = #{id}"
                         + " GROUP BY DATE_FORMAT(create_time, '%Y:%m'),receive_explain"
@@ -69,7 +69,7 @@ public interface ReceiveMapper extends BaseMapper<ReceiveEntity> {
         public List<ReceiveMaterialsStockDTO> getReceiveStockWeekByNameType(@Param("id") Long id);
 
         // 获取物料每月每天的接收数量
-        @Select("SELECT Count(*) as count,receive_explain as materials_type,DATE_FORMAT(create_time, '%Y:%m') as data_time FROM manage_receive"
+        @Select("SELECT SUM(receive_num) as count,receive_explain as materials_type,DATE_FORMAT(create_time, '%Y:%m') as data_time FROM manage_receive"
                         + " WHERE materials_id = #{id}"
                         + " AND create_time >= CURDATE() - INTERVAL 1 MONTH AND create_time <= NOW()"
                         + " GROUP BY DATE_FORMAT(create_time, '%Y:%m'),receive_explain"

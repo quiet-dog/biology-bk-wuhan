@@ -47,6 +47,10 @@ public class ReportEntity extends BaseEntity<ReportEntity> {
     @TableField("stock")
     private double stock;
 
+    @ApiModelProperty("批次")
+    @TableField("batch")
+    private String batch;
+
     @Override
     public Long pkVal() {
         return this.reportId;

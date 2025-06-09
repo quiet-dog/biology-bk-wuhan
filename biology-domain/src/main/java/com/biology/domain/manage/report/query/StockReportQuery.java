@@ -7,6 +7,9 @@ import lombok.Data;
 public class StockReportQuery {
     @Schema(description = "类型")
     private String dayType;
-    // @Schema(description = "物料名称")
-    // private String marterialsName;
+    @Schema(description = "物料名称")
+    private String marterialsName;
+
+    @Schema(description = "物料ID")
+    private Long materialsId;
 }

@@ -122,6 +122,7 @@ public class ReportModel extends ReportEntity {
         } else {
             materialsEntity.setStock(materialsEntity.getStock() - getReportNum());
         }
+        this.setBatch(materialsEntity.getBatch());
         super.insert();
         checkAlarm();
         addFiles();

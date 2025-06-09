@@ -181,14 +181,15 @@ public class AlarmModel extends AlarmEntity {
         AddEventCommand addEventCommand = new AddEventCommand();
         addEventCommand.setMaterialsId(getMaterialsId());
         addEventCommand.setType("物料报警");
+        eventModel.setType("物料报警");
         addEventCommand.setLevel(materialsValue.getLevel());
         // addEventCommand.setDescription(
         // materials.getName() + materialsValue.getSCondition() +
         // materialsValue.getValue() + "报警");
-        // eventModel.loadAddEventCommand(addEventCommand);
         addEventCommand
                 .setDescription(String.format("物料编号为%s的%s库存量为%.2f%s,触发报警", materials.getCode(), materials.getName(),
-                        materialsValue, materials.getUnit()));
+                        materialsAlarmDTO.getStock(), materials.getUnit()));
+        eventModel.loadAddEventCommand(addEventCommand);
         eventModel.insert();
 
         return materialsValue;

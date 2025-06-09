@@ -9,10 +9,10 @@ import com.biology.common.annotation.ExcelColumn;
 @Data
 public class ExcelCraftArchiveCommand {
 
-    @ExcelColumn(name = "工艺档案编号")
+    @ExcelColumn(name = "工艺编号")
     private String craftArchiveCode;
 
-    @ExcelColumn(name = "工艺档案名称")
+    @ExcelColumn(name = "工艺名称")
     private String craftArchiveName;
 
     @ExcelColumn(name = "版本")

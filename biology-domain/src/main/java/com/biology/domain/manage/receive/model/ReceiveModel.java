@@ -92,6 +92,7 @@ public class ReceiveModel extends ReceiveEntity {
         checkReceiveNum();
         MaterialsEntity materialsEntity = materialsService.getById(getMaterialsId());
         this.setStock(materialsEntity.getStock());
+        this.setBatch(materialsEntity.getBatch());
         return super.insert();
     }
 

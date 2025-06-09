@@ -74,13 +74,13 @@ public class ReportApplicationService {
         stockEchartDTO.setSeriesData(new ArrayList<>());
         stockEchartDTO.setXData(new ArrayList<>());
         if ("year".equals(query.getDayType())) {
-            stockReportDTOs = reportService.getYearStock();
+            stockReportDTOs = reportService.getYearStock(query.getMaterialsId());
         }
         if ("week".equals(query.getDayType())) {
-            stockReportDTOs = reportService.getWeekStock();
+            stockReportDTOs = reportService.getWeekStock(query.getMaterialsId());
         }
         if ("month".equals(query.getDayType())) {
-            stockReportDTOs = reportService.getMonthStock();
+            stockReportDTOs = reportService.getMonthStock(query.getMaterialsId());
         }
         for (StockReportDTO stockReportDTO : stockReportDTOs) {
             stockEchartDTO.getXData().add(stockReportDTO.getName());

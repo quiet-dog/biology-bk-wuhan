@@ -32,13 +32,13 @@ public class ExcelEquipmentCommand {
 
     // 设备型号
     @Schema(description = "设备型号")
-    @ExcelColumn(name = "型号")
+    @ExcelColumn(name = "设备型号")
     @NotBlank(message = "设备型号不能为空")
     private String equipmentType;
 
     // 数量
     @Schema(description = "数量")
-    @ExcelColumn(name = "数量")
+    // @ExcelColumn(name = "数量")
     private Integer quantity;
 
     // 所属区域
@@ -48,7 +48,7 @@ public class ExcelEquipmentCommand {
 
     // 位置
     @Schema(description = "位置")
-    @ExcelColumn(name = "位置")
+    @ExcelColumn(name = "安装位置")
     @NotBlank(message = "位置不能为空")
     private String installationLocation;
 
@@ -69,7 +69,7 @@ public class ExcelEquipmentCommand {
 
     // 购买日期
     @Schema(description = "购买日期")
-    @ExcelColumn(name = "购买日期")
+    @ExcelColumn(name = "购置日期")
     private Date purchaseDate;
 
     // 技术规格

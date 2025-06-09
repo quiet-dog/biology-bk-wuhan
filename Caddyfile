@@ -5,6 +5,7 @@
 }
 :9080 {
 	#tls internal
+
 	# API 路径代理
 	handle_path /api/* {
 		reverse_proxy http://127.0.0.1:9020
@@ -15,7 +16,7 @@
 	}
 
 	handle /kkfile/* {
-		reverse_proxy http://127.0.0.1:8012
+		reverse_proxy http://192.168.0.11:8012
 	}
 
 
@@ -85,7 +86,6 @@
 	# 静态文件处理
 	handle {
 		root * /home/zks/Projects/private/biology-fd-wuhan/dist
-		# root /home/zks/Projects/test/vite-project/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd
@@ -100,17 +100,35 @@
 	}
 
 	handle_path /minioapi/* {
-		reverse_proxy http://127.0.0.1:9004
+		reverse_proxy http://127.0.0.1:9000
 	}
 
-	handle_path /kkfile/* {
-		reverse_proxy http://127.0.0.1:8012
+	handle /kkfile/* {
+		reverse_proxy http://192.168.0.11:8012
 	}
 
+
+	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
 	@ws {
 		path /ws-api/*
 		header Connection *Upgrade*
 		header Upgrade websocket
+	}
+
+	# sw websocket 
+	@swws {
+		path /sw-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @swws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /sw-api
+		reverse_proxy http://127.0.0.1:8020 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
 	}
 
 	@videows {
@@ -137,6 +155,10 @@
 		}
 	}
 
+	handle_path /threed/* {
+		reverse_proxy http://127.0.0.1:8080
+	}
+
 	@postfoo {
                 method GET
                 path /api/file/preview*
@@ -148,8 +170,10 @@
 		reverse_proxy http://192.168.0.11:9000
 	}
 
+
+	# 静态文件处理
 	handle {
-		root * /home/zks/Projects/private/screen/dist
+		root * /home/zks/Projects/private/biology-screen-wuhan/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd
@@ -157,19 +181,19 @@
 }
 
 
-:7678 {
-	# API 路径代理
+:17773 {
 	handle_path /api/* {
-		reverse_proxy http://127.0.0.1:9021
+		reverse_proxy http://127.0.0.1:9020
 	}
 
 	handle_path /minioapi/* {
-		reverse_proxy http://127.0.0.1:9004
+		reverse_proxy http://127.0.0.1:9000
 	}
 
-	handle_path /kkfile/* {
-		reverse_proxy http://127.0.0.1:8012
+	handle /kkfile/* {
+		reverse_proxy http://192.168.0.11:8012
 	}
+
 
 	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
 	@ws {
@@ -178,6 +202,22 @@
 		header Upgrade websocket
 	}
 
+	# sw websocket 
+	@swws {
+		path /sw-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @swws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /sw-api
+		reverse_proxy http://127.0.0.1:8020 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
 	@videows {
 		path /videows/*
 		header Connection *Upgrade*
@@ -196,36 +236,75 @@
 	handle @ws {
 		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
 		uri strip_prefix /ws-api
-		reverse_proxy http://127.0.0.1:9021 {
+		reverse_proxy http://127.0.0.1:9020 {
 			header_up Host {upstream_hostport}
 			header_up X-Forwarded-Host {host}
 		}
 	}
 
+	handle_path /threed/* {
+		reverse_proxy http://127.0.0.1:8080
+	}
+
+	@postfoo {
+                method GET
+                path /api/file/preview*
+    }
+
+	handle @postfoo {
+		# 加上/biology
+		uri replace /api/file/preview /biology
+		reverse_proxy http://192.168.0.11:9000
+	}
+
+
 	# 静态文件处理
 	handle {
-		root * /www/bj-bk/dist
+		root * /home/zks/Projects/private/biology-fd-beijing/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd
 	}
 }
 
-:7679 {
+:17774 {
 
 	handle_path /api/* {
-		reverse_proxy http://127.0.0.1:9021
+		reverse_proxy http://127.0.0.1:9020
 	}
 
 	handle_path /minioapi/* {
-		reverse_proxy http://127.0.0.1:9004
+		reverse_proxy http://127.0.0.1:9000
 	}
 
+	handle /kkfile/* {
+		reverse_proxy http://192.168.0.11:8012
+	}
+
+
+	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
 	@ws {
 		path /ws-api/*
 		header Connection *Upgrade*
 		header Upgrade websocket
 	}
+
+	# sw websocket 
+	@swws {
+		path /sw-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @swws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /sw-api
+		reverse_proxy http://127.0.0.1:8020 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
 	@videows {
 		path /videows/*
 		header Connection *Upgrade*
@@ -244,16 +323,31 @@
 	handle @ws {
 		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
 		uri strip_prefix /ws-api
-		reverse_proxy http://127.0.0.1:9021 {
+		reverse_proxy http://127.0.0.1:9020 {
 			header_up Host {upstream_hostport}
 			header_up X-Forwarded-Host {host}
 		}
 	}
 
-	
+	handle_path /threed/* {
+		reverse_proxy http://127.0.0.1:8080
+	}
 
+	@postfoo {
+                method GET
+                path /api/file/preview*
+    }
+
+	handle @postfoo {
+		# 加上/biology
+		uri replace /api/file/preview /biology
+		reverse_proxy http://192.168.0.11:9000
+	}
+
+
+	# 静态文件处理
 	handle {
-		root * /www/bj-bk/screen
+		root * /home/zks/Projects/private/screen/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd
