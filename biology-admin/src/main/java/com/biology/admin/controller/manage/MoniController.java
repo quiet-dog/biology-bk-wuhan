@@ -81,4 +81,7 @@ public class MoniController extends BaseController {
         moniApplicationService.stopPush(moniId);
         return ResponseDTO.ok();
     }
+
+    // @Operation(summary = "发送模拟数据")
+    // @PostMapping("/send/{moniId}")
 }

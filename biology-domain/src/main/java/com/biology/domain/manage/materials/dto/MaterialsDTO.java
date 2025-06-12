@@ -99,6 +99,9 @@ public class MaterialsDTO {
     @Schema(description = "阈值信息")
     private List<ValueDTO> values;
 
+    @Schema(description = "总容量")
+    private double total;
+
     public MaterialsDTO(MaterialsEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);

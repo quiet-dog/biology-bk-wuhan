@@ -81,6 +81,10 @@ public class MaterialsEntity extends BaseEntity<MaterialsEntity> {
     @TableField(value = "color_description")
     private String colorDescription;
 
+    @ApiModelProperty("总容量")
+    @TableField(value = "total")
+    private double total;
+
     @Override
     public Serializable pkVal() {
         return this.materialsId;

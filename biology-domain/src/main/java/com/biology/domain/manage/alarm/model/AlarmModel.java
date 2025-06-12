@@ -125,40 +125,42 @@ public class AlarmModel extends AlarmEntity {
 
         boolean isExit = false;
         for (MaterialsValueEntity materialsValueEntity : materialsValueEntities) {
-
+            if (materials.getTotal() == 0) {
+                continue;
+            }
             // if(materialsValueEntity.getLevel().equals("轻微")){
             // continue;
             // }
 
             if (materialsValueEntity.getSCondition().equals("大于")
-                    && haveStock > materialsValueEntity.getValue()) {
+                    && (haveStock / materials.getTotal()) > materialsValueEntity.getValue()) {
                 setLevel(materialsValueEntity.getLevel());
                 materialsValue = materialsValueEntity;
                 isExit = true;
             }
 
             if (materialsValueEntity.getSCondition().equals("小于")
-                    && haveStock < materialsValueEntity.getValue()) {
+                    && (haveStock / materials.getTotal()) < materialsValueEntity.getValue()) {
                 setLevel(materialsValueEntity.getLevel());
                 materialsValue = materialsValueEntity;
                 isExit = true;
             }
 
             if (materialsValueEntity.getSCondition().equals("大于等于")
-                    && haveStock >= materialsValueEntity.getValue()) {
+                    && (haveStock / materials.getTotal()) >= materialsValueEntity.getValue()) {
                 setLevel(materialsValueEntity.getLevel());
                 materialsValue = materialsValueEntity;
                 isExit = true;
             }
 
             if (materialsValueEntity.getSCondition().equals("小于等于")
-                    && haveStock <= materialsValueEntity.getValue()) {
+                    && (haveStock / materials.getTotal()) <= materialsValueEntity.getValue()) {
                 setLevel(materialsValueEntity.getLevel());
                 materialsValue = materialsValueEntity;
                 isExit = true;
             }
             if (materialsValueEntity.getSCondition().equals("等于")
-                    && haveStock == materialsValueEntity.getValue()) {
+                    && (haveStock / materials.getTotal()) == materialsValueEntity.getValue()) {
                 setLevel(materialsValueEntity.getLevel());
                 materialsValue = materialsValueEntity;
                 isExit = true;

@@ -74,4 +74,7 @@ public class AddMaterialsCommand {
 
     @Schema(description = "阈值设置")
     List<ValueCommand> values;
+
+    @Schema(description = "总容量")
+    private double total;
 }
