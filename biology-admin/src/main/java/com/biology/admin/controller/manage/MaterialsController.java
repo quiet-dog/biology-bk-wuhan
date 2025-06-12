@@ -202,6 +202,12 @@ public class MaterialsController extends BaseController {
         CustomExcelUtil.writeToResponse(personnelList.getRows(), MaterialsDTO.class, response);
     }
 
+    @Operation(summary = "物料类型")
+    @GetMapping("/types")
+    public ResponseDTO<List<String>> getMaterialsType() {
+        return ResponseDTO.ok(materialsService.getMaterialsTypes());
+    }
+
     // @Operation(summary = "添加库存")
     // @PostMapping("/addStock")
     // public ResponseDTO<Void> addWarehouse(@RequestBody AddWarehouseCommand

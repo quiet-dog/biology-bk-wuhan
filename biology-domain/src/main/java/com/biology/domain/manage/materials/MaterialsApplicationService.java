@@ -172,4 +172,9 @@ public class MaterialsApplicationService {
     public List<MhistoryDTO> getMaterialsHistory(Long materialsId) {
         return materialsService.getMaterialsHistory(materialsId);
     }
+
+    public List<String> getMaterialsType() {
+        List<String> types = materialsService.getMaterialsTypes();
+        return types;
+    }
 }

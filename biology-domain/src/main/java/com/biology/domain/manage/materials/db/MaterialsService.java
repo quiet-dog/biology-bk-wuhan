@@ -15,4 +15,6 @@ public interface MaterialsService extends IService<MaterialsEntity> {
     public List<MaterialsEasyDTO> getMaterialsEasy();
 
     public List<MhistoryDTO> getMaterialsHistory(Long materialsId);
+
+    public List<String> getMaterialsTypes();
 }

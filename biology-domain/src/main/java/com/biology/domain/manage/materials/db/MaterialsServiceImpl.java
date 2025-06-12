@@ -90,4 +90,8 @@ public class MaterialsServiceImpl extends ServiceImpl<MaterialsMapper, Materials
         return baseMapper.getMaterialsHistory(materialsId);
     }
 
+    public List<String> getMaterialsTypes() {
+        return baseMapper.getMaterialsTypes();
+    }
+
 }
