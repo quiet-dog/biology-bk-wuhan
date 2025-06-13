@@ -26,4 +26,9 @@ public interface EnvironmentMapper extends BaseMapper<EnvironmentEntity> {
         @Select("SELECT unit_name FROM manage_environment"
                         + " GROUP BY unit_name")
         public List<String> getAllUnitName();
+
+        // 获取所有区域
+        @Select("SELECT e_area FROM manage_environment where deleted = 0"
+                        + " GROUP BY e_area")
+        public List<String> getAllAreas();
 }

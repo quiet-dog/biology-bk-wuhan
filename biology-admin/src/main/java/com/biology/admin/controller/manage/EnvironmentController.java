@@ -281,4 +281,11 @@ public class EnvironmentController extends BaseController {
     public ResponseDTO<EnvironmentTypesDTO> getAllGroup() {
         return ResponseDTO.ok(environmentApplicationService.getAllGroup());
     }
+
+    @Operation(summary = "获取环境档案所有的分类")
+    @GetMapping("/areas")
+    public ResponseDTO<List<String>> getAllAreas() {
+        return ResponseDTO.ok(environmentApplicationService.getAllAreas());
+    }
+
 }

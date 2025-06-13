@@ -12,6 +12,7 @@ import com.biology.domain.manage.equipment.db.EquipmentEntity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,7 +39,7 @@ public class CraftNodeEntity extends BaseEntity<CraftNodeEntity> {
     private Long craftArchiveId;
 
     @ApiModelProperty("关联的设备列表")
-    @TableField(exist = false) 
+    @TableField(exist = false)
     private List<EquipmentEntity> equipmentList;
 
     @ApiModelProperty("设备ID列表")
@@ -72,6 +73,18 @@ public class CraftNodeEntity extends BaseEntity<CraftNodeEntity> {
     @ApiModelProperty("所属工艺档案")
     @TableField(exist = false)
     private CraftArchiveEntity craftArchive;
+
+    @Schema(description = "标签名称")
+    @TableField("label_name")
+    private String labelName;
+
+    @Schema(description = "标签颜色")
+    @TableField("color")
+    private String color;
+
+    @Schema(description = "标签描述")
+    @TableField("color_description")
+    private String colorDescription;
 
     @Override
     public Long pkVal() {

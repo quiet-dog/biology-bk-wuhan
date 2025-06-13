@@ -13,4 +13,6 @@ public interface EnvironmentService extends IService<EnvironmentEntity> {
     public List<EnvironmentStatisticsDTO> getDayStatistics(Long environmentId);
 
     public EnvironmentTypesDTO getAllGroup();
+
+    public List<String> getAllAreas();
 }

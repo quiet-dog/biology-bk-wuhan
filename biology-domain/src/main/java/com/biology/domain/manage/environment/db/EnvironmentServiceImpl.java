@@ -27,4 +27,8 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
                 result.setUnitName(baseMapper.getAllUnitName());
                 return result;
         }
+
+        public List<String> getAllAreas() {
+                return baseMapper.getAllAreas();
+        }
 }

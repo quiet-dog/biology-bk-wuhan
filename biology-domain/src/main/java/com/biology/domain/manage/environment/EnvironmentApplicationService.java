@@ -89,4 +89,8 @@ public class EnvironmentApplicationService {
     public EnvironmentTypesDTO getAllGroup() {
         return environmentService.getAllGroup();
     }
+
+    public List<String> getAllAreas() {
+        return environmentService.getAllAreas();
+    }
 }

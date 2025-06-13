@@ -49,12 +49,21 @@ public class CraftNodeDTO {
 
     @Schema(description = "所属工艺档案")
     private CraftArchiveDTO craftArchive;
-    
+
     @Schema(description = "关联的设备列表")
     private List<EquipmentDTO> equipmentList;
 
     @Schema(description = "设备ID列表")
     private List<Long> equipmentIds;
+
+    @Schema(description = "标签名称")
+    private String labelName;
+
+    @Schema(description = "标签颜色")
+    private String color;
+
+    @Schema(description = "标签描述")
+    private String colorDescription;
 
     public CraftNodeDTO(CraftNodeEntity entity) {
         BeanUtils.copyProperties(entity, this);
