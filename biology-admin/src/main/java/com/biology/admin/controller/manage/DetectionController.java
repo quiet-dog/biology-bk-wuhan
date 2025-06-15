@@ -18,6 +18,7 @@ import com.biology.domain.manage.detection.command.AddDetectionCommand;
 import com.biology.domain.manage.detection.dto.DetectionAreaTypeEchartDTO;
 import com.biology.domain.manage.detection.dto.DetectionCountEchartTypeDTO;
 import com.biology.domain.manage.detection.dto.DetectionDTO;
+import com.biology.domain.manage.detection.dto.NengHaoDTO;
 import com.biology.domain.manage.detection.dto.PowerDTO;
 import com.biology.domain.manage.detection.dto.PowerEchartDTO;
 import com.biology.domain.manage.detection.dto.StatisticsDetailDTO;
@@ -29,6 +30,7 @@ import com.biology.domain.manage.detection.query.PowerQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import okhttp3.Response;
 
 @Tag(name = "环境监测API", description = "环境监测API的增删查改")
 @RestController
@@ -104,5 +106,9 @@ public class DetectionController extends BaseController {
     @GetMapping("/getZuiXinShuJu")
     public ResponseDTO<DetectionCountEchartTypeDTO> getZuiXinShuJu(PowerQuery query) {
         return ResponseDTO.ok(detectionApplicationService.getZuiXinShuJu(query));
+    }
+
+    public ResponseDTO<PageDTO<NengHaoDTO>> getNengHaoList(NengHaoDTO query) {
+        return ResponseDTO.ok(detectionApplicationService.getNengHaoList(query));
     }
 }

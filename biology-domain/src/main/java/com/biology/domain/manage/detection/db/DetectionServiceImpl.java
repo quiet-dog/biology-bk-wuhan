@@ -558,4 +558,11 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         return result;
     }
 
+    public Double getCurrentMonthPowerUsage(Long environmentId) {
+        return baseMapper.getCurrentMonthPowerUsage(environmentId);
+    }
+
+    public Double getCurrentMonthWaterUsage(Long environmentId) {
+        return baseMapper.getCurrentMonthWaterUsage(environmentId);
+    }
 }

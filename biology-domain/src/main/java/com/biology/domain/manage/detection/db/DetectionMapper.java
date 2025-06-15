@@ -256,4 +256,18 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + "  WHERE rn = 1 AND value IS NOT NULL")
         public List<PowerDTO> getZuiXinShuJu(@Param("area") String area,
                         @Param("unitName") String unitName);
+
+        // 获取本月的电量使用量 electricity_value
+        @Select("SELECT SUM(electricity_value) FROM manage_environment_detection"
+                        + " WHERE environment_id = #{environmentId} AND MONTH(create_time) = MONTH(CURDATE())"
+                        + " AND YEAR(create_time) = YEAR(CURDATE())"
+                        + " AND electricity_value is not null")
+        public Double getCurrentMonthPowerUsage(@Param("environmentId") Long environmentId);
+
+        // 获取水量使用量 water_value
+        @Select("SELECT SUM(water_value) FROM manage_environment_detection"
+                        + " WHERE environment_id = #{environmentId} AND MONTH(create_time) = MONTH(CURDATE())"
+                        + " AND YEAR(create_time) = YEAR(CURDATE())"
+                        + " AND water_value is not null")
+        public Double getCurrentMonthWaterUsage(@Param("environmentId") Long environmentId);
 }

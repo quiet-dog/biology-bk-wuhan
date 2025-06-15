@@ -90,4 +90,5 @@ public class EquipmentDataApplicationService {
     public TotalTimeDTO getTotalTime(Long equipmentId) {
         return equipmentDataService.getTotalTime(equipmentId);
     }
+
 }

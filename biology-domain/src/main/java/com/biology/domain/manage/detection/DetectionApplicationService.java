@@ -15,6 +15,7 @@ import com.biology.domain.manage.detection.dto.DetectionAreaTypeEchartDTO;
 import com.biology.domain.manage.detection.dto.DetectionCountEchartTypeDTO;
 import com.biology.domain.manage.detection.dto.DetectionDTO;
 import com.biology.domain.manage.detection.dto.DetectionStatisticsDTO;
+import com.biology.domain.manage.detection.dto.NengHaoDTO;
 import com.biology.domain.manage.detection.dto.PowerDTO;
 import com.biology.domain.manage.detection.dto.PowerEchartDTO;
 import com.biology.domain.manage.detection.dto.StatisticsDetailDTO;
@@ -24,6 +25,7 @@ import com.biology.domain.manage.detection.query.DetectionQuery;
 import com.biology.domain.manage.detection.query.DetectionStockQuery;
 import com.biology.domain.manage.detection.query.HistoryQuery;
 import com.biology.domain.manage.detection.query.PowerQuery;
+import com.biology.domain.manage.detection.query.SearchNengHaoQuery;
 import com.biology.domain.manage.environment.dto.EnvironmentDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentStatisticsDTO;
 import com.biology.domain.manage.event.db.EventEntity;
@@ -114,6 +116,22 @@ public class DetectionApplicationService {
 
     public DetectionCountEchartTypeDTO getZuiXinShuJu(PowerQuery query) {
         return detectionService.getZuiXinShuJu(query);
+    }
+
+    public PageDTO<NengHaoDTO> getNengHaoList(SearchNengHaoQuery query) {
+        Page<DetectionEntity> page = detectionService.page(query.toPage(), query.toQueryWrapper());
+        List<DetectionDTO> records = page.getRecords().stream().map(DetectionDTO::new).collect(Collectors.toList());
+        List<NengHaoDTO> list = new ArrayList<>();
+        for (DetectionDTO entity : records) {
+            NengHaoDTO nengHaoDTO = new NengHaoDTO(entity);
+            if (nengHaoDTO.getElectricityValue() != 0) {
+                nengHaoDTO.setTotalValue(detectionService.getCurrentMonthPowerUsage(nengHaoDTO.getEnvironmentId()));
+            }
+            if (nengHaoDTO.getWaterValue() != 0) {
+                nengHaoDTO.setTotalValue(detectionService.getCurrentMonthWaterUsage(nengHaoDTO.getEnvironmentId()));
+            }
+        }
+        return new PageDTO<>(list, page.getTotal());
     }
 
 }

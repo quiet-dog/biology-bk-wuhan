@@ -34,6 +34,7 @@ import com.biology.domain.manage.healthy.model.HealthyFactory;
 import com.biology.domain.manage.materials.db.WarehouseEntity;
 import com.biology.domain.manage.materials.dto.WarehouseDTO;
 import com.biology.domain.manage.moni.command.AddMoniCommand;
+import com.biology.domain.manage.moni.command.SendMoniDataCommand;
 import com.biology.domain.manage.moni.command.UpdateMoniCommand;
 import com.biology.domain.manage.moni.db.MoniEntity;
 import com.biology.domain.manage.moni.db.MoniService;
@@ -375,6 +376,32 @@ public class MoniApplicationService {
             double value) {
         return String.format("设备编号为%s的%s-%s为%.2f,触发报警", equipmentEntity.getEquipmentCode(),
                 equipmentEntity.getEquipmentName(), thresholdEntity.getEquipmentIndex(), value);
+    }
+
+    public void sendData(SendMoniDataCommand data) {
+        MoniThresholdEntity moniThresholdEntity = new MoniThresholdEntity();
+        List<MoniThresholdEntity> mEntities = moniThresholdEntity.selectList(
+                new QueryWrapper<MoniThresholdEntity>().eq("moni_id", data.getMoniId()));
+
+        for (MoniThresholdEntity moniThreshold : mEntities) {
+            DeviceDTO deviceDTO = new DeviceDTO();
+            if (moniThreshold.getEnvironmentId() != null && moniThreshold.getEnvironmentId() != 0) {
+                deviceDTO.setDeviceType("环境档案");
+                EnvironmentAlarmInfoDTO eDto = new EnvironmentAlarmInfoDTO();
+                eDto.setEnvironmentId(moniThreshold.getEnvironmentId());
+                eDto.setValue(data.getValue());
+                deviceDTO.setEnvironmentAlarmInfo(eDto);
+            }
+
+            if (moniThreshold.getThresholdId() != null && moniThreshold.getThresholdId() != 0) {
+                deviceDTO.setDeviceType("设备档案");
+                EquipmentInfoDTO eDto = new EquipmentInfoDTO();
+                eDto.setThresholdId(moniThreshold.getThresholdId());
+                eDto.setValue(data.getValue());
+                deviceDTO.setEquipmentInfo(eDto);
+            }
+            sendMsg(deviceDTO);
+        }
     }
 
 }

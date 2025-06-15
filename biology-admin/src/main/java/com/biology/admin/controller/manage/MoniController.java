@@ -21,6 +21,7 @@ import com.biology.domain.manage.materials.query.SearchMaterialsQuery;
 import com.biology.domain.manage.moni.MoniApplicationService;
 import com.biology.domain.manage.moni.command.AddMoniCommand;
 import com.biology.domain.manage.moni.command.DeleteMoniCommand;
+import com.biology.domain.manage.moni.command.SendMoniDataCommand;
 import com.biology.domain.manage.moni.command.UpdateMoniCommand;
 import com.biology.domain.manage.moni.dto.MoniDTO;
 import com.biology.domain.manage.moni.query.SearchMoniQuery;
@@ -82,6 +83,10 @@ public class MoniController extends BaseController {
         return ResponseDTO.ok();
     }
 
-    // @Operation(summary = "发送模拟数据")
-    // @PostMapping("/send/{moniId}")
+    @Operation(summary = "发送模拟数据")
+    @PostMapping("/send")
+    public ResponseDTO<Void> sendMoniData(@RequestBody SendMoniDataCommand command) {
+        moniApplicationService.sendData(command);
+        return ResponseDTO.ok();
+    }
 }
