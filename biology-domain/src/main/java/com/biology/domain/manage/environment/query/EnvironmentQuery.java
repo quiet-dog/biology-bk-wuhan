@@ -30,6 +30,9 @@ public class EnvironmentQuery extends AbstractPageQuery<EnvironmentEntity> {
 
     private String exportType;
 
+    @Schema(description = "单位名称")
+    private String type;
+
     // @Schema(description = "结束时间")
     // private Date endCreateTime;
 
@@ -61,6 +64,10 @@ public class EnvironmentQuery extends AbstractPageQuery<EnvironmentEntity> {
             String startTimeStr = DateUtil.format(startCreateTime, "yyyy-MM-dd");
             // 筛选当天, 通过字符串筛选
             queryWrapper = queryWrapper.like("create_time", startTimeStr + "%");
+        }
+
+        if (type != null && !type.isEmpty()) {
+            queryWrapper.in("unit_name", type);
         }
 
         // if (endCreateTime != null) {
