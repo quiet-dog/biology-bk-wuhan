@@ -14,6 +14,8 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
 
     private String type;
 
+    private Long environmentId;
+
     @Override
     public QueryWrapper<DetectionEntity> addQueryCondition() {
 
@@ -31,6 +33,10 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
             // 电和水都查询 value为null的记录
             queryWrapper.isNotNull("electricity_value").or().isNotNull("water_value");
             queryWrapper.isNull("value");
+        }
+
+        if (environmentId != null && environmentId > 0) {
+            queryWrapper.eq("environment_id", environmentId);
         }
 
         this.timeRangeColumn = "create_time";
