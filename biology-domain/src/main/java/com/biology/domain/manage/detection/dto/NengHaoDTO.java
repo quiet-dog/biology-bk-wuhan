@@ -50,10 +50,10 @@ public class NengHaoDTO {
 
             if (detectionDTO.getWaterValue() != 0) {
                 this.type = "水";
-                this.cureentvalue = this.waterValue;
+                this.value = this.waterValue;
             } else if (detectionDTO.getElectricityValue() != 0) {
                 this.type = "电";
-                this.cureentvalue = this.electricityValue;
+                this.value = this.electricityValue;
             } else {
                 this.type = "未知";
             }
