@@ -34,6 +34,8 @@ public class NengHaoDTO {
     // 本月的全部使用量
     private double totalValue;
 
+    private String type;
+
     public NengHaoDTO(DetectionDTO detectionDTO) {
         if (detectionDTO != null) {
             this.detectionId = detectionDTO.getDetectionId();
@@ -43,6 +45,14 @@ public class NengHaoDTO {
             this.waterValue = detectionDTO.getWaterValue();
             this.electricityValue = detectionDTO.getElectricityValue();
             this.createTime = detectionDTO.getCreateTime();
+
+            if (detectionDTO.getWaterValue() != 0) {
+                this.type = "水";
+            } else if (detectionDTO.getElectricityValue() != 0) {
+                this.type = "电";
+            } else {
+                this.type = "未知";
+            }
         }
     }
 
