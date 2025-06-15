@@ -26,6 +26,7 @@ import com.biology.domain.manage.detection.query.DetectionQuery;
 import com.biology.domain.manage.detection.query.DetectionStockQuery;
 import com.biology.domain.manage.detection.query.HistoryQuery;
 import com.biology.domain.manage.detection.query.PowerQuery;
+import com.biology.domain.manage.detection.query.SearchNengHaoQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -108,7 +109,9 @@ public class DetectionController extends BaseController {
         return ResponseDTO.ok(detectionApplicationService.getZuiXinShuJu(query));
     }
 
-    public ResponseDTO<PageDTO<NengHaoDTO>> getNengHaoList(NengHaoDTO query) {
+    @Operation(summary = "数据大屏获取环境监测指标")
+    @GetMapping("/getNenghao")
+    public ResponseDTO<PageDTO<NengHaoDTO>> getNengHaoList(SearchNengHaoQuery query) {
         return ResponseDTO.ok(detectionApplicationService.getNengHaoList(query));
     }
 }
