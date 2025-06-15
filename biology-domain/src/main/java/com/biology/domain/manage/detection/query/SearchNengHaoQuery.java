@@ -23,21 +23,19 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
         if (type != null && !type.isEmpty()) {
             if (type.equals("电")) {
                 // 查询 electron不为null的记录
-                queryWrapper.isNotNull("electricity_value");
                 // 并且electricity_value不为0
                 queryWrapper.ne("electricity_value", 0);
             }
             if (type.equals("水")) {
                 // 查询 water不为null的记录
-                queryWrapper.isNotNull("water_value");
                 // 并且water_value不为0
                 queryWrapper.ne("water_value", 0);
             }
         } else {
             // 电和水都查询 value为null的记录
-            queryWrapper.isNotNull("electricity_value").or().isNotNull("water_value");
             queryWrapper.ne("electricity_value", 0)
-                    .or().ne("water_value", 0); // 并且electricity_value或water_value不为0
+                    .or().ne("water_value", 0);
+
             // value为0的记录
         }
 
