@@ -36,7 +36,7 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
         } else {
             // 电和水都查询 value为null的记录
             queryWrapper.isNotNull("electricity_value").or().isNotNull("water_value");
-            queryWrapper.eq("value", 0)
+            queryWrapper.eq("value", 0);
             // value为0的记录
         }
 
