@@ -261,13 +261,15 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
         @Select("SELECT SUM(electricity_value) FROM manage_environment_detection"
                         + " WHERE environment_id = #{environmentId} AND MONTH(create_time) = MONTH(CURDATE())"
                         + " AND YEAR(create_time) = YEAR(CURDATE())"
-                        + " AND electricity_value is not null")
+                        + " AND electricity_value is not null"
+                        + " AND electricity_value <> 0")
         public Double getCurrentMonthPowerUsage(@Param("environmentId") Long environmentId);
 
         // 获取水量使用量 water_value
         @Select("SELECT SUM(water_value) FROM manage_environment_detection"
                         + " WHERE environment_id = #{environmentId} AND MONTH(create_time) = MONTH(CURDATE())"
                         + " AND YEAR(create_time) = YEAR(CURDATE())"
-                        + " AND water_value is not null")
+                        + " AND water_value is not null"
+                        + " AND water_value <> 0")
         public Double getCurrentMonthWaterUsage(@Param("environmentId") Long environmentId);
 }
