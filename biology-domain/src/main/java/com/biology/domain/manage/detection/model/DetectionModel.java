@@ -5,6 +5,7 @@ import org.springframework.beans.BeanUtils;
 import com.biology.domain.manage.detection.command.AddDetectionCommand;
 import com.biology.domain.manage.detection.db.DetectionEntity;
 import com.biology.domain.manage.detection.db.DetectionService;
+import com.biology.domain.manage.environment.db.EnvironmentEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,5 +38,15 @@ public class DetectionModel extends DetectionEntity {
         if (command != null) {
             loadAddDetectionCommand(command);
         }
+    }
+
+    public boolean insert() {
+        EnvironmentEntity environmentEntity = new EnvironmentEntity().selectById(getEnvironmentId());
+        if (environmentEntity.getUnitName() != null) {
+            this.setType(environmentEntity.getUnitName());
+        }
+        super.insert();
+
+        return true;
     }
 }

@@ -40,6 +40,10 @@ public class DetectionEntity extends BaseEntity<DetectionEntity> {
     @TableField("electricity_value")
     private double electricityValue;
 
+    @Schema(description = "创建时间")
+    @TableField("`type`")
+    private String type;
+
     @Override
     public Long pkVal() {
         return this.detectionId;
