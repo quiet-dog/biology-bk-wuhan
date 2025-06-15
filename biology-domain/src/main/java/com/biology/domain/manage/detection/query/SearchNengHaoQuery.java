@@ -42,6 +42,13 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
             queryWrapper.eq("environment_id", environmentId);
         }
 
+        if (getBeginTime() != null) {
+            queryWrapper.ge("create_time", getBeginTime());
+        }
+        if (getEndTime() != null) {
+            queryWrapper.le("create_time", getEndTime());
+        }
+
         queryWrapper.groupBy("DATE(create_time)", "`type`", "environment_id");
 
         this.timeRangeColumn = "create_time";
