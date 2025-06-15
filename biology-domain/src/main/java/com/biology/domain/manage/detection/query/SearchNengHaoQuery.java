@@ -19,6 +19,8 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
 
     private Long environmentId;
 
+    private String exportType;
+
     @Override
     public QueryWrapper<DetectionEntity> addQueryCondition() {
 
