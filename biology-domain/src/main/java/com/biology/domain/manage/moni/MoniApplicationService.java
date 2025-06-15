@@ -22,6 +22,7 @@ import com.biology.domain.manage.emergencyAlarm.EmergencyAlarmApplicationService
 import com.biology.domain.manage.emergencyAlarm.command.AddEmergencyAlarmCommand;
 import com.biology.domain.manage.environment.db.EnvironmentEmergencyService;
 import com.biology.domain.manage.environment.db.EnvironmentEntity;
+import com.biology.domain.manage.environment.db.EnvironmentService;
 import com.biology.domain.manage.environment.db.EnvironmentSopService;
 import com.biology.domain.manage.equipment.EquipmentApplicationService;
 import com.biology.domain.manage.equipment.EquipmentDataApplicationService;
@@ -92,6 +93,8 @@ public class MoniApplicationService {
 
     private final WebClient opcClient;
 
+    private final EnvironmentService environmentService;
+
     // private final HealthyFactory healthyFactory;
 
     public void addMoni(AddMoniCommand command) {
@@ -147,8 +150,20 @@ public class MoniApplicationService {
                 if (moniThresholdEntity.getEnvironmentId() != null && moniThresholdEntity.getEnvironmentId() != 0) {
                     dto.setDeviceType("环境档案");
                     EnvironmentAlarmInfoDTO eDto = new EnvironmentAlarmInfoDTO();
+                    EnvironmentEntity environmentEntity = environmentService
+                            .getById(moniThresholdEntity.getEnvironmentId());
+
                     eDto.setEnvironmentId(moniThresholdEntity.getEnvironmentId());
-                    eDto.setValue(randomValue);
+                    if (environmentEntity.getUnitName() != null) {
+                        if (environmentEntity.getUnitName().equals("电")) {
+                            eDto.setElectricityValue(randomValue);
+                        } else if (environmentEntity.getUnitName().equals("水")) {
+                            eDto.setWaterValue(randomValue);
+                        } else {
+                            eDto.setValue(randomValue);
+                        }
+                    }
+                    // eDto.setValue(randomValue);
                     dto.setEnvironmentAlarmInfo(eDto);
                 }
 
@@ -390,6 +405,7 @@ public class MoniApplicationService {
                 EnvironmentAlarmInfoDTO eDto = new EnvironmentAlarmInfoDTO();
                 eDto.setEnvironmentId(moniThreshold.getEnvironmentId());
                 eDto.setValue(data.getValue());
+
                 deviceDTO.setEnvironmentAlarmInfo(eDto);
             }
 
