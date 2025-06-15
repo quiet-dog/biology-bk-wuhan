@@ -31,7 +31,7 @@ public class EnvironmentQuery extends AbstractPageQuery<EnvironmentEntity> {
     private String exportType;
 
     @Schema(description = "单位名称")
-    private String type;
+    private List<String> type;
 
     // @Schema(description = "结束时间")
     // private Date endCreateTime;
