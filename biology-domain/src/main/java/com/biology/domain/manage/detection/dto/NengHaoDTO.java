@@ -36,6 +36,8 @@ public class NengHaoDTO {
 
     private String type;
 
+    private Double cureentvalue;
+
     public NengHaoDTO(DetectionDTO detectionDTO) {
         if (detectionDTO != null) {
             this.detectionId = detectionDTO.getDetectionId();
@@ -48,8 +50,10 @@ public class NengHaoDTO {
 
             if (detectionDTO.getWaterValue() != 0) {
                 this.type = "水";
+                this.cureentvalue = this.waterValue;
             } else if (detectionDTO.getElectricityValue() != 0) {
                 this.type = "电";
+                this.cureentvalue = this.electricityValue;
             } else {
                 this.type = "未知";
             }
