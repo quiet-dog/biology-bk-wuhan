@@ -23,7 +23,7 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
     public QueryWrapper<DetectionEntity> addQueryCondition() {
 
         QueryWrapper<DetectionEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select("detection_id", "environment_id", "SUM(water_value) as water_value",
+        queryWrapper.select("environment_id", "SUM(water_value) as water_value",
                 "SUM(electricity_value) as electricity_value",
                 "DATE(create_time) as create_time");
         if (type != null && !type.isEmpty()) {
