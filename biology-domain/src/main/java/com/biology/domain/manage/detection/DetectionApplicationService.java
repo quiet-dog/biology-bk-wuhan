@@ -130,6 +130,7 @@ public class DetectionApplicationService {
             if (nengHaoDTO.getWaterValue() != 0) {
                 nengHaoDTO.setTotalValue(detectionService.getCurrentMonthWaterUsage(nengHaoDTO.getEnvironmentId()));
             }
+            list.add(nengHaoDTO);
         }
         return new PageDTO<>(list, page.getTotal());
     }

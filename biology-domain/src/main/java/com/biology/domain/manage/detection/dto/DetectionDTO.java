@@ -47,6 +47,15 @@ public class DetectionDTO {
                 if (environmentEntity != null) {
                     this.environment = new EnvironmentDTO(environmentEntity);
                 }
+                if (getValue() == 0) {
+                    if (getElectricityValue() != 0) {
+                        this.value = getElectricityValue();
+                    } else if (getWaterValue() != 0) {
+                        this.value = getWaterValue();
+                    } else {
+                        this.value = 0;
+                    }
+                }
             }
         }
     }

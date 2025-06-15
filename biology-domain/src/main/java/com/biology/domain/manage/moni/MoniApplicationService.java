@@ -402,10 +402,19 @@ public class MoniApplicationService {
             DeviceDTO deviceDTO = new DeviceDTO();
             if (moniThreshold.getEnvironmentId() != null && moniThreshold.getEnvironmentId() != 0) {
                 deviceDTO.setDeviceType("环境档案");
+                EnvironmentEntity environmentEntity = environmentService
+                        .getById(moniThreshold.getEnvironmentId());
                 EnvironmentAlarmInfoDTO eDto = new EnvironmentAlarmInfoDTO();
                 eDto.setEnvironmentId(moniThreshold.getEnvironmentId());
-                eDto.setValue(data.getValue());
-
+                if (environmentEntity.getUnitName() != null) {
+                    if (environmentEntity.getUnitName().equals("电")) {
+                        eDto.setElectricityValue(data.getValue());
+                    } else if (environmentEntity.getUnitName().equals("水")) {
+                        eDto.setWaterValue(data.getValue());
+                    } else {
+                        eDto.setValue(data.getValue());
+                    }
+                }
                 deviceDTO.setEnvironmentAlarmInfo(eDto);
             }
 
