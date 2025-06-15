@@ -40,7 +40,7 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
             queryWrapper.eq("environment_id", environmentId);
         }
 
-        queryWrapper.groupBy("create_time", "`type`", "environment_id");
+        queryWrapper.groupBy("DATE(create_time)", "`type`", "environment_id");
 
         this.timeRangeColumn = "create_time";
         return queryWrapper;
