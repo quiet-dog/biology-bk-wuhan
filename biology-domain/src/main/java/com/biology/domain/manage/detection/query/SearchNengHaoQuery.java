@@ -27,16 +27,7 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
                 "SUM(electricity_value) as electricity_value",
                 "DATE(create_time) as create_time");
         if (type != null && !type.isEmpty()) {
-            if (type.equals("电")) {
-                // 查询 electron不为null的记录
-                // 并且electricity_value不为0
-                queryWrapper.ne("electricity_value", 0);
-            }
-            if (type.equals("水")) {
-                // 查询 water不为null的记录
-                // 并且water_value不为0
-                queryWrapper.ne("water_value", 0);
-            }
+            queryWrapper.eq("`type`", type);
         } else {
             // 电和水都查询 value为null的记录
             queryWrapper.ne("electricity_value", 0)
