@@ -24,8 +24,10 @@ import com.biology.domain.manage.detection.model.DetectionModel;
 import com.biology.domain.manage.detection.query.DetectionQuery;
 import com.biology.domain.manage.detection.query.DetectionStockQuery;
 import com.biology.domain.manage.detection.query.HistoryQuery;
+import com.biology.domain.manage.detection.query.NengHaoEchartQuery;
 import com.biology.domain.manage.detection.query.PowerQuery;
 import com.biology.domain.manage.detection.query.SearchNengHaoQuery;
+import com.biology.domain.manage.environment.db.EnvironmentEntity;
 import com.biology.domain.manage.environment.dto.EnvironmentDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentStatisticsDTO;
 import com.biology.domain.manage.event.db.EventEntity;
@@ -133,6 +135,44 @@ public class DetectionApplicationService {
             list.add(nengHaoDTO);
         }
         return new PageDTO<>(list, page.getTotal());
+    }
+
+    public DetectionCountEchartTypeDTO getTongJiNenghao(NengHaoEchartQuery query) {
+        EnvironmentEntity entity = new EnvironmentEntity().selectById(query.getEnvironmentId());
+        DetectionCountEchartTypeDTO detectionCountEchartTypeDTO = new DetectionCountEchartTypeDTO();
+        detectionCountEchartTypeDTO.setTime(new ArrayList<>());
+        detectionCountEchartTypeDTO.setData(new ArrayList<>());
+        if (entity == null) {
+            return detectionCountEchartTypeDTO;
+        }
+        List<PowerDTO> powerData = new ArrayList<>();
+
+        if (query.getDayType().equals("week")) {
+            if (entity.getUnitName().equals("电")) {
+                powerData = detectionService.getElectricityByEnvironmentIdByWeek(query.getEnvironmentId());
+            } else if (entity.getUnitName().equals("水")) {
+                powerData = detectionService.getWaterByEnvironmentIdByWeek(query.getEnvironmentId());
+            }
+        } else if (query.getDayType().equals("month")) {
+            if (entity.getUnitName().equals("电")) {
+                powerData = detectionService.getElectricityByEnvironmentIdByMonth(query.getEnvironmentId());
+            } else if (entity.getUnitName().equals("水")) {
+                powerData = detectionService.getWaterByEnvironmentIdByMonth(query.getEnvironmentId());
+            }
+        } else if (query.getDayType().equals("year")) {
+            if (entity.getUnitName().equals("电")) {
+                powerData = detectionService.getElectricityByEnvironmentIdByYear(query.getEnvironmentId());
+            } else if (entity.getUnitName().equals("水")) {
+                powerData = detectionService.getWaterByEnvironmentIdByYear(query.getEnvironmentId());
+            }
+        }
+
+        for (PowerDTO powerDTO : powerData) {
+            detectionCountEchartTypeDTO.getTime().add(powerDTO.getTime());
+            detectionCountEchartTypeDTO.getData().add(powerDTO.getData());
+        }
+
+        return detectionCountEchartTypeDTO;
     }
 
 }

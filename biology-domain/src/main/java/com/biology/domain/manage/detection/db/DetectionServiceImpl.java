@@ -188,7 +188,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
             if (query.getType().equals("电")) {
                 data = baseMapper.getHistoryElectricityByTypeWeek();
             } else if (query.getType().equals("水")) {
-                data = baseMapper.getHistoryPowersByTypeMonth();
+                data = baseMapper.getHistoryWaterByTypeMonth();
             }
             for (String time : result.getTime()) {
                 boolean isExit = false;
@@ -230,7 +230,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
             if (query.getType().equals("电")) {
                 data = baseMapper.getHistoryElectricityByTypeMonth();
             } else if (query.getType().equals("水")) {
-                data = baseMapper.getHistoryPowersByTypeMonth();
+                data = baseMapper.getHistoryWaterByTypeMonth();
             }
             for (String time : result.getTime()) {
                 boolean isExit = false;
@@ -564,5 +564,32 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
 
     public Double getCurrentMonthWaterUsage(Long environmentId) {
         return baseMapper.getCurrentMonthWaterUsage(environmentId);
+    }
+
+    // 获取近7天的数据
+    public List<PowerDTO> getElectricityByEnvironmentIdByWeek(Long environmentId) {
+        return baseMapper.getElectricityByEnvironmentIdByWeek(environmentId);
+    }
+
+    // 获取近30天的数据
+    public List<PowerDTO> getElectricityByEnvironmentIdByMonth(Long environmentId) {
+        return baseMapper.getElectricityByEnvironmentIdByMonth(environmentId);
+    }
+    // 获取从当前月往前推1年的每个月的SUM
+
+    public List<PowerDTO> getElectricityByEnvironmentIdByYear(Long environmentId) {
+        return baseMapper.getElectricityByEnvironmentIdByYear(environmentId);
+    }
+
+    public List<PowerDTO> getWaterByEnvironmentIdByWeek(Long environmentId) {
+        return baseMapper.getWaterByEnvironmentIdByWeek(environmentId);
+    }
+
+    public List<PowerDTO> getWaterByEnvironmentIdByMonth(Long environmentId) {
+        return baseMapper.getWaterByEnvironmentIdByMonth(environmentId);
+    }
+
+    public List<PowerDTO> getWaterByEnvironmentIdByYear(Long environmentId) {
+        return baseMapper.getWaterByEnvironmentIdByYear(environmentId);
     }
 }

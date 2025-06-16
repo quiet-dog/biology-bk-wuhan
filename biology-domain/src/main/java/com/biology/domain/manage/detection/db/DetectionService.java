@@ -3,6 +3,7 @@ package com.biology.domain.manage.detection.db;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.biology.domain.manage.detection.dto.DetectionAreaTypeDTO;
@@ -39,4 +40,19 @@ public interface DetectionService extends IService<DetectionEntity> {
     public Double getCurrentMonthPowerUsage(Long environmentId);
 
     public Double getCurrentMonthWaterUsage(Long environmentId);
+
+    // 获取近7天的数据
+    public List<PowerDTO> getElectricityByEnvironmentIdByWeek(Long environmentId);
+
+    // 获取近30天的数据
+    public List<PowerDTO> getElectricityByEnvironmentIdByMonth(Long environmentId);
+    // 获取从当前月往前推1年的每个月的SUM
+
+    public List<PowerDTO> getElectricityByEnvironmentIdByYear(Long environmentId);
+
+    public List<PowerDTO> getWaterByEnvironmentIdByWeek(Long environmentId);
+
+    public List<PowerDTO> getWaterByEnvironmentIdByMonth(Long environmentId);
+
+    public List<PowerDTO> getWaterByEnvironmentIdByYear(Long environmentId);
 }

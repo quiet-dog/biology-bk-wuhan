@@ -272,4 +272,55 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " AND water_value is not null"
                         + " AND water_value <> 0")
         public Double getCurrentMonthWaterUsage(@Param("environmentId") Long environmentId);
+
+        // 获取近7天的数据
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time, SUM(electricity_value) AS data"
+                        + " FROM manage_environment_detection"
+                        + " WHERE environment_id = #{environmentId}"
+                        + " AND create_time >= CURDATE() - INTERVAL 6 DAY"
+                        + " GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')"
+                        + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
+        public List<PowerDTO> getElectricityByEnvironmentIdByWeek(@Param("environmentId") Long environmentId);
+
+        // 获取近30天的数据
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time, SUM(electricity_value) AS data"
+                        + " FROM manage_environment_detection"
+                        + " WHERE environment_id = #{environmentId}"
+                        + " AND create_time >= CURDATE() - INTERVAL 29 DAY"
+                        + " GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')"
+                        + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
+        public List<PowerDTO> getElectricityByEnvironmentIdByMonth(@Param("environmentId") Long environmentId);
+
+        // 获取从当前月往前推1年的每个月的SUM
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m') AS time, SUM(electricity_value) AS data"
+                        + " FROM manage_environment_detection"
+                        + " WHERE environment_id = #{environmentId}"
+                        + " AND create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
+                        + " GROUP BY DATE_FORMAT(create_time, '%Y-%m')"
+                        + " ORDER BY DATE_FORMAT(create_time, '%Y-%m')")
+        public List<PowerDTO> getElectricityByEnvironmentIdByYear(@Param("environmentId") Long environmentId);
+
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time, SUM(water_value) AS data"
+                        + " FROM manage_environment_detection"
+                        + " WHERE environment_id = #{environmentId}"
+                        + " AND create_time >= CURDATE() - INTERVAL 6 DAY"
+                        + " GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')"
+                        + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
+        public List<PowerDTO> getWaterByEnvironmentIdByWeek(@Param("environmentId") Long environmentId);
+
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time, SUM(water_value) AS data"
+                        + " FROM manage_environment_detection"
+                        + " WHERE environment_id = #{environmentId}"
+                        + " AND create_time >= CURDATE() - INTERVAL 29 DAY"
+                        + " GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')"
+                        + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
+        public List<PowerDTO> getWaterByEnvironmentIdByMonth(@Param("environmentId") Long environmentId);
+
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m') AS time, SUM(water_value) AS data"
+                        + " FROM manage_environment_detection"
+                        + " WHERE environment_id = #{environmentId}"
+                        + " AND create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
+                        + " GROUP BY DATE_FORMAT(create_time, '%Y-%m')"
+                        + " ORDER BY DATE_FORMAT(create_time, '%Y-%m')")
+        public List<PowerDTO> getWaterByEnvironmentIdByYear(@Param("environmentId") Long environmentId);
 }

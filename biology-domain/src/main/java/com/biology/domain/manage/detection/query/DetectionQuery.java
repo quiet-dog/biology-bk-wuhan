@@ -32,6 +32,9 @@ public class DetectionQuery extends AbstractPageQuery<DetectionEntity> {
     @Schema(description = "结束时间")
     private Date endTime;
 
+    @Schema(description = "是否忽略")
+    private Boolean isIgnore;
+
     @Override
     public QueryWrapper<DetectionEntity> addQueryCondition() {
         QueryWrapper<DetectionEntity> queryWrapper = new QueryWrapper<>();
@@ -50,6 +53,11 @@ public class DetectionQuery extends AbstractPageQuery<DetectionEntity> {
             Date beginOfDay = DateUtil.beginOfDay(startDate);
             Date endOfDay = DateUtil.endOfDay(startDate);
             queryWrapper = queryWrapper.between("create_time", beginOfDay, endOfDay);
+        }
+
+        if (isIgnore != null && isIgnore) {
+            queryWrapper = queryWrapper.eq("water_value", 0);
+            queryWrapper = queryWrapper.eq("electricity_value", 0);
         }
 
         queryWrapper = queryWrapper

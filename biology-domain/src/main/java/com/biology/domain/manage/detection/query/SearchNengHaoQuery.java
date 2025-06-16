@@ -32,22 +32,20 @@ public class SearchNengHaoQuery extends AbstractPageQuery<DetectionEntity> {
             queryWrapper.eq("`type`", type);
         } else {
             // 电和水都查询 value为null的记录
-            queryWrapper.ne("electricity_value", 0)
-                    .or().ne("water_value", 0);
-
-            // value为0的记录
+            queryWrapper.and(wrapper -> wrapper.eq("`type`", "水")
+                    .or().eq("`type`", "电"));
         }
 
         if (environmentId != null && environmentId > 0) {
             queryWrapper.eq("environment_id", environmentId);
         }
 
-        if (getBeginTime() != null) {
-            queryWrapper.ge("create_time", getBeginTime());
-        }
-        if (getEndTime() != null) {
-            queryWrapper.le("create_time", getEndTime());
-        }
+        // if (getBeginTime() != null) {
+        // queryWrapper.ge("create_time", getBeginTime());
+        // }
+        // if (getEndTime() != null) {
+        // queryWrapper.le("create_time", getEndTime());
+        // }
 
         queryWrapper.groupBy("DATE(create_time)", "`type`", "environment_id");
 

@@ -2,7 +2,6 @@ package com.biology.domain.manage.detection.dto;
 
 import java.util.Date;
 
-import com.biology.domain.manage.detection.db.DetectionEntity;
 import com.biology.domain.manage.environment.dto.EnvironmentDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;

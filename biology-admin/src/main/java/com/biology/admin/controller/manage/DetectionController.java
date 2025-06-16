@@ -36,6 +36,7 @@ import com.biology.domain.manage.detection.dto.StatisticsDetailDTO;
 import com.biology.domain.manage.detection.query.DetectionQuery;
 import com.biology.domain.manage.detection.query.DetectionStockQuery;
 import com.biology.domain.manage.detection.query.HistoryQuery;
+import com.biology.domain.manage.detection.query.NengHaoEchartQuery;
 import com.biology.domain.manage.detection.query.PowerQuery;
 import com.biology.domain.manage.detection.query.SearchNengHaoQuery;
 import com.biology.domain.manage.equipment.dto.EquipmentDTO;
@@ -282,5 +283,11 @@ public class DetectionController extends BaseController {
             CustomExcelUtil.writeToResponse(userList.getRows(), NengHaoDTO.class, response);
         }
 
+    }
+
+    @Operation(summary = "统计能耗")
+    @GetMapping("/getTongJiNenghao")
+    public ResponseDTO<DetectionCountEchartTypeDTO> getTongJiNenghao(NengHaoEchartQuery query) {
+        return ResponseDTO.ok(detectionApplicationService.getTongJiNenghao(query));
     }
 }
