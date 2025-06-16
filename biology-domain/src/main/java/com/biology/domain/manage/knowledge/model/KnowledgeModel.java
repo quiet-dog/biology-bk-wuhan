@@ -70,8 +70,8 @@ public class KnowledgeModel extends KnowledgeEntity {
     }
 
     public boolean update() {
-        super.updateById();
         cleanOldPath();
+        super.updateById();
         return savePath();
     }
 

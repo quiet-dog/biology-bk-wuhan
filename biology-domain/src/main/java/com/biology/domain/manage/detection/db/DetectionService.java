@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.biology.domain.manage.detection.dto.DareaDTO;
 import com.biology.domain.manage.detection.dto.DetectionAreaTypeDTO;
 import com.biology.domain.manage.detection.dto.DetectionAreaTypeEchartDTO;
 import com.biology.domain.manage.detection.dto.DetectionCountEchartTypeDTO;
@@ -55,4 +56,7 @@ public interface DetectionService extends IService<DetectionEntity> {
     public List<PowerDTO> getWaterByEnvironmentIdByMonth(Long environmentId);
 
     public List<PowerDTO> getWaterByEnvironmentIdByYear(Long environmentId);
+
+    public List<DareaDTO> getTemperatureDataByAreaAndTimeSlot(String unitName, String beginTime, String endTime);
+
 }

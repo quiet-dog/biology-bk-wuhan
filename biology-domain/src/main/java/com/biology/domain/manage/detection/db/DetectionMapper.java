@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.biology.domain.manage.detection.dto.DareaDTO;
 import com.biology.domain.manage.detection.dto.DetectionAreaTypeDTO;
 import com.biology.domain.manage.detection.dto.DetectionStatisticsDTO;
 import com.biology.domain.manage.detection.dto.PowerDTO;
@@ -323,4 +324,31 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " GROUP BY DATE_FORMAT(create_time, '%Y-%m')"
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m')")
         public List<PowerDTO> getWaterByEnvironmentIdByYear(@Param("environmentId") Long environmentId);
+
+        /**
+         * SELECT
+         * e.area,
+         * DATE_FORMAT(DATE_SUB(d.create_time, INTERVAL MINUTE(d.create_time) % 30
+         * MINUTE), '%Y-%m-%d %H:%i') AS time_slot,
+         * ROUND(AVG(d.value), 2) AS avg_value
+         * FROM manage_devalue d
+         * JOIN manage_environment e ON d.environment_id = e.id
+         * WHERE e.unit_name = '温度传感器' -- 指定你要对比的传感器类型
+         * AND d.create_time >= NOW() - INTERVAL 1 DAY
+         * GROUP BY e.area, time_slot
+         * ORDER BY time_slot, e.area;
+         */
+        @Select("SELECT e.e_area AS area, "
+                        + "DATE_FORMAT(DATE_SUB(d.create_time, INTERVAL MINUTE(d.create_time) % 30 MINUTE), '%Y-%m-%d %H:%i') AS time_slot, "
+                        + "ROUND(AVG(d.value), 2) AS avg_value "
+                        + "FROM manage_environment_detection d "
+                        + "JOIN manage_environment e ON d.environment_id = e.environment_id "
+                        + "WHERE e.unit_name = #{unitName} "
+                        + "AND d.create_time BETWEEN #{beginTime} AND #{endTime} "
+                        + "AND d.create_time >= NOW() - INTERVAL 1 DAY "
+                        + "GROUP BY e.e_area, time_slot "
+                        + "ORDER BY time_slot, e.e_area")
+        public List<DareaDTO> getTemperatureDataByAreaAndTimeSlot(@Param("unitName") String unitName,
+                        @Param("beginTime") String beginTime,
+                        @Param("endTime") String endTime);
 }

@@ -13,6 +13,7 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.bouncycastle.asn1.ocsp.ResponseData;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.detection.DetectionApplicationService;
 import com.biology.domain.manage.detection.command.AddDetectionCommand;
+import com.biology.domain.manage.detection.dto.DareaResultDTO;
 import com.biology.domain.manage.detection.dto.DetectionAreaTypeEchartDTO;
 import com.biology.domain.manage.detection.dto.DetectionCountEchartTypeDTO;
 import com.biology.domain.manage.detection.dto.DetectionDTO;
@@ -33,6 +35,7 @@ import com.biology.domain.manage.detection.dto.NengHaoDTO;
 import com.biology.domain.manage.detection.dto.PowerDTO;
 import com.biology.domain.manage.detection.dto.PowerEchartDTO;
 import com.biology.domain.manage.detection.dto.StatisticsDetailDTO;
+import com.biology.domain.manage.detection.query.AllAreaDTO;
 import com.biology.domain.manage.detection.query.DetectionQuery;
 import com.biology.domain.manage.detection.query.DetectionStockQuery;
 import com.biology.domain.manage.detection.query.HistoryQuery;
@@ -289,5 +292,12 @@ public class DetectionController extends BaseController {
     @GetMapping("/getTongJiNenghao")
     public ResponseDTO<DetectionCountEchartTypeDTO> getTongJiNenghao(NengHaoEchartQuery query) {
         return ResponseDTO.ok(detectionApplicationService.getTongJiNenghao(query));
+    }
+
+    @Operation(summary = "统计能耗")
+    @PostMapping("/getBuTong")
+    public ResponseDTO<DareaResultDTO> getTemperatureDataByAreaAndTimeSlot(@RequestBody AllAreaDTO query) {
+        return ResponseDTO.ok(detectionApplicationService.getTemperatureDataByAreaAndTimeSlot(query.getUnitName(),
+                query.getBeginTime(), query.getEndTime()));
     }
 }

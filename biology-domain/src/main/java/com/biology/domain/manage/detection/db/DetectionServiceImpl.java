@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.biology.common.utils.time.DatePickUtil;
+import com.biology.domain.manage.detection.dto.DareaDTO;
 import com.biology.domain.manage.detection.dto.DetectionAreaTypeDTO;
 import com.biology.domain.manage.detection.dto.DetectionAreaTypeEchartDTO;
 import com.biology.domain.manage.detection.dto.DetectionCountEchartTypeDTO;
@@ -591,5 +592,9 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
 
     public List<PowerDTO> getWaterByEnvironmentIdByYear(Long environmentId) {
         return baseMapper.getWaterByEnvironmentIdByYear(environmentId);
+    }
+
+    public List<DareaDTO> getTemperatureDataByAreaAndTimeSlot(String unitName, String beginTime, String endTime) {
+        return baseMapper.getTemperatureDataByAreaAndTimeSlot(unitName, beginTime, endTime);
     }
 }

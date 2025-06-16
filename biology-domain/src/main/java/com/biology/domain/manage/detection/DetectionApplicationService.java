@@ -1,7 +1,12 @@
 package com.biology.domain.manage.detection;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +16,8 @@ import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.detection.command.AddDetectionCommand;
 import com.biology.domain.manage.detection.db.DetectionEntity;
 import com.biology.domain.manage.detection.db.DetectionService;
+import com.biology.domain.manage.detection.dto.DareaDTO;
+import com.biology.domain.manage.detection.dto.DareaResultDTO;
 import com.biology.domain.manage.detection.dto.DetectionAreaTypeEchartDTO;
 import com.biology.domain.manage.detection.dto.DetectionCountEchartTypeDTO;
 import com.biology.domain.manage.detection.dto.DetectionDTO;
@@ -18,6 +25,7 @@ import com.biology.domain.manage.detection.dto.DetectionStatisticsDTO;
 import com.biology.domain.manage.detection.dto.NengHaoDTO;
 import com.biology.domain.manage.detection.dto.PowerDTO;
 import com.biology.domain.manage.detection.dto.PowerEchartDTO;
+import com.biology.domain.manage.detection.dto.SeriesDTO;
 import com.biology.domain.manage.detection.dto.StatisticsDetailDTO;
 import com.biology.domain.manage.detection.model.DetectionFactory;
 import com.biology.domain.manage.detection.model.DetectionModel;
@@ -173,6 +181,55 @@ public class DetectionApplicationService {
         }
 
         return detectionCountEchartTypeDTO;
+    }
+
+    public DareaResultDTO getTemperatureDataByAreaAndTimeSlot(String unitName, String beginTime, String endTime) {
+        List<DareaDTO> temperatureData = detectionService.getTemperatureDataByAreaAndTimeSlot(unitName, beginTime,
+                endTime);
+        Set<String> timeSlotsSet = new TreeSet<>(); // 自动排序时间
+        Set<String> areasSet = new HashSet<>();
+        Map<String, Map<String, Double>> areaToTimeValueMap = new HashMap<>();
+
+        // 分组数据
+        for (DareaDTO item : temperatureData) {
+            String area = item.getArea();
+            String timeSlot = item.getTimeSlot();
+            Double value = item.getAvgValue();
+
+            timeSlotsSet.add(timeSlot);
+            areasSet.add(area);
+
+            areaToTimeValueMap
+                    .computeIfAbsent(area, k -> new HashMap<>())
+                    .put(timeSlot, value);
+        }
+
+        // 转为列表
+        List<String> xData = new ArrayList<>(timeSlotsSet);
+        List<SeriesDTO> seriesList = new ArrayList<>();
+
+        for (String area : areasSet) {
+            SeriesDTO seriesItem = new SeriesDTO();
+            seriesItem.setName(area);
+
+            List<Double> dataList = new ArrayList<>();
+            Map<String, Double> timeMap = areaToTimeValueMap.get(area);
+
+            for (String timeSlot : xData) {
+                dataList.add(timeMap.getOrDefault(timeSlot, null));
+            }
+
+            seriesItem.setData(dataList);
+            seriesList.add(seriesItem);
+        }
+
+        // 填充返回结构
+        DareaResultDTO result = new DareaResultDTO();
+        result.setXData(xData);
+        result.setSeries(seriesList);
+        return result;
+        // return
+        // temperatureData.stream().map(DareaDTO::new).collect(Collectors.toList());
     }
 
 }
