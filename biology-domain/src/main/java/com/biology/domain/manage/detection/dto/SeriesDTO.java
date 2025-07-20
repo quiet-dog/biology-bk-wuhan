@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class SeriesDTO {
     private String name;
-    private String type;
-    private String stack;
+    private String type = "line";
+    private String stack = "数值";
     private List<Double> data;
 }

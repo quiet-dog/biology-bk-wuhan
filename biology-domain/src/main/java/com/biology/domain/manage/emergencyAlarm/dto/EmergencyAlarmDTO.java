@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.biology.common.annotation.ExcelColumn;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailEntity;
 import com.biology.domain.manage.detection.db.DetectionEntity;
 import com.biology.domain.manage.emergency.db.EmergencyFileEntity;
@@ -22,30 +23,39 @@ import lombok.Data;
 public class EmergencyAlarmDTO {
 
     @ApiModelProperty("应急ID")
+    @Schema(description = "应急ID")
+    @ExcelColumn(name = "应急ID")
     private Long emergencyAlarmId;
 
     @Schema(description = "设备数据id")
+    @ExcelColumn(name = "设备数据id")
     private Long equipmentDataId;
 
     @Schema(description = "环境数据Id")
+    @ExcelColumn(name = "环境数据Id")
     private Long detectionId;
 
     @ApiModelProperty("应急编号")
     @Schema(description = "应急编号")
+    @ExcelColumn(name = "应急编号")
     private String code;
 
     @Schema(description = "报警级别")
+    @ExcelColumn(name = "报警级别")
     private String level;
 
     @ApiModelProperty("报警类型")
     @Schema(description = "报警类型")
+    @ExcelColumn(name = "报警类型")
     private String type;
 
     @ApiModelProperty("报警描述")
     @Schema(description = "报警描述")
+    @ExcelColumn(name = "报警描述")
     private String description;
 
     @Schema(description = "报警时间")
+    @ApiModelProperty("报警时间")
     private Date createTime;
 
     private List<String> paths;

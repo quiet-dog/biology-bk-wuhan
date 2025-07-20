@@ -110,8 +110,8 @@ public class EventModel extends EventEntity {
                 || eventDTO.getLevel().equals("中度")) {
             command.setNotificationType("通知");
         } else {
-            // command.setNotificationType("提醒");
-            command.setNotificationType("通知");
+            command.setNotificationType("提醒");
+            // command.setNotificationType("通知");
         }
         command.setEventId(getEventId());
         command.setNotificationContent(eventDTO.getDescription());

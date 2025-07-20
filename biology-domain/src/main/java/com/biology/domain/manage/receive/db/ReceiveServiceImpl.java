@@ -159,11 +159,13 @@ public class ReceiveServiceImpl extends ServiceImpl<ReceiveMapper, ReceiveEntity
                         other += r.getCount();
                     } else if (receiveExplain.equals("维修用量")) {
                         maintenance = r.getCount();
-                    } else if (receiveExplain.equals("实验用量")) {
-                        experiment = r.getCount();
-                    } else if (receiveExplain.equals("清洁用量")) {
-                        clean = r.getCount();
-                    } else if (receiveExplain.equals("生产用量")) {
+                    }
+                    // else if (receiveExplain.equals("实验用量")) {
+                    // experiment = r.getCount();
+                    // } else if (receiveExplain.equals("清洁用量")) {
+                    // clean = r.getCount();
+                    // }
+                    else if (receiveExplain.equals("生产用量")) {
                         production = r.getCount();
                     } else {
                         other += r.getCount();

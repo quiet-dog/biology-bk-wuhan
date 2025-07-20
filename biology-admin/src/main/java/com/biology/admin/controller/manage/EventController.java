@@ -34,6 +34,8 @@ import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailEntity;
 import com.biology.domain.manage.detection.DetectionApplicationService;
 import com.biology.domain.manage.detection.command.AddDetectionCommand;
+import com.biology.domain.manage.detection.dto.DareaResultDTO;
+import com.biology.domain.manage.detection.query.AllAreaDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentDTO;
 import com.biology.domain.manage.environment.query.EnvironmentQuery;
 import com.biology.domain.manage.event.EventApplicationService;
@@ -377,4 +379,9 @@ public class EventController extends BaseController {
         return ResponseDTO.ok(eventApplicationService.getAllEnvironmentAreaEchart());
     }
 
+    @PostMapping("/getAreaStatisticsByDate")
+    public ResponseDTO<DareaResultDTO> getAreaStatisticsByDate(@RequestBody AllAreaDTO query) {
+        return ResponseDTO
+                .ok(eventApplicationService.getAreaStatisticsByDate(query.getBeginTime(), query.getEndTime()));
+    }
 }

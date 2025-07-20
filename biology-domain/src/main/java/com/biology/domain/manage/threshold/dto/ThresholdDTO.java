@@ -1,8 +1,10 @@
 package com.biology.domain.manage.threshold.dto;
 
+import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 
@@ -10,10 +12,12 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.emergency.db.EmergencyEntity;
+import com.biology.domain.manage.emergency.db.EmergencyFileEntity;
 import com.biology.domain.manage.emergency.dto.EmergencyDTO;
 import com.biology.domain.manage.equipment.db.EquipmentEntity;
 import com.biology.domain.manage.equipment.dto.EquipmentDTO;
 import com.biology.domain.manage.sop.db.SopEntity;
+import com.biology.domain.manage.sop.db.SopFileEntity;
 import com.biology.domain.manage.sop.dto.SopDTO;
 import com.biology.domain.manage.threshold.db.ThresholdEmergencyEntity;
 import com.biology.domain.manage.threshold.db.ThresholdEntity;
@@ -66,8 +70,12 @@ public class ThresholdDTO {
     @Schema(description = "应急预案列表")
     private List<Long> emergencys;
 
+    private List<String> emergencyPaths;
+
     @Schema(description = "SOP列表")
     private List<Long> sops;
+
+    private List<String> sopPaths;
 
     @Schema(description = "创建时间")
     private Date createTime;
@@ -118,8 +126,16 @@ public class ThresholdDTO {
                 .selectList(queryWrapper);
         if (thresholdEmergencyEntities != null && thresholdEmergencyEntities.size() > 0) {
             emergencys = new ArrayList<>();
+            emergencyPaths = new ArrayList<>();
             for (ThresholdEmergencyEntity thresholdEmergencyEntity : thresholdEmergencyEntities) {
                 emergencys.add(thresholdEmergencyEntity.getEmergencyId());
+            }
+            if (emergencys != null && emergencys.size() > 0) {
+                new EmergencyFileEntity()
+                        .selectList(new QueryWrapper<EmergencyFileEntity>().in("emergency_id", emergencys))
+                        .forEach(emergencyFileEntity -> {
+                            emergencyPaths.add(emergencyFileEntity.getPath());
+                        });
             }
         }
     }
@@ -144,8 +160,15 @@ public class ThresholdDTO {
         List<ThresholdSopEntity> thresholdSopEntities = new ThresholdSopEntity().selectList(queryWrapper);
         if (thresholdSopEntities != null && thresholdSopEntities.size() > 0) {
             sops = new ArrayList<>();
+            sopPaths = new ArrayList<>();
             for (ThresholdSopEntity thresholdSopEntity : thresholdSopEntities) {
                 sops.add(thresholdSopEntity.getSopId());
+            }
+            if (sops != null && sops.size() > 0) {
+                new SopFileEntity().selectList(new QueryWrapper<SopFileEntity>().in("sop_id", sops))
+                        .forEach(sopEntity -> {
+                            sopPaths.add(sopEntity.getPath());
+                        });
             }
         }
     }

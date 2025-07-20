@@ -15,9 +15,11 @@ import com.biology.domain.manage.alarmlevel.db.AlarmlevelEntity;
 import com.biology.domain.manage.alarmlevel.dto.AlarmlevelDTO;
 import com.biology.domain.manage.alarmlevel.dto.AlarmlevelDetailDTO;
 import com.biology.domain.manage.emergency.db.EmergencyEntity;
+import com.biology.domain.manage.emergency.db.EmergencyFileEntity;
 import com.biology.domain.manage.emergency.dto.EmergencyDTO;
 import com.biology.domain.manage.environment.db.EnvironmentEntity;
 import com.biology.domain.manage.sop.db.SopEntity;
+import com.biology.domain.manage.sop.db.SopFileEntity;
 import com.biology.domain.manage.sop.dto.SopDTO;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -107,6 +109,10 @@ public class EnvironmentDTO {
 
     private List<Long> emergencyIds;
 
+    private List<String> sopPaths;
+
+    private List<String> emergencyPaths;
+
     private List<Long> sopIds;
 
     // @Schema(description = "报警级别")
@@ -148,6 +154,15 @@ public class EnvironmentDTO {
             getEmergencyIds().add(emergencyEntity.getEmergencyId());
         }
         setEmergencies(emergenciesDB);
+        emergencyPaths = new ArrayList<>();
+
+        if (emergencyIds != null && emergencyIds.size() > 0) {
+            new EmergencyFileEntity()
+                    .selectList(new QueryWrapper<EmergencyFileEntity>().in("emergency_id", emergencyIds))
+                    .forEach(emergencyFileEntity -> {
+                        emergencyPaths.add(emergencyFileEntity.getPath());
+                    });
+        }
     }
 
     public void addSops() {
@@ -162,5 +177,12 @@ public class EnvironmentDTO {
             getSopIds().add(sopEntity.getSopId());
         }
         setSops(sopsDB);
+        sopPaths = new ArrayList<>();
+        if (sops != null && sops.size() > 0) {
+            new SopFileEntity().selectList(new QueryWrapper<SopFileEntity>().in("sop_id", sops))
+                    .forEach(sopEntity -> {
+                        sopPaths.add(sopEntity.getPath());
+                    });
+        }
     }
 }

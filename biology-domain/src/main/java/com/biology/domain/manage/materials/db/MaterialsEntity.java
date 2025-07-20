@@ -85,6 +85,14 @@ public class MaterialsEntity extends BaseEntity<MaterialsEntity> {
     @TableField(value = "total")
     private double total;
 
+    @ApiModelProperty("技术规格")
+    @TableField(value = "technical_specification")
+    private String technicalSpecification;
+
+    @ApiModelProperty("性能参数")
+    @TableField(value = "performance_parameters")
+    private String performanceParameters;
+
     @Override
     public Serializable pkVal() {
         return this.materialsId;

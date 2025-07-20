@@ -106,6 +106,10 @@ public class EventDTO {
     @Schema(description = "阈值信息")
     private ThresholdDTO threshold;
 
+    @ApiModelProperty("推送类型")
+    @Schema(description = "推送类型")
+    private String pushType;
+
     @ApiModelProperty("创建时间")
     @Schema(description = "创建时间")
     @ExcelColumn(name = "报警时间")

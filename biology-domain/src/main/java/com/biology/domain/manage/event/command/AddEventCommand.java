@@ -5,6 +5,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.biology.common.annotation.ExcelColumn;
 
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -62,4 +63,8 @@ public class AddEventCommand {
 
     @ApiModelProperty("处理文件")
     private List<String> paths;
+
+    @ApiModelProperty("推送类型")
+    @ExcelColumn(name = "推送类型")
+    private String pushType;
 }

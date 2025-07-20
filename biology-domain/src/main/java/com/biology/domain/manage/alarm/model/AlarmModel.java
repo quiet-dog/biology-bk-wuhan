@@ -168,6 +168,8 @@ public class AlarmModel extends AlarmEntity {
         }
 
         if (!isExit) {
+            System.out.println(String.format("物料编号为%s的%s库存量为%.2f%s,未触发报警",
+                    materials.getCode(), materials.getName(), haveStock, materials.getUnit()));
             return null;
         }
         MaterialsAlarmDTO materialsAlarmDTO = new MaterialsAlarmDTO(materials);
@@ -199,6 +201,7 @@ public class AlarmModel extends AlarmEntity {
 
     public boolean insert() {
         MaterialsValueEntity result = checkNum();
+        System.out.println("result ========================= " + result);
         if (result == null) {
             return false;
         }

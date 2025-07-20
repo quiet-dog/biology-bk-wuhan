@@ -49,14 +49,19 @@ public interface ReceiveMapper extends BaseMapper<ReceiveEntity> {
                         + " GROUP BY m.name,m.materials_type")
         public List<ReceiveMaterialsStockDTO> getReceiveAllTypeStock();
 
-        @Select("SELECT SUM(r.receive_num) as count,m.name as materialsType FROM manage_receive as r"
-                        + " JOIN manage_materials m on m.materials_id = r.materials_id"
-                        + " WHERE m.materials_type = #{name}"
-                        + " GROUP BY m.materials_type,m.name")
+        // @Select("SELECT SUM(r.receive_num) as count,m.name as materialsType FROM
+        // manage_receive as r"
+        // + " JOIN manage_materials m on m.materials_id = r.materials_id"
+        // + " WHERE m.materials_type = #{name}"
+        // + " GROUP BY m.materials_type,m.name")
+        @Select("SELECT SUM(stock) as count,name as materialsType FROM manage_materials"
+                        + " WHERE materials_type = #{name} AND deleted = 0"
+                        + " GROUP BY materials_type,name")
         public List<ReceiveMaterialsStockDTO> getReceiveAllTypeByName(@Param("name") String name);
 
         @Select("SELECT SUM(r.receive_num) as count,m.name,r.receive_explain from manage_receive as r"
                         + " JOIN manage_materials m on m.materials_id = r.materials_id"
+                        + " WHERE m.deleted = 0"
                         + " GROUP BY m.name,r.receive_explain")
         public List<ReceiveMaterialsStockDTO> getReceiveAllReceiveExplain();
 

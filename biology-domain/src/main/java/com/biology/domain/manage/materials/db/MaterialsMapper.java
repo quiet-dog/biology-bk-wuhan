@@ -68,7 +68,7 @@ public interface MaterialsMapper extends BaseMapper<MaterialsEntity> {
                         + " ORDER BY create_time DESC ")
         List<MhistoryDTO> getMaterialsHistory(Long materialsId);
 
-        @Select("SELECT DISTINCT materials_type FROM manage_materials")
+        @Select("SELECT DISTINCT materials_type FROM manage_materials where deleted = 0")
         List<String> getMaterialsTypes();
 
 }

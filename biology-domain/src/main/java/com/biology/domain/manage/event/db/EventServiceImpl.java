@@ -4,13 +4,21 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.biology.common.utils.time.DatePickUtil;
+import com.biology.domain.manage.detection.dto.DareaDTO;
+import com.biology.domain.manage.detection.dto.DareaResultDTO;
+import com.biology.domain.manage.detection.dto.SeriesDTO;
 import com.biology.domain.manage.event.dto.AllEventEchartDTO;
 import com.biology.domain.manage.event.dto.AreaStatisticsDTO;
 import com.biology.domain.manage.event.dto.EnvironmentStock;
@@ -386,6 +394,57 @@ public class EventServiceImpl extends ServiceImpl<EventMapper, EventEntity> impl
 
     public List<AllEventEchartDTO> getAllEnvironmentAreaEchart() {
         return baseMapper.getAllEnvironmentAreaEchart();
+    }
+
+    public DareaResultDTO getAreaStatisticsByDate(String startTime, String endTime) {
+        List<DareaDTO> temperatureData = baseMapper.getAreaStatisticsByDate(startTime, endTime);
+        System.out.println("======================");
+        System.out.println(startTime);
+        System.out.println(endTime);
+        System.out.println(temperatureData.size());
+        // 打印长度
+        Set<String> timeSlotsSet = new TreeSet<>(); // 自动排序时间
+        Set<String> areasSet = new HashSet<>();
+        Map<String, Map<String, Double>> areaToTimeValueMap = new HashMap<>();
+
+        // 分组数据
+        for (DareaDTO item : temperatureData) {
+            String area = item.getArea();
+            String timeSlot = item.getTimeSlot();
+            Double value = item.getAvgValue();
+
+            timeSlotsSet.add(timeSlot);
+            areasSet.add(area);
+
+            areaToTimeValueMap
+                    .computeIfAbsent(area, k -> new HashMap<>())
+                    .put(timeSlot, value);
+        }
+
+        // 转为列表
+        List<String> xData = new ArrayList<>(timeSlotsSet);
+        List<SeriesDTO> seriesList = new ArrayList<>();
+
+        for (String area : areasSet) {
+            SeriesDTO seriesItem = new SeriesDTO();
+            seriesItem.setName(area);
+
+            List<Double> dataList = new ArrayList<>();
+            Map<String, Double> timeMap = areaToTimeValueMap.get(area);
+
+            for (String timeSlot : xData) {
+                dataList.add(timeMap.getOrDefault(timeSlot, null));
+            }
+
+            seriesItem.setData(dataList);
+            seriesList.add(seriesItem);
+        }
+
+        // 填充返回结构
+        DareaResultDTO result = new DareaResultDTO();
+        result.setXData(xData);
+        result.setSeries(seriesList);
+        return result;
     }
 
 }

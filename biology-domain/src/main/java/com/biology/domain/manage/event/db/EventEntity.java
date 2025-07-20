@@ -93,6 +93,10 @@ public class EventEntity extends BaseEntity<EventEntity> {
     @TableField(value = "handlerId")
     private Long handlerId;
 
+    @ApiModelProperty("推送类型")
+    @TableField(value = "push_type")
+    private String pushType;
+
     @Override
     public Serializable pkVal() {
         return this.eventId;

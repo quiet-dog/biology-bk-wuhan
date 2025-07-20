@@ -77,4 +77,10 @@ public class AddMaterialsCommand {
 
     @Schema(description = "总容量")
     private double total;
+
+    @Schema(description = "技术规格")
+    private String technicalSpecification;
+
+    @Schema(description = "性能参数")
+    private String performanceParameters;
 }

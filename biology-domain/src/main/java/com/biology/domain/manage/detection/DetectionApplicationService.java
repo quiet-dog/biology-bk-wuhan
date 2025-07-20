@@ -134,11 +134,20 @@ public class DetectionApplicationService {
         List<NengHaoDTO> list = new ArrayList<>();
         for (DetectionDTO entity : records) {
             NengHaoDTO nengHaoDTO = new NengHaoDTO(entity);
-            if (nengHaoDTO.getElectricityValue() != 0) {
-                nengHaoDTO.setTotalValue(detectionService.getCurrentMonthPowerUsage(nengHaoDTO.getEnvironmentId()));
+            System.out.println("nengHaoDTO = " + nengHaoDTO);
+            if (nengHaoDTO.getElectricityValue() != 0 && nengHaoDTO.getEnvironmentId() != null) {
+                Double total = detectionService.getCurrentMonthPowerUsage(nengHaoDTO.getEnvironmentId());
+                if (total == null) {
+                    total = 0.0;
+                }
+                nengHaoDTO.setTotalValue(total);
             }
-            if (nengHaoDTO.getWaterValue() != 0) {
-                nengHaoDTO.setTotalValue(detectionService.getCurrentMonthWaterUsage(nengHaoDTO.getEnvironmentId()));
+            if (nengHaoDTO.getWaterValue() != 0 && nengHaoDTO.getEnvironmentId() != null) {
+                Double total = detectionService.getCurrentMonthWaterUsage(nengHaoDTO.getEnvironmentId());
+                if (total == null) {
+                    total = 0.0;
+                }
+                nengHaoDTO.setTotalValue(total);
             }
             list.add(nengHaoDTO);
         }

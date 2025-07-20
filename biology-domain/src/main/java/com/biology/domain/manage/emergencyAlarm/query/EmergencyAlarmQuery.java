@@ -22,12 +22,14 @@ public class EmergencyAlarmQuery extends AbstractPageQuery<EmergencyAlarmEntity>
     @Schema(description = "报警级别")
     private String level;
 
+    private String exportType;
+
     @Override
     public QueryWrapper<EmergencyAlarmEntity> addQueryCondition() {
         QueryWrapper<EmergencyAlarmEntity> queryWrapper = new QueryWrapper<EmergencyAlarmEntity>();
         queryWrapper.like(StrUtil.isNotEmpty(type), "type", type)
                 .like(StrUtil.isNotEmpty(level), "level", level)
-                .like(StrUtil.isNotEmpty(eventName), "type", eventName); 
+                .like(StrUtil.isNotEmpty(eventName), "type", eventName);
 
         setTimeRangeColumn("create_time");
 

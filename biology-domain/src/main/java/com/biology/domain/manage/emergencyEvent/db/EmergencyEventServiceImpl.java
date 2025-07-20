@@ -24,7 +24,7 @@ public class EmergencyEventServiceImpl extends ServiceImpl<EmergencyEventMapper,
                         result.getTimes().add(i + "月");
                         Boolean isExist = false;
                         for (EnvironmentStock stock : list) {
-                                if (stock.getTime().equals(i + "")) {
+                                if (stock.getTime().equals(i < 10 ? ("0" + i + "") : i)) {
                                         isExist = true;
                                         result.getData().add(stock.getCount().doubleValue());
                                         break;

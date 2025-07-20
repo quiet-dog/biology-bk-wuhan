@@ -20,6 +20,7 @@ import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailService;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelEntity;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelService;
 import com.biology.domain.manage.alarmlevel.dto.EnvironmentAlarmInfoDTO;
+import com.biology.domain.manage.detection.dto.DareaResultDTO;
 import com.biology.domain.manage.environment.db.EnvironmentEntity;
 import com.biology.domain.manage.environment.db.EnvironmentService;
 import com.biology.domain.manage.event.command.AddEventCommand;
@@ -486,5 +487,9 @@ public class EventApplicationService {
 
     public List<AllEventEchartDTO> getAllEnvironmentAreaEchart() {
         return eventService.getAllEnvironmentAreaEchart();
+    }
+
+    public DareaResultDTO getAreaStatisticsByDate(String startTime, String endTime) {
+        return eventService.getAreaStatisticsByDate(startTime, endTime);
     }
 }

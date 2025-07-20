@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.biology.domain.manage.detection.dto.DareaDTO;
 import com.biology.domain.manage.event.dto.AllEventEchartDTO;
 import com.biology.domain.manage.event.dto.AreaStatisticsDTO;
 import com.biology.domain.manage.event.dto.EnvironmentStock;
@@ -107,10 +108,21 @@ public interface EventMapper extends BaseMapper<EventEntity> {
                         + " LEFT JOIN manage_emergency_alarm a on a.emergency_alarm_id = n.emergency_alarm_id"
                         + " LEFT JOIN manage_environment_detection d on d.detection_id = a.detection_id"
                         + " LEFT JOIN manage_environment m on m.environment_id = d.environment_id"
-                        + " WHERE e.create_time BETWEEN #{startTime} AND #{endTime}"
+                        + " WHERE e.create_time BETWEEN #{startTime} AND CONCAT(#{endTime}, ' 23:59:59')"
                         + " AND e.type = '环境报警类'"
                         + " GROUP BY m.e_area")
         public List<AreaStatisticsDTO> getAreaStatistics(@Param("startTime") String startTime,
+                        @Param("endTime") String endTime);
+
+        @Select("SELECT m.e_area as area, COUNT(*) AS avgValue,DATE_FORMAT(e.create_time, '%Y-%m-%d') AS timeSlot from manage_emergency_event as e"
+                        + " LEFT JOIN manage_emergency_event_alarm n on e.emergency_event_id = n.emergency_event_id"
+                        + " LEFT JOIN manage_emergency_alarm a on a.emergency_alarm_id = n.emergency_alarm_id"
+                        + " LEFT JOIN manage_environment_detection d on d.detection_id = a.detection_id"
+                        + " LEFT JOIN manage_environment m on m.environment_id = d.environment_id"
+                        + " WHERE e.create_time BETWEEN #{startTime} AND CONCAT(#{endTime}, ' 23:59:59')"
+                        + " AND e.type = '环境报警类'"
+                        + " GROUP BY m.e_area,DATE_FORMAT(e.create_time, '%Y-%m-%d')")
+        public List<DareaDTO> getAreaStatisticsByDate(@Param("startTime") String startTime,
                         @Param("endTime") String endTime);
 
         // 获取今日报警数量
@@ -148,6 +160,7 @@ public interface EventMapper extends BaseMapper<EventEntity> {
 
         @Select("SELECT n.unit_name,COUNT(*) as count FROM manage_event e JOIN manage_environment n on n.environment_id = e.environment_id"
                         + " WHERE e.create_time >= CURDATE() - INTERVAL 6 DAY AND e.create_time < CURDATE() + INTERVAL 1 DAY"
+                        + " AND e.deleted = 0 AND n.deleted = 0"
                         + " GROUP BY n.unit_name")
         public List<EnvironmentStock> getEnvrionmentEventAllWeek();
 

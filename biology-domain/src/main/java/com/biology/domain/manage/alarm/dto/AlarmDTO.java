@@ -23,6 +23,8 @@ public class AlarmDTO {
 
     private double stock;
 
+    private String level;
+
     public AlarmDTO(AlarmEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);

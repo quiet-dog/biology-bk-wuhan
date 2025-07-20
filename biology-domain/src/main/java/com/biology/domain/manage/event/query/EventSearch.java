@@ -47,12 +47,12 @@ public class EventSearch extends AbstractPageQuery<EventEntity> {
                                                 "select equipment_id from manage_equipment where equipment_name = '"
                                                                 + deviceName + "'");
                 if (StrUtil.isNotEmpty(area)) {
-                        queryWrapper.or().inSql("environment_id",
+                        queryWrapper.inSql("(environment_id",
                                         "select environment_id from manage_environment where e_area = '" + area
                                                         + "'")
                                         .or().inSql("equipment_id",
                                                         "select equipment_id from manage_equipment where installation_location = '"
-                                                                        + area + "'");
+                                                                        + area + "')");
                 }
 
                 setTimeRangeColumn("create_time");

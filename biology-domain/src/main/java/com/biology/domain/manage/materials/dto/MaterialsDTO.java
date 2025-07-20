@@ -102,6 +102,14 @@ public class MaterialsDTO {
     @Schema(description = "总容量")
     private double total;
 
+    @ApiModelProperty("技术规格")
+    @ExcelColumn(name = "技术规格")
+    private String technicalSpecification;
+
+    @ApiModelProperty("性能参数")
+    @ExcelColumn(name = "性能参数")
+    private String performanceParameters;
+
     public MaterialsDTO(MaterialsEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);

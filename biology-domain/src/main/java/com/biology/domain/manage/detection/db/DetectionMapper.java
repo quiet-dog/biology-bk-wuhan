@@ -338,16 +338,49 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
          * GROUP BY e.area, time_slot
          * ORDER BY time_slot, e.area;
          */
-        @Select("SELECT e.e_area AS area, "
-                        + "DATE_FORMAT(DATE_SUB(d.create_time, INTERVAL MINUTE(d.create_time) % 30 MINUTE), '%Y-%m-%d %H:%i') AS time_slot, "
-                        + "ROUND(AVG(d.value), 2) AS avg_value "
-                        + "FROM manage_environment_detection d "
-                        + "JOIN manage_environment e ON d.environment_id = e.environment_id "
-                        + "WHERE e.unit_name = #{unitName} "
-                        + "AND d.create_time BETWEEN #{beginTime} AND #{endTime} "
-                        + "AND d.create_time >= NOW() - INTERVAL 1 DAY "
-                        + "GROUP BY e.e_area, time_slot "
-                        + "ORDER BY time_slot, e.e_area")
+        // @Select("SELECT e.e_area AS area, "
+        // + "DATE_FORMAT(DATE_SUB(d.create_time, INTERVAL MINUTE(d.create_time) % 30
+        // MINUTE), '%Y-%m-%d %H:%i') AS time_slot, "
+        // + "ROUND(AVG(d.value), 2) AS avg_value "
+        // + "FROM manage_environment_detection d "
+        // + "JOIN manage_environment e ON d.environment_id = e.environment_id "
+        // + "WHERE e.unit_name = #{unitName} "
+        // + "AND d.create_time >= #{beginTime} AND d.create_time < #{endTime} "
+        // + "GROUP BY e.e_area, time_slot "
+        // + "ORDER BY time_slot, e.e_area")
+        @Select("WITH RECURSIVE time_slots AS ( " +
+                        "    SELECT CAST(CONCAT(#{beginTime}, ' 00:00:00') AS DATETIME) AS time_point " +
+                        "    UNION ALL " +
+                        "    SELECT DATE_ADD(time_point, INTERVAL 30 MINUTE) " +
+                        "    FROM time_slots " +
+                        "    WHERE time_point < CAST(CONCAT(#{endTime}, ' 00:00:00') AS DATETIME) " +
+                        "), " +
+                        "area_list AS ( " +
+                        "    SELECT DISTINCT e.e_area " +
+                        "    FROM manage_environment_detection d " +
+                        "    JOIN manage_environment e ON d.environment_id = e.environment_id " +
+                        "    WHERE e.unit_name = #{unitName} " +
+                        "      AND d.create_time >= #{beginTime} AND d.create_time < #{endTime} " +
+                        "), " +
+                        "avg_values AS ( " +
+                        "    SELECT " +
+                        "        e.e_area, " +
+                        "        FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(d.create_time) / 1800) * 1800) AS time_slot, " +
+                        "        ROUND(AVG(d.value), 2) AS avg_value " +
+                        "    FROM manage_environment_detection d " +
+                        "    JOIN manage_environment e ON d.environment_id = e.environment_id " +
+                        "    WHERE e.unit_name = #{unitName} " +
+                        "      AND d.create_time >= #{beginTime} AND d.create_time < #{endTime} " +
+                        "    GROUP BY e.e_area, time_slot " +
+                        ") " +
+                        "SELECT " +
+                        "    a.e_area AS area, " +
+                        "    DATE_FORMAT(t.time_point, '%H:%i') AS time_slot, " +
+                        "    IFNULL(av.avg_value, 0) AS avg_value " +
+                        "FROM area_list a " +
+                        "CROSS JOIN time_slots t " +
+                        "LEFT JOIN avg_values av ON a.e_area = av.e_area AND t.time_point = av.time_slot " +
+                        "ORDER BY time_slot, area")
         public List<DareaDTO> getTemperatureDataByAreaAndTimeSlot(@Param("unitName") String unitName,
                         @Param("beginTime") String beginTime,
                         @Param("endTime") String endTime);

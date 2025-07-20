@@ -1,10 +1,10 @@
 {
-    debug
-    auto_https off
-    http_port 0
+	debug
+	auto_https off
+	http_port 0
 }
 :9080 {
-	#tls internal
+	#tls /home/zks/Projects/private/biology-bk-wuhan/certs/cert.pem /home/zks/Projects/private/biology-bk-wuhan/certs/key.pem
 
 	# API 路径代理
 	handle_path /api/* {
@@ -16,9 +16,13 @@
 	}
 
 	handle /kkfile/* {
-		reverse_proxy http://192.168.0.11:8012
+		reverse_proxy 192.168.0.11:8012 {
+			header_up X-Forwarded-Proto {scheme}
+			header_up Host {host}
+			header_up X-Real-IP {remote}
+			header_up X-Forwarded-For {remote}
+		}
 	}
-
 
 	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
 	@ws {
@@ -72,9 +76,9 @@
 	}
 
 	@postfoo {
-                method GET
-                path /api/file/preview*
-    }
+		method GET
+		path /api/file/preview*
+	}
 
 	handle @postfoo {
 		# 加上/biology
@@ -82,18 +86,17 @@
 		reverse_proxy http://192.168.0.11:9000
 	}
 
-
 	# 静态文件处理
 	handle {
-		root * /home/zks/Projects/private/biology-fd-wuhan/dist
+		root * /home/zks/Projects/private/biology-fd-beijing/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd
 	}
 }
 
-
 :17772 {
+	#tls /home/zks/Projects/private/biology-bk-wuhan/certs/cert.pem /home/zks/Projects/private/biology-bk-wuhan/certs/key.pem
 
 	handle_path /api/* {
 		reverse_proxy http://127.0.0.1:9020
@@ -107,7 +110,6 @@
 		reverse_proxy http://192.168.0.11:8012
 	}
 
-
 	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
 	@ws {
 		path /ws-api/*
@@ -160,9 +162,9 @@
 	}
 
 	@postfoo {
-                method GET
-                path /api/file/preview*
-    }
+		method GET
+		path /api/file/preview*
+	}
 
 	handle @postfoo {
 		# 加上/biology
@@ -170,16 +172,14 @@
 		reverse_proxy http://192.168.0.11:9000
 	}
 
-
 	# 静态文件处理
 	handle {
-		root * /home/zks/Projects/private/biology-screen-wuhan/dist
+		root * /home/zks/Projects/private/screen/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd
 	}
 }
-
 
 :17773 {
 	handle_path /api/* {
@@ -194,7 +194,6 @@
 		reverse_proxy http://192.168.0.11:8012
 	}
 
-
 	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
 	@ws {
 		path /ws-api/*
@@ -247,16 +246,15 @@
 	}
 
 	@postfoo {
-                method GET
-                path /api/file/preview*
-    }
+		method GET
+		path /api/file/preview*
+	}
 
 	handle @postfoo {
 		# 加上/biology
 		uri replace /api/file/preview /biology
 		reverse_proxy http://192.168.0.11:9000
 	}
-
 
 	# 静态文件处理
 	handle {
@@ -268,7 +266,6 @@
 }
 
 :17774 {
-
 	handle_path /api/* {
 		reverse_proxy http://127.0.0.1:9020
 	}
@@ -281,7 +278,6 @@
 		reverse_proxy http://192.168.0.11:8012
 	}
 
-
 	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
 	@ws {
 		path /ws-api/*
@@ -334,16 +330,15 @@
 	}
 
 	@postfoo {
-                method GET
-                path /api/file/preview*
-    }
+		method GET
+		path /api/file/preview*
+	}
 
 	handle @postfoo {
 		# 加上/biology
 		uri replace /api/file/preview /biology
 		reverse_proxy http://192.168.0.11:9000
 	}
-
 
 	# 静态文件处理
 	handle {
@@ -352,4 +347,11 @@
 		file_server
 		encode gzip zstd
 	}
+}
+
+:9000 {
+	reverse_proxy http://192.168.0.11:9000
+}
+:9001 {
+	reverse_proxy http://192.168.0.11:9001
 }
