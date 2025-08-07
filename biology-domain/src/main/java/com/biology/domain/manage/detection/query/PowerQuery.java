@@ -20,10 +20,10 @@ public class PowerQuery {
     private String area;
 
     @Schema(description = "开始时间")
-    private LocalDateTime startTime;
+    private String startTime;
 
     @Schema(description = "结束时间")
-    private LocalDateTime endTime;
+    private String endTime;
 
     @Schema(description = "环境ID")
     private Long environmentId;

@@ -170,17 +170,21 @@ public class EventDTO {
     }
 
     public void addDescription() {
-        if (getType() != null && getType().equals("设备报警") && getEquipment() != null && getThreshold() != null) {
-            setDescription(String.format("设备编号为%s的%s-%s为%.2f,触发报警", getEquipment().getEquipmentCode(),
-                    getEquipment().getEquipmentName(), getThreshold().getEquipmentIndex(), getEquipmentValue()));
+        if (getType() != null && getDescription() == null && getType().equals("设备报警") && getEquipment() != null
+                && getThreshold() != null) {
+            setDescription(String.format("设备编号为%s的%s-%s为%.2f,触发报警",
+                    getEquipment().getEquipmentCode(),
+                    getEquipment().getEquipmentName(), getThreshold().getEquipmentIndex(),
+                    getEquipmentValue()));
         }
 
-        if (getType() != null && getType().equals("环境报警") && environment != null
+        if (getType() != null && getDescription() == null && getType().equals("环境报警") && environment != null
                 && environment.getAlarmlevels() != null) {
             environment.getAlarmlevels().forEach(alarmlevel -> {
                 if (alarmlevel.getMin() < environmentValue && environmentValue < alarmlevel.getMax()) {
                     setDescription(String.format("位号为%s的%s-%s数值为%.2f,触发报警", environment.getTag(),
-                            environment.getDescription(), environment.getUnitName(), getEnvironmentValue()));
+                            environment.getDescription(), environment.getUnitName(),
+                            getEnvironmentValue()));
                 }
             });
             return;

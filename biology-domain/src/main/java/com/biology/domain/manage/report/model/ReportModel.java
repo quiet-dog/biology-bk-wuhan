@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
 import com.biology.domain.manage.alarm.command.AddAlarmCommand;
@@ -95,7 +96,14 @@ public class ReportModel extends ReportEntity {
         addAlarmCommand.setMaterialsId(getMaterialsId());
         addAlarmCommand.setNum(getReportNum());
         alarmModel.loadAddCommand(addAlarmCommand);
-        alarmModel.insert();
+        Long alarmId = alarmModel.insertToAlarmId();
+        UpdateWrapper<AlarmEntity> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("alarm_id", alarmId).set("report_id", getReportId());
+        // AlarmEntity alarm = new AlarmEntity();
+        // alarm.setReportId(getReportId());
+        // alarmService.update(alarm, updateWrapper);
+        this.alarmService.getBaseMapper().update(null, updateWrapper);
+
     }
 
     public void addFiles() {

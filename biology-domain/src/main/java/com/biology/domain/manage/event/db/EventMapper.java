@@ -70,7 +70,7 @@ public interface EventMapper extends BaseMapper<EventEntity> {
         @Select("SELECT type,DATE_FORMAT(create_time,'%m-%d')  as data_time , COUNT(*) AS count,"
                         + " FORMAT((COUNT(DISTINCT equipment_id) / (SELECT COUNT(*) FROM manage_equipment)),2) as rate"
                         + " from manage_event"
-                        + " WHERE create_time >= CURDATE() - INTERVAL 6 DAY"
+                        + " WHERE create_time >= CURDATE() - INTERVAL 6 DAY AND deleted = 0"
                         + " GROUP BY type,DATE_FORMAT(create_time, '%m-%d')"
                         + " ORDER BY type")
         public List<WeekStatisticsDTO> getNowWeekStatistics();

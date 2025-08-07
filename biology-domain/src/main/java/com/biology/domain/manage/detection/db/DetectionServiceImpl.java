@@ -30,7 +30,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
 
     @Override
     public List<PowerDTO> getPowerStatic(PowerQuery query) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDate today = LocalDate.now();
         List<PowerDTO> result = new ArrayList<>();
 
@@ -38,8 +38,16 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         if (query.getStartTime() != null && query.getEndTime() != null) {
             List<PowerDTO> data = baseMapper.getPowerStaticByDateRange(query.getDes(), query.getStartTime(),
                     query.getEndTime());
-            LocalDate start = query.getStartTime().toLocalDate();
-            LocalDate end = query.getEndTime().toLocalDate();
+            // LocalDate start = query.getStartTime().toLocalDate();
+            // LocalDate end = query.getEndTime().toLocalDate();
+            // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd
+            // HH:mm:ss");
+
+            LocalDateTime startDateTime = LocalDateTime.parse(query.getStartTime(), formatter);
+            LocalDate start = startDateTime.toLocalDate();
+
+            LocalDateTime endDateTime = LocalDateTime.parse(query.getEndTime(), formatter);
+            LocalDate end = endDateTime.toLocalDate();
 
             for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
                 PowerDTO powerDTO = new PowerDTO();
@@ -530,7 +538,9 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         DetectionCountEchartTypeDTO result = new DetectionCountEchartTypeDTO();
         result.setData(new ArrayList<>());
         result.setTime(DatePickUtil.getDayNow());
-        List<PowerDTO> list = baseMapper.getHistoryDayByEnvironmentId(query.getEnvironmentId());
+        List<PowerDTO> list = baseMapper.getHistoryDayByEnvironmentId(query.getEnvironmentId(),
+                query.getStartTime(),
+                query.getEndTime());
         for (String time : result.getTime()) {
             boolean isExit = false;
             for (PowerDTO p : list) {

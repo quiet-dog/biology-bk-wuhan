@@ -32,6 +32,12 @@ public class AlarmApplicationService {
         alarmModel.insert();
     }
 
+    public Long addAlarmToAlarmId(AddAlarmCommand command) {
+        AlarmModel alarmModel = alarmFactory.create();
+        alarmModel.loadAddCommand(command);
+        return alarmModel.insertToAlarmId();
+    }
+
     public void updateAlarm(UpdateAlarmCommand command) {
         AlarmModel alarmModel = alarmFactory.loadById(command.getAlarmId());
         alarmModel.loadAddCommand(command);

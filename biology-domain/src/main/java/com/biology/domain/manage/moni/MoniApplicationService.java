@@ -264,6 +264,11 @@ public class MoniApplicationService {
                 command.setEnvironmentId(deviceDTO.getEnvironmentAlarmInfo().getEnvironmentId());
                 command.setEnvironmentUnit(deviceDTO.getEnvironmentAlarmInfo().getUnit());
                 command.setAlarmlevelId(alarmlevelDetailEntity.getAlarmlevelId());
+                // 位号为%s的%s-%s数值为%.2f,触发报警
+
+                command.setDescription(String.format("位号为%s的%s-%s数值为%.2f,触发报警", environmentEntity.getTag(),
+                        environmentEntity.getDescription(), environmentEntity.getUnitName(),
+                        deviceDTO.getEnvironmentAlarmInfo().getValue()));
                 eventApplicationService.createEvent(command);
             }
         }
@@ -363,6 +368,9 @@ public class MoniApplicationService {
                 command.setLevel(thresholdValueEntity.getLevel());
                 command.setThresholdId(thresholdValueEntity.getThresholdId());
                 command.setEquipmentValue(deviceDTO.getEquipmentInfo().getValue());
+                command.setDescription(String.format("设备编号为%s的%s-%s为%.2f,触发报警", equipmentEntity.getEquipmentCode(),
+                        equipmentEntity.getEquipmentName(), thresholdEntity.getEquipmentIndex(),
+                        deviceDTO.getEquipmentInfo().getValue()));
                 eventApplicationService.createEvent(command);
             }
         }

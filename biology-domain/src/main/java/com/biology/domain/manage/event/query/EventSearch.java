@@ -55,6 +55,12 @@ public class EventSearch extends AbstractPageQuery<EventEntity> {
                                                                         + area + "')");
                 }
 
+                // if (StrUtil.isNotEmpty(sensorType)) {
+                // queryWrapper.inSql("equipment_id",
+                // "select equipment_id from manage_equipment where unit_name = '"
+                // + sensorType + "'");
+                // }
+
                 setTimeRangeColumn("create_time");
 
                 return queryWrapper;

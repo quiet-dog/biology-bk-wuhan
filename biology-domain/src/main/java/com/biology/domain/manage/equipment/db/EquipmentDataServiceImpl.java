@@ -25,10 +25,12 @@ public class EquipmentDataServiceImpl extends ServiceImpl<EquipmentDataMapper, E
         EquipmentDataStockEchartDTO echartDTO = new EquipmentDataStockEchartDTO();
         List<EquipmentDataStockDTO> list = baseMapper.getEquipmentDataStockDay(threshold);
         echartDTO.setData(new ArrayList<>());
-        echartDTO.setTime(DatePickUtil.getDayNow());
+        echartDTO.setTime(DatePickUtil.getDayNowHalfHour());
         for (String s : echartDTO.getTime()) {
             Boolean isExit = false;
             for (EquipmentDataStockDTO equipmentDataStockDTO : list) {
+                System.out.println("=========================");
+                System.out.println(s + "====" + equipmentDataStockDTO.getTime());
                 if (s.equals(equipmentDataStockDTO.getTime())) {
                     isExit = true;
                     echartDTO.getData().add(equipmentDataStockDTO.getData());

@@ -179,7 +179,7 @@ public class EnvironmentDTO {
         setSops(sopsDB);
         sopPaths = new ArrayList<>();
         if (sops != null && sops.size() > 0) {
-            new SopFileEntity().selectList(new QueryWrapper<SopFileEntity>().in("sop_id", sops))
+            new SopFileEntity().selectList(new QueryWrapper<SopFileEntity>().in("sop_id", sopIds))
                     .forEach(sopEntity -> {
                         sopPaths.add(sopEntity.getPath());
                     });

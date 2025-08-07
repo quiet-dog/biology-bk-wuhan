@@ -219,4 +219,28 @@ public class AlarmModel extends AlarmEntity {
 
         return super.insert();
     }
+
+    public Long insertToAlarmId() {
+        MaterialsValueEntity result = checkNum();
+        System.out.println("result ========================= " + result);
+        if (result == null) {
+            return null;
+        }
+
+        // MaterialsValueEntity materialsValue = checkNum();
+        // if (materialsValue != null) {
+        // EventModel eventModel = eventFactory.create();
+        // AddEventCommand addEventCommand = new AddEventCommand();
+        // addEventCommand.setMaterialsId(getMaterialsId());
+        // addEventCommand.setType("物料报警");
+        // addEventCommand.setMaterialsValue(getStock());
+        // eventModel.loadAddEventCommand(addEventCommand);
+        // eventModel.insert();
+        // }
+        if (super.insert()) {
+            return this.getAlarmId();
+        }
+
+        return this.getAlarmId();
+    }
 }

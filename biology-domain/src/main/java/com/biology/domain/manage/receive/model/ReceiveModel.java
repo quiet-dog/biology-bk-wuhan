@@ -3,10 +3,12 @@ package com.biology.domain.manage.receive.model;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
 import com.biology.domain.manage.alarm.AlarmApplicationService;
 import com.biology.domain.manage.alarm.command.AddAlarmCommand;
+import com.biology.domain.manage.alarm.db.AlarmEntity;
 import com.biology.domain.manage.alarm.db.AlarmService;
 import com.biology.domain.manage.alarm.dto.AlarmDTO;
 import com.biology.domain.manage.alarm.model.AlarmFactory;
@@ -81,19 +83,28 @@ public class ReceiveModel extends ReceiveEntity {
     }
 
     // 计算领用数量
-    public void checkReceiveNum() {
+    public Long checkReceiveNum() {
         AddAlarmCommand command = new AddAlarmCommand();
         command.setMaterialsId(getMaterialsId());
         command.setNum(getReceiveNum());
-        alarmApplicationService.addAlarm(command);
+        // alarmApplicationService.addAlarm(command);
+        return alarmApplicationService.addAlarmToAlarmId(command);
     }
 
     public boolean insert() {
-        checkReceiveNum();
+        Long alarmId = checkReceiveNum();
         MaterialsEntity materialsEntity = materialsService.getById(getMaterialsId());
         this.setStock(materialsEntity.getStock());
         this.setBatch(materialsEntity.getBatch());
-        return super.insert();
+        if (super.insert()) {
+            UpdateWrapper<AlarmEntity> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("alarm_id", alarmId).set("receive_id", getReceiveId());
+            this.alarmService.getBaseMapper().update(null, updateWrapper);
+            // AlarmEntity alarm = new AlarmEntity();
+            // alarm.setReceiveId(getReceiveId());
+            // alarmService.update(alarm, updateWrapper);
+        }
+        return true;
     }
 
 }

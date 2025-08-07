@@ -75,6 +75,25 @@ public class DatePickUtil {
         return times;
     }
 
+    public static List<String> getDayNowHalfHour() {
+        // 获取当前时间和当天开始时间（00:00）
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfDay = now.toLocalDate().atStartOfDay();
+
+        List<String> times = new ArrayList<>();
+
+        // 遍历每 30 分钟
+        LocalDateTime currentTime = startOfDay;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        while (!currentTime.isAfter(now)) {
+            times.add(currentTime.format(formatter));
+            currentTime = currentTime.plusMinutes(30);
+        }
+
+        return times;
+    }
+
     public static List<String> getWeekNowMMDD() {
         LocalDate today = LocalDate.now();
         List<String> dates = new ArrayList<>();

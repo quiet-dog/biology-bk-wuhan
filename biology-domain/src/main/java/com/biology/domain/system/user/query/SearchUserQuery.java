@@ -2,6 +2,9 @@ package com.biology.domain.system.user.query;
 
 import cn.hutool.core.util.StrUtil;
 import com.biology.common.core.page.AbstractPageQuery;
+
+import java.util.List;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,6 +23,7 @@ public class SearchUserQuery<T> extends AbstractPageQuery<T> {
     protected Integer status;
     protected String phoneNumber;
     protected Long deptId;
+    protected List<Long> userIds;
 
     @Override
     public QueryWrapper<T> addQueryCondition() {
@@ -33,7 +37,8 @@ public class SearchUserQuery<T> extends AbstractPageQuery<T> {
                 .and(deptId != null, o -> o.eq("u.dept_id", deptId)
                         .or()
                         .apply("u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(" + deptId
-                                + ", ancestors))"));
+                                + ", ancestors))"))
+                .in(getUserIds() != null && getUserIds().size() > 0, "user_id", getUserIds());
 
         // 设置排序字段
         this.timeRangeColumn = "u.create_time";

@@ -36,6 +36,14 @@ public class AlarmEntity extends BaseEntity<AlarmEntity> {
     @TableField(value = "level")
     private String level;
 
+    @ApiModelProperty("领用Id")
+    @TableField(value = "receive_id")
+    private Long receiveId;
+
+    @ApiModelProperty("上报Id")
+    @TableField(value = "report_id")
+    private Long reportId;
+
     @Override
     public Serializable pkVal() {
         return this.alarmId;

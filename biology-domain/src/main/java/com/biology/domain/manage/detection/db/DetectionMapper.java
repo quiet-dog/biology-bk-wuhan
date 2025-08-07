@@ -1,5 +1,6 @@
 package com.biology.domain.manage.detection.db;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -56,8 +57,8 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " GROUP BY DATE_FORMAT(d.create_time, '%Y-%m-%d')"
                         + " ORDER BY DATE_FORMAT(d.create_time, '%Y-%m-%d')")
         public List<PowerDTO> getPowerStaticByDateRange(@Param("des") String des,
-                        @Param("startTime") java.time.LocalDateTime startTime,
-                        @Param("endTime") java.time.LocalDateTime endTime);
+                        @Param("startTime") String startTime,
+                        @Param("endTime") String endTime);
 
         // 获取一年内每个月的数据
         @Select("SELECT DATE_FORMAT(d.create_time, '%Y-%m') AS time,AVG(d.power) AS data"
@@ -98,7 +99,7 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
         public List<PowerDTO> getHistoryPowersByType();
 
         @Select("SELECT CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00') AS time,SUM(water_value) as data FROM manage_environment_detection"
-                        + " WHERE create_time >= CURDATE()"
+                        + " WHERE DATE(create_time) = CURDATE()"
                         + " GROUP BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00')"
                         + " ORDER BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00')")
         public List<PowerDTO> getHistoryWaterPowersByType();
@@ -146,7 +147,7 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
         public List<PowerDTO> getHistoryWaterByTypeYear();
 
         @Select("SELECT CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00') AS time,SUM(electricity_value) as data FROM manage_environment_detection"
-                        + " WHERE create_time >= CURDATE() "
+                        + " WHERE DATE(create_time) = CURDATE() "
                         + " GROUP BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00')"
                         + " ORDER BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00')")
         public List<PowerDTO> getHistoryElectricityByType();
@@ -243,10 +244,11 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
 
         @Select("SELECT CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00') as time,AVG(value) as data FROM manage_environment_detection"
                         + " WHERE environment_id = #{environmentId}"
-                        + " AND create_time >= CURDATE()"
+                        + " AND create_time >= #{startTime} AND create_time < #{endTime}"
                         + " GROUP BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00') "
                         + " ORDER BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00') ")
-        public List<PowerDTO> getHistoryDayByEnvironmentId(@Param("environmentId") Long environmentId);
+        public List<PowerDTO> getHistoryDayByEnvironmentId(@Param("environmentId") Long environmentId,
+                        @Param("startTime") String startTime, @Param("endTime") String endTime);
 
         @Select("SELECT description AS time, value AS data"
                         + " FROM (SELECT d.value,e.description,ROW_NUMBER() OVER (PARTITION BY e.environment_id ORDER BY d.create_time DESC) AS rn"
