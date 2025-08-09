@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.xwAlarm.command.AddXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.command.UpdateXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.db.XwAlarmEntity;
 import com.biology.domain.manage.xwAlarm.db.XwAlarmService;
+import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
 import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
 import com.biology.domain.manage.xwAlarm.model.XwAlarmFactory;
 import com.biology.domain.manage.xwAlarm.model.XwAlarmModel;
@@ -56,5 +58,20 @@ public class XwAlarmApplicationService {
     public XwAlarmDTO getXwAlarmInfo(Long xwAlarmId) {
         XwAlarmEntity byId = xwAlarmService.getById(xwAlarmId);
         return new XwAlarmDTO(byId);
+    }
+
+    public void getXingWeiAlarm(XingWeiDTO xingWeiDTO) {
+        AddXwAlarmCommand command = new AddXwAlarmCommand();
+        command.setCameraId(xingWeiDTO.getCameraId());
+        command.setAlarmId(xingWeiDTO.getAlarmId());
+        command.setDisplayFlag(xingWeiDTO.getDisplayFlag());
+        command.setFilterFlag(xingWeiDTO.getFilterFlag());
+        command.setFlag(xingWeiDTO.getFlag());
+        command.setFunctionType(xingWeiDTO.getFunctionType());
+        command.setPicPath(xingWeiDTO.getPicPath());
+        command.setPicPathOrg(xingWeiDTO.getPicPathOrg());
+        command.setSeatNumber(xingWeiDTO.getSeatNumber());
+        command.setTimeStamp(xingWeiDTO.getTimeStampAsMillis());
+        create(command);
     }
 }

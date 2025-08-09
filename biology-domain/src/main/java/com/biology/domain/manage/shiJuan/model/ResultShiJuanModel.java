@@ -39,4 +39,5 @@ public class ResultShiJuanModel extends ResultShiJuanEntity {
             loadAddResultShiJuanCommand(command);
         }
     }
+
 }

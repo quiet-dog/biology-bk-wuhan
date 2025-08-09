@@ -21,6 +21,7 @@ public enum CacheKeyEnum {
     ONLINE_DEVICE_KEY("online_device:", 60, TimeUnit.SECONDS),
     THRESHOLD_VALUES_DEVICE_KEY("threshold_values_device:", 60, TimeUnit.SECONDS),
     THRESHOLD_EMERGENCY_DEVICE_KEY("threshold_emergency_device:", 60, TimeUnit.SECONDS),
+    SM_DEVICE_ONLINE_KEY("sm_device_online", 5, TimeUnit.SECONDS),
     ;
 
     CacheKeyEnum(String key, int expiration, TimeUnit timeUnit) {

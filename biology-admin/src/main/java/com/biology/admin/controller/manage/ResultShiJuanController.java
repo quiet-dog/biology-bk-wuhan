@@ -17,8 +17,13 @@ import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.shiJuan.ResultShiJuanApplicationService;
 import com.biology.domain.manage.shiJuan.command.AddResultShiJuanCommand;
 import com.biology.domain.manage.shiJuan.command.UpdateResultShiJuanCommand;
+import com.biology.domain.manage.shiJuan.dto.ResultGanYuDTO;
 import com.biology.domain.manage.shiJuan.dto.ResultShiJuanDTO;
+import com.biology.domain.manage.shiJuan.dto.ShiJuanDTO;
+import com.biology.domain.manage.shiJuan.dto.SubmitResultDTO;
+import com.biology.domain.manage.shiJuan.model.ResultShiJuanModel;
 import com.biology.domain.manage.shiJuan.query.ResultShiJuanQuery;
+import com.biology.domain.manage.shiJuan.query.ShiJuanQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -80,5 +85,26 @@ public class ResultShiJuanController {
     public ResponseDTO<PageDTO<ResultShiJuanDTO>> listByUser(ResultShiJuanQuery query) {
         PageDTO<ResultShiJuanDTO> list = resultShiJuanApplicationService.getResultShiJuansByUser(query);
         return ResponseDTO.ok(list);
+    }
+
+    @Operation(summary = "获取试卷列表")
+    @GetMapping("/shiJuanList")
+    public ResponseDTO<PageDTO<ShiJuanDTO>> getShiJuanList(ShiJuanQuery query) {
+        PageDTO<ShiJuanDTO> list = resultShiJuanApplicationService.getShiJuanList(query);
+        return ResponseDTO.ok(list);
+    }
+
+    @Operation(summary = "获取试卷列表")
+    @PostMapping("/setResult")
+    public ResponseDTO<Void> submitResult(@RequestBody SubmitResultDTO req) {
+        resultShiJuanApplicationService.submitResult(req);
+        return ResponseDTO.ok();
+    }
+
+    @Operation(summary = "设置干预")
+    @PostMapping("/setGanYu")
+    public ResponseDTO<Void> setGanYu(@RequestBody ResultGanYuDTO req) {
+        resultShiJuanApplicationService.setGanYu(req);
+        return ResponseDTO.ok();
     }
 }

@@ -27,4 +27,17 @@ public class AddResultShiJuanCommand {
 
     private Long userId;
 
+    private Long startTime;
+
+    private Long useTime;
+
+    private String cePing;
+
+    private String ganYuFangShi;
+
+    private Long ganYuTime;
+
+    private String execUser;
+
+    private String ganYuResult;
 }

@@ -16,10 +16,14 @@ public class XwAlarmQuery extends AbstractPageQuery<XwAlarmEntity> {
     @Schema(description = "位号")
     private String seatNumer;
 
+    @Schema(description = "摄像头ID")
+    private String cameraId;
+
     @Override
     public QueryWrapper<XwAlarmEntity> addQueryCondition() {
         QueryWrapper<XwAlarmEntity> queryWrapper = new QueryWrapper<XwAlarmEntity>();
-        queryWrapper.like(!StrUtil.isEmpty(getSeatNumer()), "seat_number", getSeatNumer());
+        queryWrapper.like(!StrUtil.isEmpty(getSeatNumer()), "seat_number", getSeatNumer())
+                .like(!StrUtil.isEmpty(getCameraId()), "camera_id", getCameraId());
 
         return queryWrapper;
     }

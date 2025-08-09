@@ -14,6 +14,7 @@ import com.biology.domain.manage.shiJuan.db.ResultShiJuanEntity;
 import com.biology.domain.manage.shiJuan.db.ResultShiJuanService;
 import com.biology.domain.manage.shiJuan.model.ResultShiJuanFactory;
 import com.biology.domain.manage.shiJuan.model.ResultShiJuanModel;
+import com.biology.domain.manage.xlArchive.db.XlArchiveEntity;
 import com.biology.domain.manage.xlFangAn.command.AddXlFangAnCommand;
 import com.biology.domain.manage.xlFangAn.command.UpdateXlFangAnCommand;
 import com.biology.domain.manage.xlFangAn.db.XlFangAnEntity;
@@ -86,7 +87,7 @@ public class XlFangAnModel extends XlFangAnEntity {
     }
 
     public boolean insert() {
-        checkNotUser();
+        // checkNotUser();
         if (super.insert()) {
             addResultShiJuan();
         }

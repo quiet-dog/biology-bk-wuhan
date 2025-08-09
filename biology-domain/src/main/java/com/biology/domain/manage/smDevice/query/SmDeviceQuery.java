@@ -15,6 +15,9 @@ public class SmDeviceQuery extends AbstractPageQuery<SmDeviceEntity> {
     @Schema(description = "设备sn")
     private String deviceSn;
 
+    @Schema(description = "设备名称")
+    private String name;
+
     @Schema(description = "操作人名称")
     private String personnelName;
 
@@ -31,6 +34,7 @@ public class SmDeviceQuery extends AbstractPageQuery<SmDeviceEntity> {
         queryWrapper
                 .eq(!StrUtil.isEmpty(getDeviceSn()), "device_sn", getDeviceSn())
                 .eq(!StrUtil.isEmpty(getArea()), "area", getArea())
+                .eq(!StrUtil.isEmpty(getName()), "name", getName())
                 .inSql(!StrUtil.isEmpty(getPersonnelName()), "personnel_id",
                         String.format("select personnel_id from manage_personnel where name like '%s'",
                                 getPersonnelName()));

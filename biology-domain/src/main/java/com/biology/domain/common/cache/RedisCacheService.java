@@ -11,12 +11,15 @@ import com.biology.domain.manage.emergency.db.EmergencyService;
 import com.biology.domain.manage.emergency.dto.EmergencyDTO;
 import com.biology.domain.manage.knowledge.db.KnowledgeTypeEntity;
 import com.biology.domain.manage.knowledge.db.KnowledgeTypeService;
+import com.biology.domain.manage.smData.dto.SmDataDTO;
 import com.biology.domain.manage.sop.db.SopEntity;
 import com.biology.domain.manage.sop.db.SopService;
 import com.biology.domain.manage.sop.dto.SopDTO;
+import com.biology.domain.manage.task.dto.SmOnlineDataDTO;
 import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
 import com.biology.domain.manage.threshold.db.ThresholdValueService;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
+import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
 import com.biology.domain.system.post.db.SysPostEntity;
 import com.biology.domain.system.role.db.SysRoleEntity;
 import com.biology.domain.system.user.db.SysUserEntity;
@@ -56,6 +59,10 @@ public class RedisCacheService {
     public RedisCacheTemplate<List<EmergencyDTO>> thrsholdEmergencyCache;
 
     public RedisCacheTemplate<List<SopDTO>> thrsholdSopCache;
+
+    public RedisCacheTemplate<SmOnlineDataDTO> smDeviceOnlineCache;
+
+    public RedisCacheTemplate<XingWeiDTO> xingWeiOnlineCache;
 
     // public RedisCacheTemplate<RoleInfo> roleModelInfoCache;
 
@@ -152,6 +159,13 @@ public class RedisCacheService {
             }
         };
 
+        smDeviceOnlineCache = new RedisCacheTemplate<SmOnlineDataDTO>(redisUtil,
+                CacheKeyEnum.SM_DEVICE_ONLINE_KEY) {
+        };
+
+        xingWeiOnlineCache = new RedisCacheTemplate<XingWeiDTO>(redisUtil,
+                CacheKeyEnum.SM_DEVICE_ONLINE_KEY) {
+        };
         // thrsholdEmergencyCache = new
         // RedisCacheTemplate<List<EmergencyDTO>>(redisUtil,
         // CacheKeyEnum.THRESHOLD_EMERGENCY_DEVICE_KEY) {

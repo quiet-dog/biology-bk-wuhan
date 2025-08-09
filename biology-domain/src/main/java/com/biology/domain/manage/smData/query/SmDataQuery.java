@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class SmDataQuery extends AbstractPageQuery<SmDataEntity> {
+
     private String smDeviceSn;
 
     @Override

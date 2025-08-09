@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Validated
 @RequiredArgsConstructor
 public class XlFangAnController extends BaseController {
- private final XlFangAnApplicationService xlFangAnApplicationService;
+    private final XlFangAnApplicationService xlFangAnApplicationService;
 
     @Operation(summary = "添加心理测评方案")
     @PostMapping
@@ -66,5 +66,11 @@ public class XlFangAnController extends BaseController {
     public ResponseDTO<XlFangAnDTO> info(@PathVariable(value = "xlFangAnId", required = false) Long xlFangAnId) {
         XlFangAnDTO xlFangAnDTO = xlFangAnApplicationService.getXlFangAnInfo(xlFangAnId);
         return ResponseDTO.ok(xlFangAnDTO);
+    }
+
+    @Operation(summary = "获取心理测评方案组")
+    @GetMapping("/getDeptGroup")
+    public ResponseDTO<List<String>> getDeptGroup() {
+        return ResponseDTO.ok(xlFangAnApplicationService.getDeptGroup());
     }
 }

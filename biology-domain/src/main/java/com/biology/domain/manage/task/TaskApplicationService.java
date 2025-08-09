@@ -8,8 +8,10 @@ import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.door.command.AddDoorCommand;
 import com.biology.domain.manage.door.db.DoorEntity;
 import com.biology.domain.manage.door.db.DoorService;
@@ -37,6 +39,7 @@ import com.biology.domain.manage.personnel.model.PersonnelFactory;
 import com.biology.domain.manage.personnel.model.PersonnelModel;
 import com.biology.domain.manage.task.db.MaterialsTaskEntity;
 import com.biology.domain.manage.task.db.MaterialsTaskService;
+import com.biology.domain.manage.task.dto.ShengOnelineResDTO;
 import com.biology.domain.manage.websocket.db.WebsocketService;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -71,6 +74,8 @@ public class TaskApplicationService {
     private static Integer size = 10000;
 
     private static Boolean isSubjectRunning = false;
+
+    private final WebClient renTiClient;
 
     // @Scheduled(cron = "30 0 0 1 * ?")
     // public void stock() {
@@ -422,4 +427,22 @@ public class TaskApplicationService {
         }
     }
 
+    @Scheduled(fixedRate = 3000)
+    public void renTi() {
+        ShengOnelineResDTO result = renTiClient.get()
+                .uri("/api/getDevicesLastSendInfo") // 注意：你文档里是 getDevicesLastSendInfo
+                .retrieve()
+                .bodyToMono(ShengOnelineResDTO.class)
+                .block(); // 阻塞直到返回结果
+
+        if (result != null && result.getCode() == 0) {
+            result.getData().forEach(device -> {
+                if (device.getOnline()) {
+                    CacheCenter.smDeviceOnlineCache.set(device.getSn(), device);
+                } else {
+                    CacheCenter.smDeviceOnlineCache.set(device.getSn(), device);
+                }
+            });
+        }
+    }
 }

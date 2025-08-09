@@ -2,22 +2,14 @@ package com.biology.domain.manage.smDevice.dto;
 
 import java.util.Date;
 
-import org.checkerframework.checker.units.qual.s;
 import org.springframework.beans.BeanUtils;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.biology.common.annotation.ExcelSheet;
-import com.biology.domain.manage.materials.db.MaterialsEntity;
-import com.biology.domain.manage.materials.dto.MaterialsDTO;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.personnel.db.PersonnelEntity;
-import com.biology.domain.manage.personnel.dto.PersonnelDTO;
 import com.biology.domain.manage.smDevice.db.SmDeviceEntity;
-import com.biology.domain.system.user.db.SysUserEntity;
-import com.biology.domain.system.user.dto.UserDTO;
+import com.biology.domain.manage.task.dto.SmOnlineDataDTO;
 
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -50,6 +42,10 @@ public class SmDeviceDTO {
 
     private String personnelName;
 
+    private Boolean isOnline;
+
+    private Long lastTime;
+
     public SmDeviceDTO(SmDeviceEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
@@ -61,6 +57,16 @@ public class SmDeviceDTO {
         if (getPersonnelId() != null && getPersonnelId() != 0) {
             PersonnelEntity pEntity = new PersonnelEntity().selectById(getPersonnelId());
             setPersonnelName(pEntity.getName());
+        }
+    }
+
+    public void addIsOnline() {
+        SmOnlineDataDTO isOnlone = CacheCenter.smDeviceOnlineCache.getObjectById(getDeviceSn());
+        if (isOnlone == null) {
+            setIsOnline(false);
+        } else {
+            setIsOnline(isOnlone.getOnline());
+            setLastTime(isOnlone.getLastTime());
         }
     }
 

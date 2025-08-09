@@ -47,6 +47,27 @@ public class ResultShiJuanEntity extends BaseEntity<ResultShiJuanEntity> {
     @TableField(value = "user_id")
     private Long userId;
 
+    @TableField(value = "start_time")
+    private Long startTime;
+
+    @TableField(value = "use_time")
+    private Long useTime;
+
+    @TableField(value = "ce_ping")
+    private String cePing;
+
+    @TableField(value = "gan_yu_fang_shi")
+    private String ganYuFangShi;
+
+    @TableField(value = "gan_yu_time")
+    private Long ganYuTime;
+
+    @TableField(value = "exec_user")
+    private String execUser;
+
+    @TableField(value = "gan_yu_result")
+    private String ganYuResult;
+
     @Override
     public Serializable pkVal() {
         return this.resultId;

@@ -17,6 +17,7 @@ import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.xwAlarm.XwAlarmApplicationService;
 import com.biology.domain.manage.xwAlarm.command.AddXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.command.UpdateXwAlarmCommand;
+import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
 import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
 import com.biology.domain.manage.xwAlarm.query.XwAlarmQuery;
 
@@ -65,5 +66,12 @@ public class XwAlarmController {
     public ResponseDTO<XwAlarmDTO> info(@PathVariable(value = "xwAlarmId", required = false) Long xwAlarmId) {
         XwAlarmDTO xwAlarmDTO = xwAlarmApplicationService.getXwAlarmInfo(xwAlarmId);
         return ResponseDTO.ok(xwAlarmDTO);
+    }
+
+    @Operation(summary = "获取行为数据信息")
+    @PostMapping("/receive")
+    public ResponseDTO<Void> getXingWeiAlarm(@RequestBody XingWeiDTO xindian) {
+        xwAlarmApplicationService.getXingWeiAlarm(xindian);
+        return ResponseDTO.ok();
     }
 }

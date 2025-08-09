@@ -2,12 +2,13 @@
 <configuration>
 
   <!-- 日志存放路径 在xml文件夹中 -->
-  <springProperty name="log.path" source="logging.file.path"/>
+  <springProperty name="log.path" source="logging.file.path" />
 
-  <springProperty name="console.pattern" source="logging.pattern.console"/>
+  <springProperty name="console.pattern" source="logging.pattern.console" />
 
   <!-- 日志输出格式 -->
-  <property name="log.pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n"/>
+  <property name="log.pattern"
+    value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n" />
 
   <!-- 控制台输出 -->
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -82,7 +83,7 @@
     <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
     <queueSize>256</queueSize>
     <!-- 添加附加的appender,最多只能添加一个 -->
-    <appender-ref ref="info_log"/>
+    <appender-ref ref="info_log" />
     <!-- %class%line中没有显示正确的值，而是两个问号? 解决办法：一般出现在AsyncAppender中，需要添加属性 -->
     <includeCallerData>true</includeCallerData>
   </appender>
@@ -94,7 +95,7 @@
     <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
     <queueSize>256</queueSize>
     <!-- 添加附加的appender,最多只能添加一个 -->
-    <appender-ref ref="error_log"/>
+    <appender-ref ref="error_log" />
     <includeCallerData>true</includeCallerData>
   </appender>
 
@@ -105,18 +106,17 @@
     <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
     <queueSize>1024</queueSize>
     <!-- 添加附加的appender,最多只能添加一个 -->
-    <appender-ref ref="debug_log"/>
+    <appender-ref ref="debug_log" />
     <includeCallerData>true</includeCallerData>
   </appender>
 
 
   <root level="info">
-    <appender-ref ref="console"/>
-    <appender-ref ref="async_info_log"/>
-    <appender-ref ref="async_error_log"/>
-    <appender-ref ref="async_debug_log"/>
+    <appender-ref ref="console" />
+    <appender-ref ref="async_info_log" />
+    <appender-ref ref="async_error_log" />
+    <appender-ref ref="async_debug_log" />
   </root>
-
 
 
 </configuration>

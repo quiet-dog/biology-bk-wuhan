@@ -58,4 +58,9 @@ public class XlFangAnApplicationService {
         XlFangAnEntity byId = xlFangAnService.getById(xlFangAnId);
         return new XlFangAnDTO(byId);
     }
+
+    public List<String> getDeptGroup() {
+        return xlFangAnService.getPersonnelGroup();
+    }
+
 }
