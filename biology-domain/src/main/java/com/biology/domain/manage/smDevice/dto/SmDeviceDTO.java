@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
+import com.biology.common.annotation.ExcelColumn;
 import com.biology.common.annotation.ExcelSheet;
 import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.personnel.db.PersonnelEntity;
@@ -19,15 +20,18 @@ public class SmDeviceDTO {
     @Schema(description = "设备Id")
     private Long smDeviceId;
 
+    @ExcelColumn(name = "设备SN")
     @Schema(description = "设备sn")
     private String deviceSn;
 
+    @ExcelColumn(name = "设备名称")
     @Schema(description = "设备名称")
     private String name;
 
     @Schema(description = "人员Id")
     private Long personnelId;
 
+    @ExcelColumn(name = "所属区域")
     @Schema(description = "区域")
     private String area;
 
@@ -40,10 +44,13 @@ public class SmDeviceDTO {
     @Schema(description = "创建人ID")
     private Long creatorId;
 
+    @ExcelColumn(name = "操作员")
     private String personnelName;
 
+    @ExcelColumn(name = "设备状态")
     private Boolean isOnline;
 
+    @ExcelColumn(name = "末次通讯时间", showInImportTemplate = false)
     private Long lastTime;
 
     public SmDeviceDTO(SmDeviceEntity entity) {

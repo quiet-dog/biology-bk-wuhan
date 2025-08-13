@@ -2,6 +2,8 @@ package com.biology.admin.controller.manage;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
+import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.smDevice.command.AddSmDeviceCommand;
 import com.biology.domain.manage.smDevice.command.UpdateSmDeviceCommand;
 import com.biology.domain.manage.smDevice.dto.SmDeviceDTO;
 import com.biology.domain.manage.smDevice.query.SmDeviceQuery;
+import com.biology.domain.manage.event.dto.EventDTO;
+import com.biology.domain.manage.event.query.EventSearch;
 import com.biology.domain.manage.smDevice.SmDeviceApplicationService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,5 +71,12 @@ public class SmDeviceController extends BaseController {
     public ResponseDTO<SmDeviceDTO> info(@PathVariable(value = "smDeviceId", required = false) Long smDeviceId) {
         SmDeviceDTO smDeviceDTO = smDeviceApplicationService.getSmDeviceInfo(smDeviceId);
         return ResponseDTO.ok(smDeviceDTO);
+    }
+
+    @Operation(summary = "生命设备列表导出")
+    @GetMapping("/excel")
+    public void exportUserByExcel(HttpServletResponse response, SmDeviceQuery query) {
+        PageDTO<SmDeviceDTO> list = smDeviceApplicationService.getSmDevices(query);
+        CustomExcelUtil.writeToResponse(list.getRows(), SmDeviceDTO.class, response);
     }
 }

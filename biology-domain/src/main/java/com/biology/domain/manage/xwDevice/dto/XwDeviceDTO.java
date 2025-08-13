@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.BeanUtils;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.biology.common.annotation.ExcelColumn;
 import com.biology.common.annotation.ExcelSheet;
 import com.biology.domain.manage.xwDevice.db.XwDeviceEntity;
 
@@ -17,15 +18,19 @@ public class XwDeviceDTO {
     @Schema(description = "设备ID")
     private Long xwDeviceId;
 
+    @ExcelColumn(name = "摄像头ID")
     @Schema(description = "摄像头ID")
     private String cameraId;
 
+    @ExcelColumn(name = "设备名称")
     @Schema(description = "设备名称")
     private String name;
 
+    @ExcelColumn(name = "机位号")
     @Schema(description = "设备位号")
     private String seatNumber;
 
+    @ExcelColumn(name = "机位对应内容")
     @Schema(description = "对位内容")
     private String content;
 

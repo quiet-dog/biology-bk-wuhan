@@ -2,6 +2,8 @@ package com.biology.admin.controller.manage;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
+import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.xlArchive.XlArchiveApplicationService;
 import com.biology.domain.manage.xlArchive.command.AddXlArchiveCommand;
 import com.biology.domain.manage.xlArchive.command.UpdateXlArchiveCommand;
 import com.biology.domain.manage.xlArchive.dto.XlArchiveDTO;
 import com.biology.domain.manage.xlArchive.query.XlArchiveQuery;
+import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
+import com.biology.domain.manage.xwAlarm.query.XwAlarmQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,5 +71,12 @@ public class XlArchiveController extends BaseController {
     public ResponseDTO<XlArchiveDTO> info(@PathVariable(value = "xlArchiveId", required = false) Long xlArchiveId) {
         XlArchiveDTO xlArchiveDTO = xlArchiveApplicationService.getXlArchiveInfo(xlArchiveId);
         return ResponseDTO.ok(xlArchiveDTO);
+    }
+
+    @Operation(summary = "心理健康档案列表导出")
+    @GetMapping("/excel")
+    public void exportUserByExcel(HttpServletResponse response, XlArchiveQuery query) {
+        PageDTO<XlArchiveDTO> list = xlArchiveApplicationService.getXlArchives(query);
+        CustomExcelUtil.writeToResponse(list.getRows(), XlArchiveDTO.class, response);
     }
 }

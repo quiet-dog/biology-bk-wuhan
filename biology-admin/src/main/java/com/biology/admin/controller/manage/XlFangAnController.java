@@ -2,6 +2,8 @@ package com.biology.admin.controller.manage;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
+import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.xlFangAn.XlFangAnApplicationService;
 import com.biology.domain.manage.xlFangAn.command.AddXlFangAnCommand;
 import com.biology.domain.manage.xlFangAn.command.UpdateXlFangAnCommand;
 import com.biology.domain.manage.xlFangAn.dto.XlFangAnDTO;
 import com.biology.domain.manage.xlFangAn.query.XlFangAnQuery;
+import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
+import com.biology.domain.manage.xwAlarm.query.XwAlarmQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,5 +77,12 @@ public class XlFangAnController extends BaseController {
     @GetMapping("/getDeptGroup")
     public ResponseDTO<List<String>> getDeptGroup() {
         return ResponseDTO.ok(xlFangAnApplicationService.getDeptGroup());
+    }
+
+    @Operation(summary = "心理测评方案列表导出")
+    @GetMapping("/excel")
+    public void exportUserByExcel(HttpServletResponse response, XlFangAnQuery query) {
+        PageDTO<XlFangAnDTO> list = xlFangAnApplicationService.getXlFangAns(query);
+        CustomExcelUtil.writeToResponse(list.getRows(), XlFangAnDTO.class, response);
     }
 }

@@ -2,6 +2,8 @@ package com.biology.admin.controller.manage;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
+import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.smData.SmDataApplicationService;
 import com.biology.domain.manage.smData.command.AddSmDataCommand;
 import com.biology.domain.manage.smData.command.UpdateSmDataCommand;
 import com.biology.domain.manage.smData.dto.SmDataDTO;
 import com.biology.domain.manage.smData.query.SmDataQuery;
+import com.biology.domain.manage.smDevice.dto.SmDeviceDTO;
+import com.biology.domain.manage.smDevice.query.SmDeviceQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,5 +71,12 @@ public class SmDataController extends BaseController {
     public ResponseDTO<SmDataDTO> info(@PathVariable(value = "smDataId", required = false) Long smDataId) {
         SmDataDTO smDataDTO = smDataApplicationService.getSmDataInfo(smDataId);
         return ResponseDTO.ok(smDataDTO);
+    }
+
+    @Operation(summary = "生命体征数据列表导出")
+    @GetMapping("/excel")
+    public void exportUserByExcel(HttpServletResponse response, SmDataQuery query) {
+        PageDTO<SmDataDTO> list = smDataApplicationService.getSmDatas(query);
+        CustomExcelUtil.writeToResponse(list.getRows(), SmDataDTO.class, response);
     }
 }

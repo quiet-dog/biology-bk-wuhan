@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.shiJuan.ResultShiJuanApplicationService;
@@ -34,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/manage/resultShiJuan")
 @Validated
 @RequiredArgsConstructor
-public class ResultShiJuanController {
+public class ResultShiJuanController extends BaseController {
     private final ResultShiJuanApplicationService resultShiJuanApplicationService;
 
     @Operation(summary = "添加行为设备")

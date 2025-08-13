@@ -2,6 +2,8 @@ package com.biology.admin.controller.manage;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
+import com.biology.common.utils.poi.CustomExcelUtil;
+import com.biology.domain.manage.smData.dto.SmDataDTO;
+import com.biology.domain.manage.smData.query.SmDataQuery;
 import com.biology.domain.manage.xwDevice.XwDeviceApplicationService;
 import com.biology.domain.manage.xwDevice.command.AddXwDeviceCommand;
 import com.biology.domain.manage.xwDevice.command.UpdateXwDeviceCommand;
@@ -66,5 +71,12 @@ public class XwDeviceController extends BaseController {
     public ResponseDTO<XwDeviceDTO> info(@PathVariable(value = "xwDeviceId", required = false) Long xwDeviceId) {
         XwDeviceDTO xwDeviceDTO = xwDeviceApplicationService.getXwDeviceInfo(xwDeviceId);
         return ResponseDTO.ok(xwDeviceDTO);
+    }
+
+    @Operation(summary = "生命体征数据列表导出")
+    @GetMapping("/excel")
+    public void exportUserByExcel(HttpServletResponse response, XwDeviceQuery query) {
+        PageDTO<XwDeviceDTO> list = xwDeviceApplicationService.getXwDevices(query);
+        CustomExcelUtil.writeToResponse(list.getRows(), XwDeviceDTO.class, response);
     }
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
+import com.biology.common.annotation.ExcelColumn;
 import com.biology.domain.manage.xwAlarm.db.XwAlarmEntity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,15 +13,18 @@ import lombok.Data;
 @Data
 public class XwAlarmDTO {
 
+    @ExcelColumn(name = "报警序号")
     @Schema(description = "报警ID")
     private Long alarmId;
 
+    @ExcelColumn(name = "摄像头ID")
     @Schema(description = "摄像头ID")
     private String cameraId;
 
     @Schema(description = "转换后图片路径")
     private String picPath;
 
+    @ExcelColumn(name = "机位号")
     @Schema(description = "位号")
     private String seatNumber;
 
@@ -30,6 +34,7 @@ public class XwAlarmDTO {
     @Schema(description = "时间戳")
     private Long timeStamp;
 
+    @ExcelColumn(name = "报警标志")
     @Schema(description = "报警标志0未审核 1报警 2误报")
     private Long flag;
 

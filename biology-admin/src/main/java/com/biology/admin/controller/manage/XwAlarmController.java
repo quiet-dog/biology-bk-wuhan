@@ -2,6 +2,8 @@ package com.biology.admin.controller.manage;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
+import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.xwAlarm.XwAlarmApplicationService;
 import com.biology.domain.manage.xwAlarm.command.AddXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.command.UpdateXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
 import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
 import com.biology.domain.manage.xwAlarm.query.XwAlarmQuery;
+import com.biology.domain.manage.xwDevice.dto.XwDeviceDTO;
+import com.biology.domain.manage.xwDevice.query.XwDeviceQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/manage/xwAlarm")
 @Validated
 @RequiredArgsConstructor
-public class XwAlarmController {
+public class XwAlarmController extends BaseController {
     private final XwAlarmApplicationService xwAlarmApplicationService;
 
     @Operation(summary = "添加行为数据")
@@ -73,5 +79,12 @@ public class XwAlarmController {
     public ResponseDTO<Void> getXingWeiAlarm(@RequestBody XingWeiDTO xindian) {
         xwAlarmApplicationService.getXingWeiAlarm(xindian);
         return ResponseDTO.ok();
+    }
+
+    @Operation(summary = "行为监测数据列表导出")
+    @GetMapping("/excel")
+    public void exportUserByExcel(HttpServletResponse response, XwAlarmQuery query) {
+        PageDTO<XwAlarmDTO> list = xwAlarmApplicationService.getXwAlarms(query);
+        CustomExcelUtil.writeToResponse(list.getRows(), XwAlarmDTO.class, response);
     }
 }
