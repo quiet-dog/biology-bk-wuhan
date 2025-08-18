@@ -22,6 +22,9 @@ import com.biology.domain.manage.smDevice.command.AddSmDeviceCommand;
 import com.biology.domain.manage.smDevice.command.UpdateSmDeviceCommand;
 import com.biology.domain.manage.smDevice.dto.SmDeviceDTO;
 import com.biology.domain.manage.smDevice.query.SmDeviceQuery;
+import com.biology.domain.manage.smThreshold.SmThresholdApplicationService;
+import com.biology.domain.manage.smThreshold.command.AddSmThresholdAllReq;
+import com.biology.domain.manage.smThreshold.dto.SmThresholdResDTO;
 import com.biology.domain.manage.event.dto.EventDTO;
 import com.biology.domain.manage.event.query.EventSearch;
 import com.biology.domain.manage.smDevice.SmDeviceApplicationService;
@@ -37,6 +40,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SmDeviceController extends BaseController {
     private final SmDeviceApplicationService smDeviceApplicationService;
+
+    private final SmThresholdApplicationService smThresholdApplicationService;
 
     @Operation(summary = "添加生命设备")
     @PostMapping
@@ -78,5 +83,19 @@ public class SmDeviceController extends BaseController {
     public void exportUserByExcel(HttpServletResponse response, SmDeviceQuery query) {
         PageDTO<SmDeviceDTO> list = smDeviceApplicationService.getSmDevices(query);
         CustomExcelUtil.writeToResponse(list.getRows(), SmDeviceDTO.class, response);
+    }
+
+    @Operation(summary = "设置生命阈值")
+    @PostMapping("/setThreshold")
+    public ResponseDTO<Void> setSmThreshold(@RequestBody AddSmThresholdAllReq command) {
+        smThresholdApplicationService.create(command);
+        return ResponseDTO.ok();
+    }
+
+    @Operation(summary = "设置生命阈值")
+    @GetMapping("/getThreshold/{deviceId}")
+    public ResponseDTO<List<SmThresholdResDTO>> getThreshold(
+            @PathVariable(value = "deviceId", required = false) Long deviceId) {
+        return ResponseDTO.ok(smThresholdApplicationService.get(deviceId));
     }
 }

@@ -1,5 +1,6 @@
 package com.biology.domain.manage.xwAlarm;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.common.cache.CacheCenter;
+import com.biology.domain.manage.shiJuan.dto.PingGuJieGuoEchart;
+import com.biology.domain.manage.shiJuan.dto.PingGuJieGuoSeriesDTO;
 import com.biology.domain.manage.xwAlarm.command.AddXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.command.UpdateXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.db.XwAlarmEntity;
@@ -73,5 +76,24 @@ public class XwAlarmApplicationService {
         command.setSeatNumber(xingWeiDTO.getSeatNumber());
         command.setTimeStamp(xingWeiDTO.getTimeStampAsMillis());
         create(command);
+    }
+
+    public PingGuJieGuoEchart JiWeiBaoJingZhanBi(String dayType) {
+        PingGuJieGuoEchart pEchart = new PingGuJieGuoEchart();
+        if (dayType != null) {
+            List<PingGuJieGuoSeriesDTO> list = new ArrayList<>();
+            if (dayType.equals("week")) {
+                list = xwAlarmService.JiWeiBaoJingZhanBiByWeek(dayType);
+            }
+            if (dayType.equals("month")) {
+                list = xwAlarmService.JiWeiBaoJingZhanBiByMonth(dayType);
+            }
+            if (dayType.equals("year")) {
+                list = xwAlarmService.JiWeiBaoJingZhanBiByYear(dayType);
+            }
+            pEchart.setSeries(list);
+        }
+
+        return pEchart;
     }
 }

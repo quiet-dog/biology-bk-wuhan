@@ -21,6 +21,8 @@ public class XlArchiveQuery extends AbstractPageQuery<XlArchiveEntity> {
 
     private List<Long> userIds;
 
+    private List<Long> xlArchiveIds;
+
     @Override
     public QueryWrapper<XlArchiveEntity> addQueryCondition() {
         QueryWrapper<XlArchiveEntity> qWrapper = new QueryWrapper<XlArchiveEntity>();
@@ -28,7 +30,8 @@ public class XlArchiveQuery extends AbstractPageQuery<XlArchiveEntity> {
                 String.format("select personnel_id from manage_personnel where name like '%%%s%%'", getName()))
                 .inSql(!StrUtil.isEmpty(deptName), "personnel_id",
                         "select personnel_id from manage_personnel where department like '%" + getDeptName() + "%'")
-                .in(getUserIds() != null && getUserIds().size() > 0, "user_id", getUserIds());
+                .in(getUserIds() != null && getUserIds().size() > 0, "user_id", getUserIds())
+                .in(getXlArchiveIds() != null && getXlArchiveIds().size() > 0, "xl_archive_id", getXlArchiveIds());
 
         return qWrapper;
     }

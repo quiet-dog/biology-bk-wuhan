@@ -18,12 +18,14 @@ import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
 import com.biology.common.utils.poi.CustomExcelUtil;
+import com.biology.domain.manage.shiJuan.dto.PingGuJieGuoEchart;
 import com.biology.domain.manage.xwAlarm.XwAlarmApplicationService;
 import com.biology.domain.manage.xwAlarm.command.AddXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.command.UpdateXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
 import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
 import com.biology.domain.manage.xwAlarm.query.XwAlarmQuery;
+import com.biology.domain.manage.xwAlarm.query.XwEchartQuery;
 import com.biology.domain.manage.xwDevice.dto.XwDeviceDTO;
 import com.biology.domain.manage.xwDevice.query.XwDeviceQuery;
 
@@ -86,5 +88,10 @@ public class XwAlarmController extends BaseController {
     public void exportUserByExcel(HttpServletResponse response, XwAlarmQuery query) {
         PageDTO<XwAlarmDTO> list = xwAlarmApplicationService.getXwAlarms(query);
         CustomExcelUtil.writeToResponse(list.getRows(), XwAlarmDTO.class, response);
+    }
+
+    @GetMapping("/jiWeiBaoJingZhanBi")
+    public ResponseDTO<PingGuJieGuoEchart> JiWeiBaoJingZhanBi(XwEchartQuery dayType) {
+        return ResponseDTO.ok(xwAlarmApplicationService.JiWeiBaoJingZhanBi(dayType.getDayType()));
     }
 }

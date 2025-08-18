@@ -1,11 +1,15 @@
 package com.biology.domain.manage.shiJuan;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.catalina.loader.ResourceEntry;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -13,6 +17,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.chuqin.command.AddChuQinCommand;
+import com.biology.domain.manage.detection.dto.SeriesDTO;
 import com.biology.domain.manage.shiJuan.command.AddResultShiJuanCommand;
 import com.biology.domain.manage.shiJuan.command.UpdateResultShiJuanCommand;
 import com.biology.domain.manage.shiJuan.db.ResultShiJuanEntity;
@@ -20,12 +25,19 @@ import com.biology.domain.manage.shiJuan.db.ResultShiJuanService;
 import com.biology.domain.manage.shiJuan.db.Score;
 import com.biology.domain.manage.shiJuan.db.ShiJuanEntity;
 import com.biology.domain.manage.shiJuan.db.ShiJuanService;
+import com.biology.domain.manage.shiJuan.dto.CePingJieGuoTongJiEchart;
+import com.biology.domain.manage.shiJuan.dto.CePingJieGuoTongJiEchartResult;
+import com.biology.domain.manage.shiJuan.dto.CePingNumDTO;
+import com.biology.domain.manage.shiJuan.dto.PingFuJieGuoNumDTO;
+import com.biology.domain.manage.shiJuan.dto.PingGuJieGuoEchart;
+import com.biology.domain.manage.shiJuan.dto.PingGuJieGuoSeriesDTO;
 import com.biology.domain.manage.shiJuan.dto.ResultGanYuDTO;
 import com.biology.domain.manage.shiJuan.dto.ResultShiJuanDTO;
 import com.biology.domain.manage.shiJuan.dto.ShiJuanDTO;
 import com.biology.domain.manage.shiJuan.dto.SubmitResultDTO;
 import com.biology.domain.manage.shiJuan.model.ResultShiJuanFactory;
 import com.biology.domain.manage.shiJuan.model.ResultShiJuanModel;
+import com.biology.domain.manage.shiJuan.query.PingGuJieGuoFenXiQuery;
 import com.biology.domain.manage.shiJuan.query.ResultShiJuanQuery;
 import com.biology.domain.manage.shiJuan.query.ShiJuanQuery;
 import com.biology.domain.manage.xlArchive.db.XlArchiveEntity;
@@ -241,4 +253,158 @@ public class ResultShiJuanApplicationService {
         rModel.setExecUser(req.getExecUser());
         rModel.updateById();
     }
+
+    public Map<String, Map<String, Integer>> getResultNum(Long fangAnId) {
+        QueryWrapper<ResultShiJuanEntity> queryWrapper = new QueryWrapper<ResultShiJuanEntity>();
+        List<ResultShiJuanEntity> list = resultShiJuanService.list(queryWrapper);
+        Map<String, Integer> sas = new HashMap<>();
+        Map<String, Integer> sds = new HashMap<>();
+        Map<String, Integer> xl = new HashMap<>();
+        xl.put("正常范围", 0);
+        xl.put("轻度异常", 0);
+        xl.put("中度异常", 0);
+        xl.put("重度异常", 0);
+
+        sds.put("无明显抑郁症状", 0);
+        sds.put("轻度抑郁", 0);
+        sds.put("中度抑郁", 0);
+        sds.put("重度抑郁", 0);
+
+        sas.put("无明显焦虑症状", 0);
+        sas.put("轻度焦虑", 0);
+        sas.put("中度焦虑", 0);
+        sas.put("重度焦虑", 0);
+        for (ResultShiJuanEntity r : list) {
+            Integer num = null;
+
+            if (r.getType().equals("SAS量表")) {
+                num = sas.get(r.getCePing());
+                if (num != null) {
+                    num++;
+                    sas.put(r.getCePing(), num);
+                }
+            }
+            if (r.getType().equals("SDS量表")) {
+                num = sds.get(r.getCePing());
+                if (num != null) {
+                    num++;
+                    sds.put(r.getCePing(), num);
+                }
+            }
+            if (r.getType().equals("心理调查评估问卷")) {
+                num = xl.get(r.getCePing());
+                if (num != null) {
+                    num++;
+                    xl.put(r.getCePing(), num);
+                }
+            }
+
+        }
+
+        Map<String, Map<String, Integer>> result = new HashMap<>();
+        result.put("SAS量表", sas);
+        result.put("SDS量表", sds);
+        result.put("心理调查评估问卷", xl);
+        return result;
+    }
+
+    public PingGuJieGuoEchart pingGuJieGuoFenXi(PingGuJieGuoFenXiQuery query) {
+        List<PingFuJieGuoNumDTO> list = resultShiJuanService.getPingGuJieGuoFenXi(query.getType());
+        PingGuJieGuoEchart result = new PingGuJieGuoEchart();
+        List<PingGuJieGuoSeriesDTO> l = new ArrayList<>();
+        List<String> sou = new ArrayList<>();
+
+        if (query.getType().equals("心理调查评估问卷")) {
+            sou.add("正常范围");
+            sou.add("轻度异常");
+            sou.add("中度异常");
+            sou.add("重度异常");
+        }
+
+        if (query.getType().equals("SDS量表")) {
+            sou.add("无明显抑郁症状");
+            sou.add("轻度抑郁");
+            sou.add("中度抑郁");
+            sou.add("重度抑郁");
+        }
+
+        if (query.getType().equals("SAS量表")) {
+            sou.add("无明显焦虑症状");
+            sou.add("轻度焦虑");
+            sou.add("中度焦虑");
+            sou.add("重度焦虑");
+        }
+
+        sou.forEach(item -> {
+            PingGuJieGuoSeriesDTO d = new PingGuJieGuoSeriesDTO();
+            d.setName(item);
+            d.setValue(0);
+            l.add(d);
+        });
+        for (PingFuJieGuoNumDTO r : list) {
+            for (Integer i = 0; i < l.size(); i++) {
+                PingGuJieGuoSeriesDTO tar = l.get(i);
+                if (tar.getName().equals(r.getCePing())) {
+                    tar.setValue(r.getNum());
+                    l.set(i, tar);
+                }
+            }
+        }
+        result.setSeries(l);
+        return result;
+    }
+
+    public Map<String, Map<String, Integer>> cePingJieGuoTongJi(PingGuJieGuoFenXiQuery query) {
+        List<PingFuJieGuoNumDTO> list = resultShiJuanService.cePingJieGuoTongJi(query.getXlFangAnId());
+        List<String> categories = Arrays.asList(
+                "正常范围", "轻度异常", "中度异常", "重度异常",
+                "无明显抑郁症状", "轻度抑郁", "中度抑郁", "重度抑郁",
+                "无明显焦虑症状", "轻度焦虑", "中度焦虑", "重度焦虑");
+        Map<String, Integer> sas = new HashMap<>();
+        sas.put("无明显焦虑症状", 0);
+        sas.put("轻度焦虑", 0);
+        sas.put("中度焦虑", 0);
+        sas.put("重度焦虑", 0);
+        Map<String, Integer> sds = new HashMap<>();
+        sds.put("无明显抑郁症状", 0);
+        sds.put("轻度抑郁", 0);
+        sds.put("中度抑郁", 0);
+        sds.put("重度抑郁", 0);
+        Map<String, Integer> xl = new HashMap<>();
+        xl.put("正常范围", 0);
+        xl.put("轻度异常", 0);
+        xl.put("中度异常", 0);
+        xl.put("重度异常", 0);
+        Boolean sasB = false;
+        Boolean sdsB = false;
+        Boolean xlB = false;
+        for (PingFuJieGuoNumDTO r : list) {
+            if (r.getType().equals("SAS量表")) {
+                sas.put(r.getCePing(), r.getNum());
+                sasB = true;
+            }
+            if (r.getType().equals("SDS量表")) {
+                sds.put(r.getCePing(), r.getNum());
+                sdsB = true;
+            }
+            if (r.getType().equals("心理调查评估问卷")) {
+                xl.put(r.getCePing(), r.getNum());
+                xlB = true;
+            }
+        }
+
+        Map<String, Map<String, Integer>> result = new HashMap<>();
+        if (sasB) {
+            result.put("SAS量表", sas);
+        }
+        if (sdsB) {
+            result.put("SDS量表", sds);
+        }
+        if (xlB) {
+            result.put("心理调查评估问卷", xl);
+        }
+
+        return result;
+    }
+
 }

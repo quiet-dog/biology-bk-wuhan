@@ -1,6 +1,9 @@
 package com.biology.admin.controller.manage;
 
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,16 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
+import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.shiJuan.ResultShiJuanApplicationService;
 import com.biology.domain.manage.shiJuan.command.AddResultShiJuanCommand;
 import com.biology.domain.manage.shiJuan.command.UpdateResultShiJuanCommand;
+import com.biology.domain.manage.shiJuan.dto.CePingJieGuoTongJiEchartResult;
+import com.biology.domain.manage.shiJuan.dto.PingGuJieGuoEchart;
 import com.biology.domain.manage.shiJuan.dto.ResultGanYuDTO;
 import com.biology.domain.manage.shiJuan.dto.ResultShiJuanDTO;
 import com.biology.domain.manage.shiJuan.dto.ShiJuanDTO;
 import com.biology.domain.manage.shiJuan.dto.SubmitResultDTO;
 import com.biology.domain.manage.shiJuan.model.ResultShiJuanModel;
+import com.biology.domain.manage.shiJuan.query.PingGuJieGuoFenXiQuery;
 import com.biology.domain.manage.shiJuan.query.ResultShiJuanQuery;
 import com.biology.domain.manage.shiJuan.query.ShiJuanQuery;
+import com.biology.domain.manage.smData.dto.SmDataDTO;
+import com.biology.domain.manage.smData.query.SmDataQuery;
+import com.biology.domain.manage.xwDevice.dto.XwDeviceDTO;
+import com.biology.domain.manage.xwDevice.query.XwDeviceQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -108,4 +119,36 @@ public class ResultShiJuanController extends BaseController {
         resultShiJuanApplicationService.setGanYu(req);
         return ResponseDTO.ok();
     }
+
+    @Operation(summary = "心理测评数据列表导出")
+    @GetMapping("/excelByCreator")
+    public void exportCreatorByExcel(HttpServletResponse response, ResultShiJuanQuery query) {
+        PageDTO<ResultShiJuanDTO> list = resultShiJuanApplicationService.getResultShiJuansByCreator(query);
+        CustomExcelUtil.writeToResponse(list.getRows(), ResultShiJuanDTO.class, response);
+    }
+
+    @Operation(summary = "心理测评数据列表导出")
+    @GetMapping("/excelByUser")
+    public void exportUserByExcel(HttpServletResponse response, ResultShiJuanQuery query) {
+        PageDTO<ResultShiJuanDTO> list = resultShiJuanApplicationService.getResultShiJuansByUser(query);
+        CustomExcelUtil.writeToResponse(list.getRows(), ResultShiJuanDTO.class, response);
+    }
+
+    @GetMapping("/getResultNum/{fangAnId}")
+    public ResponseDTO<Map<String, Map<String, Integer>>> getResultNum(
+            @PathVariable(value = "fangAnId", required = false) Long fangAnId) {
+        return ResponseDTO.ok(resultShiJuanApplicationService.getResultNum(fangAnId));
+    }
+
+    @PostMapping("/pingGuJieGuoFenXi")
+    public ResponseDTO<PingGuJieGuoEchart> pingGuJieGuoFenXi(@RequestBody PingGuJieGuoFenXiQuery query) {
+        return ResponseDTO.ok(resultShiJuanApplicationService.pingGuJieGuoFenXi(query));
+    }
+
+    @PostMapping("/cePingJieGuoTongJi")
+    public ResponseDTO<Map<String, Map<String, Integer>>> cePingJieGuoTongJi(
+            @RequestBody PingGuJieGuoFenXiQuery query) {
+        return ResponseDTO.ok(resultShiJuanApplicationService.cePingJieGuoTongJi(query));
+    }
+
 }

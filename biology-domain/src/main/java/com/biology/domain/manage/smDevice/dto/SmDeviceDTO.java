@@ -1,16 +1,20 @@
 package com.biology.domain.manage.smDevice.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.annotation.ExcelColumn;
 import com.biology.common.annotation.ExcelSheet;
 import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.personnel.db.PersonnelEntity;
+import com.biology.domain.manage.smData.db.SmDataEntity;
 import com.biology.domain.manage.smDevice.db.SmDeviceEntity;
 import com.biology.domain.manage.task.dto.SmOnlineDataDTO;
 
+import cn.hutool.core.util.StrUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -47,16 +51,22 @@ public class SmDeviceDTO {
     @ExcelColumn(name = "操作员")
     private String personnelName;
 
-    @ExcelColumn(name = "设备状态")
     private Boolean isOnline;
 
-    @ExcelColumn(name = "末次通讯时间", showInImportTemplate = false)
+    @ExcelColumn(name = "设备状态")
+    private String online;
+
+    // @ExcelColumn(name = "末次通讯时间", showInImportTemplate = false)
     private Long lastTime;
+
+    @ExcelColumn(name = "末次通讯时间", showInImportTemplate = false)
+    private String lastTimeStr;
 
     public SmDeviceDTO(SmDeviceEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
             addPersonnelInfo();
+            addIsOnline();
         }
     }
 
@@ -71,9 +81,28 @@ public class SmDeviceDTO {
         SmOnlineDataDTO isOnlone = CacheCenter.smDeviceOnlineCache.getObjectById(getDeviceSn());
         if (isOnlone == null) {
             setIsOnline(false);
+            setOnline("离线");
+            SmDataEntity queryEntity = new SmDataEntity();
+            queryEntity.setSmDeviceId(getSmDeviceId());
+
+            SmDataEntity data = queryEntity.selectOne(
+                    new QueryWrapper<SmDataEntity>()
+                            .eq("sm_device_id", getSmDeviceId())
+                            .orderByDesc("create_time")
+                            .last("LIMIT 1"));
+            if (data != null) {
+                setLastTime(data.getCreateTime().getTime());
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                setLastTimeStr(sdf.format(getLastTime()));
+            }
+
         } else {
             setIsOnline(isOnlone.getOnline());
             setLastTime(isOnlone.getLastTime());
+            setOnline("在线");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            setLastTimeStr(sdf.format(getLastTime()));
         }
     }
 

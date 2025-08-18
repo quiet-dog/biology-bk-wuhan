@@ -13,19 +13,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
 import com.biology.common.utils.poi.CustomExcelUtil;
+import com.biology.domain.manage.alarm.command.AddAlarmCommand;
 import com.biology.domain.manage.xlArchive.XlArchiveApplicationService;
 import com.biology.domain.manage.xlArchive.command.AddXlArchiveCommand;
+import com.biology.domain.manage.xlArchive.command.ImportXlArchiveCommand;
 import com.biology.domain.manage.xlArchive.command.UpdateXlArchiveCommand;
 import com.biology.domain.manage.xlArchive.dto.XlArchiveDTO;
 import com.biology.domain.manage.xlArchive.query.XlArchiveQuery;
+import com.biology.domain.manage.xsDevice.command.AddXsDeviceCommand;
 import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
 import com.biology.domain.manage.xwAlarm.query.XwAlarmQuery;
 
+import cn.hutool.core.collection.ListUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -78,5 +83,19 @@ public class XlArchiveController extends BaseController {
     public void exportUserByExcel(HttpServletResponse response, XlArchiveQuery query) {
         PageDTO<XlArchiveDTO> list = xlArchiveApplicationService.getXlArchives(query);
         CustomExcelUtil.writeToResponse(list.getRows(), XlArchiveDTO.class, response);
+    }
+
+    @GetMapping("/excelTemplate")
+    public void excelTemplate(HttpServletResponse response) {
+        CustomExcelUtil.writeToResponse(ListUtil.toList(new ImportXlArchiveCommand()), ImportXlArchiveCommand.class,
+                response);
+    }
+
+    @Operation(summary = "心理健康档案列表倒入")
+    @PostMapping("/excel")
+    public ResponseDTO<Void> importExcel(MultipartFile file) {
+        List<ImportXlArchiveCommand> commands = CustomExcelUtil.readFromRequest(ImportXlArchiveCommand.class, file);
+        xlArchiveApplicationService.importExcel(commands);
+        return ResponseDTO.ok();
     }
 }

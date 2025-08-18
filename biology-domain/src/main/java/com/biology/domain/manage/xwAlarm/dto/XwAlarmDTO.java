@@ -34,9 +34,11 @@ public class XwAlarmDTO {
     @Schema(description = "时间戳")
     private Long timeStamp;
 
-    @ExcelColumn(name = "报警标志")
     @Schema(description = "报警标志0未审核 1报警 2误报")
     private Long flag;
+
+    @ExcelColumn(name = "报警标志")
+    private String flagStr;
 
     @Schema(description = "过滤标志")
     private Long filterFlag;
@@ -59,6 +61,21 @@ public class XwAlarmDTO {
     public XwAlarmDTO(XwAlarmEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
+            addFlag();
+        }
+    }
+
+    public void addFlag() {
+        if (getFlag() != null) {
+            if (getFlag() == 0) {
+                setFlagStr("未审核");
+            }
+            if (getFlag() == 1) {
+                setFlagStr("报警");
+            }
+            if (getFlag() == 2) {
+                setFlagStr("误报");
+            }
         }
     }
 

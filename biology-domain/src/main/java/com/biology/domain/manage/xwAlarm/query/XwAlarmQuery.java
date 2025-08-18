@@ -1,5 +1,7 @@
 package com.biology.domain.manage.xwAlarm.query;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.core.page.AbstractPageQuery;
 import com.biology.domain.manage.xwAlarm.db.XwAlarmEntity;
@@ -19,12 +21,14 @@ public class XwAlarmQuery extends AbstractPageQuery<XwAlarmEntity> {
     @Schema(description = "摄像头ID")
     private String cameraId;
 
+    private List<Long> xwAlarmIds;
+
     @Override
     public QueryWrapper<XwAlarmEntity> addQueryCondition() {
         QueryWrapper<XwAlarmEntity> queryWrapper = new QueryWrapper<XwAlarmEntity>();
         queryWrapper.like(!StrUtil.isEmpty(getSeatNumer()), "seat_number", getSeatNumer())
-                .like(!StrUtil.isEmpty(getCameraId()), "camera_id", getCameraId());
-
+                .like(!StrUtil.isEmpty(getCameraId()), "camera_id", getCameraId())
+                .in(getXwAlarmIds() != null && getXwAlarmIds().size() > 0, "xw_alarm_id", getXwAlarmIds());
         return queryWrapper;
     }
 

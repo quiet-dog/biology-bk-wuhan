@@ -16,22 +16,31 @@ import lombok.Data;
 @Data
 public class XlFangAnDTO {
 
-    @ExcelColumn(name = "方案名称")
-    private String name;
-
     @ExcelColumn(name = "测评编号")
     private Long xlFangAnId;
 
-    @ExcelColumn(name = "测评编号")
+    @ExcelColumn(name = "方案名称")
+    private String name;
+
     private String types;
 
     private List<String> shiJuanTypes;
 
     private List<Integer> userIds;
 
+    @ExcelColumn(name = "测评内容")
+    private String shiJuanTypesStr;
+
     public XlFangAnDTO(XlFangAnEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
+            addShiJuanTypesStr();
+        }
+    }
+
+    public void addShiJuanTypesStr() {
+        if (getShiJuanTypes() != null && getShiJuanTypes().size() > 0) {
+            setShiJuanTypesStr(String.join(",", getShiJuanTypes()));
         }
     }
 }

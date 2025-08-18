@@ -30,6 +30,8 @@ public class ResultShiJuanQuery extends AbstractPageQuery<ResultShiJuanEntity> {
 
     private String type;
 
+    private List<Long> resultIds;
+
     @Override
     public QueryWrapper<ResultShiJuanEntity> addQueryCondition() {
         QueryWrapper<ResultShiJuanEntity> queryWrapper = new QueryWrapper<ResultShiJuanEntity>();
@@ -43,7 +45,8 @@ public class ResultShiJuanQuery extends AbstractPageQuery<ResultShiJuanEntity> {
                 .inSql(!StrUtil.isEmpty(getDeptName()), "user_id", String.format(
                         "select user_id from manage_xl_archive where personnel_id in (select personnel_id from manage_personnel where department like '%%%s%%' and deleted = 0) and deleted = 0",
                         getDeptName()))
-                .isNotNull(isNeedLastTime != null && isNeedLastTime, "last_time");
+                .isNotNull(isNeedLastTime != null && isNeedLastTime, "last_time")
+                .in(getResultIds() != null && getResultIds().size() > 0, "result_id", getResultIds());
         if (isNotNull != null && isNotNull.size() > 0) {
             isNotNull.forEach(item -> {
                 queryWrapper.isNotNull(item);
