@@ -3,6 +3,7 @@ package com.biology.domain.manage.websocket.db;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.biology.domain.manage.moni.dto.SendType;
 import com.biology.domain.manage.websocket.dto.ContentDTO;
 
 import lombok.RequiredArgsConstructor;

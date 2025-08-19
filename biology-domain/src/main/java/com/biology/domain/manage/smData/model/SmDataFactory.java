@@ -1,6 +1,7 @@
 package com.biology.domain.manage.smData.model;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
@@ -14,8 +15,10 @@ import lombok.RequiredArgsConstructor;
 public class SmDataFactory {
     private final SmDataService smDataService;
 
+    private final WebClient opcClient;
+
     public SmDataModel create() {
-        return new SmDataModel(smDataService);
+        return new SmDataModel(smDataService, opcClient);
     }
 
     public SmDataModel loadById(Long id) {
@@ -23,6 +26,6 @@ public class SmDataFactory {
         if (byId == null) {
             throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, id, "接收");
         }
-        return new SmDataModel(byId, smDataService);
+        return new SmDataModel(byId, smDataService, opcClient);
     }
 }

@@ -1,6 +1,7 @@
 package com.biology.admin.controller.manage;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -93,5 +94,16 @@ public class XwAlarmController extends BaseController {
     @GetMapping("/jiWeiBaoJingZhanBi")
     public ResponseDTO<PingGuJieGuoEchart> JiWeiBaoJingZhanBi(XwEchartQuery dayType) {
         return ResponseDTO.ok(xwAlarmApplicationService.JiWeiBaoJingZhanBi(dayType.getDayType()));
+    }
+
+    @GetMapping("/jianCeShuJuTongJi")
+    public ResponseDTO<Map<String, Object>> JianCeShuJuTongJi() {
+        return ResponseDTO.ok(xwAlarmApplicationService.JianCeShuJuTongJi());
+    }
+
+    @GetMapping("jiWeiQuShiBianHua")
+    public ResponseDTO<Map<String, Object>> jiWeiQuShiBianHua(XwEchartQuery dayType) {
+        return ResponseDTO
+                .ok(xwAlarmApplicationService.jiWeiQuShiBianHua(dayType.getDayType(), dayType.getSeatNumber()));
     }
 }

@@ -1,7 +1,9 @@
 package com.biology.domain.manage.xwAlarm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import com.biology.domain.manage.xwAlarm.model.XwAlarmFactory;
 import com.biology.domain.manage.xwAlarm.model.XwAlarmModel;
 import com.biology.domain.manage.xwAlarm.query.XwAlarmQuery;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -95,5 +98,67 @@ public class XwAlarmApplicationService {
         }
 
         return pEchart;
+    }
+
+    public Map<String, Object> JianCeShuJuTongJi() {
+        List<PingGuJieGuoSeriesDTO> list = xwAlarmService.JianCeShuJuTongJi();
+        Map<String, Object> result = new HashMap<>();
+        List<Object> xData = new ArrayList<>();
+        List<Object> sData = new ArrayList<>();
+        for (PingGuJieGuoSeriesDTO r : list) {
+            xData.add(r.getName());
+            sData.add(r.getValue());
+        }
+        result.put("xData", xData);
+        result.put("sData", sData);
+
+        return result;
+    }
+
+    public Map<String, Object> jiWeiQuShiBianHua(String dayType, String seatNumber) {
+        Map<String, Object> result = new HashMap<>();
+        List<Object> sData = new ArrayList<>();
+        List<String> xData = new ArrayList<>();
+        List<PingGuJieGuoSeriesDTO> list = new ArrayList<>();
+        if (dayType != null) {
+
+            if (dayType.equals("day")) {
+                if (!StrUtil.isEmpty(seatNumber)) {
+                    list = xwAlarmService.jiWeiQuShiBianHuaByDay(seatNumber);
+                } else {
+                    list = xwAlarmService.jiWeiQuShiBianHuaByDayAll();
+                }
+            } else if (dayType.equals("week")) {
+                if (!StrUtil.isEmpty(seatNumber)) {
+                    list = xwAlarmService.jiWeiQuShiBianHuaByWeek(seatNumber);
+                } else {
+                    list = xwAlarmService.jiWeiQuShiBianHuaByWeekAll();
+                }
+            } else if (dayType.equals("month")) {
+                if (!StrUtil.isEmpty(seatNumber)) {
+                    list = xwAlarmService.jiWeiQuShiBianHuaByMonth(seatNumber);
+                } else {
+                    list = xwAlarmService.jiWeiQuShiBianHuaByMonthAll();
+                }
+            } else if (dayType.equals("year")) {
+                if (!StrUtil.isEmpty(seatNumber)) {
+                    list = xwAlarmService.jiWeiQuShiBianHuaByYear(seatNumber);
+                } else {
+                    list = xwAlarmService.jiWeiQuShiBianHuaByYearAll();
+                }
+            }
+
+        }
+        for (
+
+        PingGuJieGuoSeriesDTO r : list) {
+            xData.add(r.getName());
+            sData.add(r.getValue());
+        }
+
+        result.put("xData", xData);
+        result.put("sData", sData);
+
+        return result;
     }
 }
