@@ -35,6 +35,9 @@ public class XlFangAnEntity extends BaseEntity<XlFangAnEntity> {
     @TableField(value = "user_ids", typeHandler = JacksonTypeHandler.class)
     private List<Integer> userIds;
 
+    @TableField(value = "ping_gu_time")
+    private Long pingGuTime;
+
     @Override
     public Serializable pkVal() {
         return this.xlFangAnId;

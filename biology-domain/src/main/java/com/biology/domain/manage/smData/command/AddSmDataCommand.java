@@ -33,4 +33,6 @@ public class AddSmDataCommand {
     private Double xinlv;
 
     private Double xueYang;
+
+    private String tiTai;
 }

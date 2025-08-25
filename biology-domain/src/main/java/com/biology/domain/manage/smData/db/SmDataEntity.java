@@ -1,6 +1,7 @@
 package com.biology.domain.manage.smData.db;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -56,6 +57,11 @@ public class SmDataEntity extends BaseEntity<SmDataEntity> {
 
     @TableField(value = "xue_yang")
     private Double xueYang;
+
+    @TableField(value = "ti_tai")
+    private String tiTai;
+
+    private Date createTime;
 
     @Override
     public Serializable pkVal() {

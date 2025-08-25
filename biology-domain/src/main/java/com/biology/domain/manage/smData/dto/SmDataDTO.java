@@ -71,6 +71,9 @@ public class SmDataDTO {
     @Schema(description = "血氧")
     private Double xueYang;
 
+    @Schema(description = "体态")
+    private String tiTai;
+
     @Schema(description = "创建时间")
     private Date createTime;
 

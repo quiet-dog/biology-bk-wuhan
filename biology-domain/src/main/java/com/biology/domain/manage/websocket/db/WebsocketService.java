@@ -35,6 +35,12 @@ public class WebsocketService {
         messagingTemplate.convertAndSend("/topic/data", contentDTO);
     }
 
+    public void sendTopicKetisan(Object message) {
+        ContentDTO contentDTO = new ContentDTO();
+        contentDTO.setContent(message);
+        messagingTemplate.convertAndSend("/topic/ketisan", contentDTO);
+    }
+
     // 发送通知
     public void sendTopicNotice(Object message) {
         ContentDTO contentDTO = new ContentDTO();

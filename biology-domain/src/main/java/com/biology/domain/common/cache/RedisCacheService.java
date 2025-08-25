@@ -6,11 +6,13 @@ import com.biology.infrastructure.cache.redis.CacheKeyEnum;
 import com.biology.infrastructure.cache.redis.RedisCacheTemplate;
 import com.biology.infrastructure.user.web.SystemLoginUser;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.biology.domain.manage.caiYangData.dto.CaiYangFunDTO;
 import com.biology.domain.manage.emergency.db.EmergencyEntity;
 import com.biology.domain.manage.emergency.db.EmergencyService;
 import com.biology.domain.manage.emergency.dto.EmergencyDTO;
 import com.biology.domain.manage.knowledge.db.KnowledgeTypeEntity;
 import com.biology.domain.manage.knowledge.db.KnowledgeTypeService;
+import com.biology.domain.manage.nongDuData.command.NongDuDTO;
 import com.biology.domain.manage.smData.dto.SmDataDTO;
 import com.biology.domain.manage.sop.db.SopEntity;
 import com.biology.domain.manage.sop.db.SopService;
@@ -19,6 +21,7 @@ import com.biology.domain.manage.task.dto.SmOnlineDataDTO;
 import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
 import com.biology.domain.manage.threshold.db.ThresholdValueService;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
+import com.biology.domain.manage.xsData.command.XsDataFun1DTO;
 import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
 import com.biology.domain.system.post.db.SysPostEntity;
 import com.biology.domain.system.role.db.SysRoleEntity;
@@ -63,6 +66,12 @@ public class RedisCacheService {
     public RedisCacheTemplate<SmOnlineDataDTO> smDeviceOnlineCache;
 
     public RedisCacheTemplate<XingWeiDTO> xingWeiOnlineCache;
+
+    public RedisCacheTemplate<XsDataFun1DTO> xsDataFun1Cache;
+
+    public RedisCacheTemplate<CaiYangFunDTO> caiYangFunCache;
+
+    public RedisCacheTemplate<NongDuDTO> jianCeDataCache;
 
     // public RedisCacheTemplate<RoleInfo> roleModelInfoCache;
 
@@ -166,6 +175,17 @@ public class RedisCacheService {
         xingWeiOnlineCache = new RedisCacheTemplate<XingWeiDTO>(redisUtil,
                 CacheKeyEnum.SM_DEVICE_ONLINE_KEY) {
         };
+
+        xsDataFun1Cache = new RedisCacheTemplate<XsDataFun1DTO>(redisUtil, CacheKeyEnum.SM_DEVICE_ONLINE_KEY) {
+
+        };
+
+        caiYangFunCache = new RedisCacheTemplate<CaiYangFunDTO>(redisUtil, CacheKeyEnum.SM_DEVICE_ONLINE_KEY) {
+        };
+
+        jianCeDataCache = new RedisCacheTemplate<NongDuDTO>(redisUtil, CacheKeyEnum.SM_DEVICE_ONLINE_KEY) {
+        };
+
         // thrsholdEmergencyCache = new
         // RedisCacheTemplate<List<EmergencyDTO>>(redisUtil,
         // CacheKeyEnum.THRESHOLD_EMERGENCY_DEVICE_KEY) {

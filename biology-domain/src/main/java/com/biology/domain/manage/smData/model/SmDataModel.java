@@ -2,6 +2,7 @@ package com.biology.domain.manage.smData.model;
 
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
 import com.biology.domain.manage.moni.dto.SendType;
@@ -12,6 +13,8 @@ import com.biology.domain.manage.smData.command.UpdateSmDataCommand;
 import com.biology.domain.manage.smData.db.SmDataEntity;
 import com.biology.domain.manage.smData.db.SmDataService;
 import com.biology.domain.manage.smData.dto.SmDataDTO;
+import com.biology.domain.manage.smThreshold.db.SmThresholdEntity;
+import com.biology.domain.manage.smThreshold.db.SmThresholdService;
 
 import cn.hutool.core.bean.BeanUtil;
 import lombok.Data;
@@ -26,18 +29,23 @@ public class SmDataModel extends SmDataEntity {
 
     private WebClient opcClient;
 
-    public SmDataModel(SmDataService smDataService, WebClient opcClient) {
+    private SmThresholdService smThresholdService;
+
+    public SmDataModel(SmDataService smDataService, WebClient opcClient, SmThresholdService smThresholdService) {
         this.smDataService = smDataService;
         this.opcClient = opcClient;
+        this.smThresholdService = smThresholdService;
     }
 
-    public SmDataModel(SmDataEntity entity, SmDataService smDataService, WebClient opcClient) {
+    public SmDataModel(SmDataEntity entity, SmDataService smDataService, WebClient opcClient,
+            SmThresholdService smThresholdService) {
 
         if (entity != null) {
             BeanUtil.copyProperties(entity, this);
         }
         this.smDataService = smDataService;
         this.opcClient = opcClient;
+        this.smThresholdService = smThresholdService;
     }
 
     public void loadAddSmDataCommand(AddSmDataCommand command) {

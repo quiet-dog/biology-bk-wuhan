@@ -1,6 +1,7 @@
 package com.biology.admin.controller.manage;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -76,5 +77,10 @@ public class XsDeviceController extends BaseController {
     public void exportUserByExcel(HttpServletResponse response, XsDeviceQuery query) {
         PageDTO<XsDeviceDTO> list = xsDeviceApplicationService.getXsDevices(query);
         CustomExcelUtil.writeToResponse(list.getRows(), XsDeviceDTO.class, response);
+    }
+
+    @GetMapping("/getOnlineCount")
+    public ResponseDTO<Map<String, Object>> getOnlineCount() {
+        return ResponseDTO.ok(xsDeviceApplicationService.getOnlineCount());
     }
 }

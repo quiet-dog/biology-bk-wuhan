@@ -361,48 +361,81 @@ public class ResultShiJuanApplicationService {
                 "无明显抑郁症状", "轻度抑郁", "中度抑郁", "重度抑郁",
                 "无明显焦虑症状", "轻度焦虑", "中度焦虑", "重度焦虑");
         Map<String, Integer> sas = new HashMap<>();
-        sas.put("无明显焦虑症状", 0);
-        sas.put("轻度焦虑", 0);
-        sas.put("中度焦虑", 0);
-        sas.put("重度焦虑", 0);
+        // sas.put("无明显焦虑症状", 0);
+        // sas.put("轻度焦虑", 0);
+        // sas.put("中度焦虑", 0);
+        // sas.put("重度焦虑", 0);
+        sas.put("正常", 0);
+        sas.put("异常", 0);
         Map<String, Integer> sds = new HashMap<>();
-        sds.put("无明显抑郁症状", 0);
-        sds.put("轻度抑郁", 0);
-        sds.put("中度抑郁", 0);
-        sds.put("重度抑郁", 0);
+        // sds.put("无明显抑郁症状", 0);
+        // sds.put("轻度抑郁", 0);
+        // sds.put("中度抑郁", 0);
+        // sds.put("重度抑郁", 0);
+        sds.put("正常", 0);
+        sds.put("异常", 0);
         Map<String, Integer> xl = new HashMap<>();
-        xl.put("正常范围", 0);
-        xl.put("轻度异常", 0);
-        xl.put("中度异常", 0);
-        xl.put("重度异常", 0);
+        // xl.put("正常范围", 0);
+        // xl.put("轻度异常", 0);
+        // xl.put("中度异常", 0);
+        // xl.put("重度异常", 0);
+        xl.put("正常", 0);
+        xl.put("异常", 0);
         Boolean sasB = false;
         Boolean sdsB = false;
         Boolean xlB = false;
         for (PingFuJieGuoNumDTO r : list) {
             if (r.getType().equals("SAS量表")) {
-                sas.put(r.getCePing(), r.getNum());
+                if (r.getCePing().equals("无明显焦虑症状")) {
+                    sas.put("正常", r.getNum());
+                } else {
+                    Integer num = sas.get(r.getCePing());
+                    if (num == null) {
+                        num = 0;
+                    }
+                    num = num + r.getNum();
+                    sas.put("异常", num);
+                }
                 sasB = true;
             }
             if (r.getType().equals("SDS量表")) {
-                sds.put(r.getCePing(), r.getNum());
+                if (r.getCePing().equals("无明显抑郁症状")) {
+                    sds.put("正常", r.getNum());
+                } else {
+                    Integer num = sds.get(r.getCePing());
+                    if (num == null) {
+                        num = 0;
+                    }
+                    num = num + r.getNum();
+                    sds.put("异常", num);
+                }
                 sdsB = true;
             }
             if (r.getType().equals("心理调查评估问卷")) {
-                xl.put(r.getCePing(), r.getNum());
+                if (r.getCePing().equals("正常范围")) {
+                    xl.put("正常", r.getNum());
+                } else {
+                    Integer num = xl.get(r.getCePing());
+                    if (num == null) {
+                        num = 0;
+                    }
+                    num = num + r.getNum();
+                    xl.put("异常", num);
+                }
                 xlB = true;
             }
         }
 
         Map<String, Map<String, Integer>> result = new HashMap<>();
-        if (sasB) {
-            result.put("SAS量表", sas);
-        }
-        if (sdsB) {
-            result.put("SDS量表", sds);
-        }
-        if (xlB) {
-            result.put("心理调查评估问卷", xl);
-        }
+        // if (sasB) {
+        result.put("SAS量表", sas);
+        // }
+        // if (sdsB) {
+        result.put("SDS量表", sds);
+        // }
+        // if (xlB) {
+        result.put("心理调查评估问卷", xl);
+        // }
 
         return result;
     }

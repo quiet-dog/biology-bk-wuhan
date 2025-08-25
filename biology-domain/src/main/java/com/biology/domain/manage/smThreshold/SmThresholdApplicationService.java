@@ -60,7 +60,12 @@ public class SmThresholdApplicationService {
         SmThresholdResDTO co2 = new SmThresholdResDTO();
         co2.setType("co2");
         co2.setData(new ArrayList<>());
-
+        SmThresholdResDTO huXi = new SmThresholdResDTO();
+        huXi.setType("呼吸");
+        huXi.setData(new ArrayList<>());
+        SmThresholdResDTO xinDian = new SmThresholdResDTO();
+        xinDian.setType("心电");
+        xinDian.setData(new ArrayList<>());
         for (SmThresholdEntity item : list) {
             if (item.getType().equals("心率")) {
                 xinlv.getData().add(item);
@@ -74,12 +79,20 @@ public class SmThresholdApplicationService {
             if (item.getType().equals("co2")) {
                 co2.getData().add(item);
             }
+            if (item.getType().equals("呼吸")) {
+                huXi.getData().add(item);
+            }
+            if (item.getType().equals("心电")) {
+                xinDian.getData().add(item);
+            }
         }
 
         result.add(xinlv);
         result.add(xueYang);
         result.add(hum);
         result.add(co2);
+        result.add(huXi);
+        result.add(xinDian);
         return result;
     }
 }
