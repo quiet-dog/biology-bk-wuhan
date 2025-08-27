@@ -36,6 +36,9 @@ public class SmDeviceEntity extends BaseEntity<SmDeviceEntity> {
     @TableField(value = "area")
     private String area;
 
+    @TableField(value = "last_time")
+    private Long lastTime;
+
     @Override
     public Serializable pkVal() {
         return this.smDeviceId;

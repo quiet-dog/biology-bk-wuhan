@@ -16,4 +16,7 @@ public class AddSmDeviceCommand {
 
     @Schema(description = "区域")
     private String area;
+
+    private Long lastTime;
+
 }

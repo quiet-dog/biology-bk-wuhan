@@ -9,6 +9,7 @@ import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.biology.domain.manage.moni.dto.SendType;
 import com.biology.domain.manage.smData.SmDataApplicationService;
 import com.biology.domain.manage.smData.command.AddSmDataCommand;
@@ -128,6 +129,7 @@ public class RenTiWebsocketClient {
                 @Override
                 public void handleFrame(StompHeaders headers, Object payload) {
                     System.out.println("收到消息: " + payload);
+                    long timestamp = System.currentTimeMillis();
                     PostRenTiMessageDTO msg = (PostRenTiMessageDTO) payload;
                     if (msg.getData() != null) {
                         PostRenTiDataDTO data = msg.getData();
@@ -146,9 +148,10 @@ public class RenTiWebsocketClient {
                         sQueryWrapper.eq("device_sn", data.getSn());
                         SmDeviceEntity sEntity = new SmDeviceEntity().selectOne(sQueryWrapper);
                         if (sEntity != null) {
+                            sEntity.setLastTime(timestamp);
+                            sEntity.updateById();
                             command.setSmDeviceId(sEntity.getSmDeviceId());
                             smDataApplicationService.create(command);
-
                             // 判断是否报警
                             List<SmThresholdResDTO> list = smThresholdApplicationService.get(sEntity.getSmDeviceId());
                             for (SmThresholdResDTO s : list) {

@@ -54,7 +54,7 @@ public class SmDeviceDTO {
     private Boolean isOnline;
 
     @ExcelColumn(name = "设备状态")
-    private String online;
+    private String isOnlineStr;
 
     // @ExcelColumn(name = "末次通讯时间", showInImportTemplate = false)
     private Long lastTime;
@@ -81,7 +81,7 @@ public class SmDeviceDTO {
         SmOnlineDataDTO isOnlone = CacheCenter.smDeviceOnlineCache.getObjectById(getDeviceSn());
         if (isOnlone == null) {
             setIsOnline(false);
-            setOnline("离线");
+            setIsOnlineStr("离线");
             SmDataEntity queryEntity = new SmDataEntity();
             queryEntity.setSmDeviceId(getSmDeviceId());
 
@@ -100,7 +100,7 @@ public class SmDeviceDTO {
         } else {
             setIsOnline(isOnlone.getOnline());
             setLastTime(isOnlone.getLastTime());
-            setOnline("在线");
+            setIsOnlineStr("在线");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             setLastTimeStr(sdf.format(getLastTime()));
         }

@@ -58,7 +58,18 @@ public class SmDeviceQuery extends AbstractPageQuery<SmDeviceEntity> {
                     sns.add(a.getSn());
                 }
             }
-            queryWrapper.in("device_sn", sns);
+
+            if (getOnline().equals("在线")) {
+                if (sns != null && sns.size() > 0) {
+                    queryWrapper.in("device_sn", sns);
+                } else {
+                    queryWrapper.eq("device_sn", "========================");
+                }
+            } else {
+                if (sns != null && sns.size() > 0) {
+                    queryWrapper.notIn("device_sn", sns);
+                }
+            }
         }
         return queryWrapper;
     }
