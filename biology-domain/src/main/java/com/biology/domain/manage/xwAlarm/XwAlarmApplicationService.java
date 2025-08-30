@@ -106,7 +106,7 @@ public class XwAlarmApplicationService {
         List<Object> xData = new ArrayList<>();
         List<Object> sData = new ArrayList<>();
         for (PingGuJieGuoSeriesDTO r : list) {
-            xData.add(r.getName());
+            xData.add(r.getName() + "月");
             sData.add(r.getValue());
         }
         result.put("xData", xData);
@@ -152,7 +152,11 @@ public class XwAlarmApplicationService {
         for (
 
         PingGuJieGuoSeriesDTO r : list) {
-            xData.add(r.getName());
+            if (!StrUtil.isEmpty(dayType) && dayType.equals("month")) {
+                xData.add(r.getName() + "月");
+            } else {
+                xData.add(r.getName());
+            }
             sData.add(r.getValue());
         }
 

@@ -2,6 +2,7 @@ package com.biology.domain.manage.shiJuan;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +47,7 @@ import com.biology.domain.manage.xlFangAn.db.XlFangAnEntity;
 import com.biology.infrastructure.user.AuthenticationUtils;
 import com.biology.infrastructure.user.web.SystemLoginUser;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -355,7 +357,9 @@ public class ResultShiJuanApplicationService {
     }
 
     public Map<String, Map<String, Integer>> cePingJieGuoTongJi(PingGuJieGuoFenXiQuery query) {
-        List<PingFuJieGuoNumDTO> list = resultShiJuanService.cePingJieGuoTongJi(query.getXlFangAnId());
+        // List<PingFuJieGuoNumDTO> list =
+        // resultShiJuanService.cePingJieGuoTongJi(query.getXlFangAnId());
+        List<PingFuJieGuoNumDTO> list = resultShiJuanService.getPingJieGuoTongJiByFangAnName(query.getFangAnName());
         List<String> categories = Arrays.asList(
                 "正常范围", "轻度异常", "中度异常", "重度异常",
                 "无明显抑郁症状", "轻度抑郁", "中度抑郁", "重度抑郁",
@@ -438,6 +442,17 @@ public class ResultShiJuanApplicationService {
         // }
 
         return result;
+    }
+
+    // 获取当天异常的人数
+    public long getDayExceptionCount() {
+        // 正常范围 无明显抑郁症状 无明显焦虑症状
+        List<String> list = Arrays.asList("正常范围", "无明显抑郁症状", "无明显焦虑症状");
+        QueryWrapper<ResultShiJuanEntity> queryWrapper = new QueryWrapper<ResultShiJuanEntity>();
+        queryWrapper.eq("DATE_FORMAT(create_time, '%Y-%m-%d')", DateUtil.format(new Date(), "yyyy-MM-dd"))
+                .notIn("ce_ping", list)
+                .isNotNull("ce_ping");
+        return resultShiJuanService.count(queryWrapper);
     }
 
 }

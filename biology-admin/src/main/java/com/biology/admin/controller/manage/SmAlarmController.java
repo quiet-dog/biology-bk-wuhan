@@ -79,4 +79,8 @@ public class SmAlarmController extends BaseController {
         return ResponseDTO.ok(smAlarmApplicationService.getBaoJingCiShuTongJiByRecentWeek());
     }
 
+    @GetMapping("/getDayExceptionCount")
+    public ResponseDTO<Long> getDayExceptionCount() {
+        return ResponseDTO.ok(smAlarmApplicationService.getDayExceptionCount());
+    }
 }

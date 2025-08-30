@@ -12,4 +12,6 @@ public interface ResultShiJuanService extends IService<ResultShiJuanEntity> {
     public List<PingFuJieGuoNumDTO> getPingGuJieGuoFenXi(String type);
 
     public List<PingFuJieGuoNumDTO> cePingJieGuoTongJi(Long xlFangAnId);
+
+    public List<PingFuJieGuoNumDTO> getPingJieGuoTongJiByFangAnName(String fangAnName);
 }

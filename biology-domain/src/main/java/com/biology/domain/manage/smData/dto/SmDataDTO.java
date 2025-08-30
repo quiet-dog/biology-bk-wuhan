@@ -59,7 +59,6 @@ public class SmDataDTO {
     @Schema(description = "采样时间")
     private Long sendTime;
 
-    @ExcelColumn(name = "采样时间")
     private String caiYangTime;
 
     @Schema(description = "心电")
@@ -74,6 +73,7 @@ public class SmDataDTO {
     @Schema(description = "体态")
     private String tiTai;
 
+    @ExcelColumn(name = "采样时间")
     @Schema(description = "创建时间")
     private Date createTime;
 

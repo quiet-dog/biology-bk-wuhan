@@ -62,5 +62,4 @@ public class XlFangAnApplicationService {
     public List<String> getDeptGroup() {
         return xlFangAnService.getPersonnelGroup();
     }
-
 }

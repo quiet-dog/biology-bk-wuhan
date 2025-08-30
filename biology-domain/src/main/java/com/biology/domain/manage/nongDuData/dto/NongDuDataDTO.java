@@ -36,6 +36,11 @@ public class NongDuDataDTO {
     @ExcelColumn(name = "报警状态")
     private String alarmStatus;
 
+    private Integer workingStatus;
+
+    @ExcelColumn(name = "工作状态")
+    private String workingStatusStr;
+
     @ExcelColumn(name = "采样时间")
     private Date createTime;
 
@@ -52,6 +57,14 @@ public class NongDuDataDTO {
                 setAlarmStatus("未报警");
             } else {
                 setAlarmStatus("报警");
+            }
+        }
+
+        if (getWorkingStatus() != null) {
+            if (getWorkingStatus().equals(0)) {
+                setWorkingStatusStr("停止");
+            } else {
+                setWorkingStatusStr("启动");
             }
         }
     }

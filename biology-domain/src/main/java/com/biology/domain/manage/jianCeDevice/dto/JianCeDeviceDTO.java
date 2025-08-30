@@ -50,7 +50,7 @@ public class JianCeDeviceDTO {
                 setWorkStatus("停止");
             }
         } else {
-            setIsOnlineStr("lixian");
+            setIsOnlineStr("离线");
         }
 
         if (lastTime != null) {

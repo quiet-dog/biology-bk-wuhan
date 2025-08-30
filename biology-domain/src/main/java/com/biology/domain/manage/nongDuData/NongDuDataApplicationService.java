@@ -75,6 +75,7 @@ public class NongDuDataApplicationService {
         aCommand.setBiologicalConcentration(dataDTO.getBiologicalConcentrationToDouble());
         aCommand.setParticleConcentration(dataDTO.getParticleConcentrationToDouble());
         aCommand.setAlarm(dataDTO.getAlarm());
+        aCommand.setWorkingStatus(dataDTO.getWorkingStatus());
         if (StrUtil.isEmpty(dataDTO.getDeviceSn())) {
             aCommand.setDeviceSn("deviceSn");
         }

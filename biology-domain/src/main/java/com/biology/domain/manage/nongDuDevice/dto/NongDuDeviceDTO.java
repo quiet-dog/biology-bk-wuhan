@@ -75,7 +75,9 @@ public class NongDuDeviceDTO {
                         setIsOnline(true);
                         if (cDto.getWorkStatus() != null && cDto.getWorkStatus().equals(1)) {
                             setWorkStatus("采样");
-                        } else {
+                        } else if (cDto.getWorkStatus() != null && cDto.getWorkStatus().equals(2)) {
+                            setWorkStatus("采样完成");
+                        } else if (cDto.getWorkStatus() != null && cDto.getWorkStatus().equals(0)) {
                             setWorkStatus("空闲");
                         }
                     } else {

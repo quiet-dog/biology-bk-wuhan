@@ -68,7 +68,6 @@ public class XsDeviceDTO {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
             setLastTimeStr(dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
         }
         if (!StrUtil.isEmpty(getDeviceSn())) {
             XsDataFun1DTO cDto = CacheCenter.xsDataFun1Cache.getObjectById(getDeviceSn());

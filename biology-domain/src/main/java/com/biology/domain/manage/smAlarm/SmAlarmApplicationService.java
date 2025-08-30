@@ -1,6 +1,7 @@
 package com.biology.domain.manage.smAlarm;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.shiJuan.dto.PingGuJieGuoSeriesDTO;
@@ -22,6 +24,7 @@ import com.biology.domain.manage.smAlarm.model.SmAlarmModel;
 import com.biology.domain.manage.smAlarm.query.SmAlarmQuery;
 import com.biology.domain.manage.xlArchive.model.XlArchiveFactory;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -109,4 +112,11 @@ public class SmAlarmApplicationService {
         return result;
     }
 
+    // 获取当天异常的人数
+    public long getDayExceptionCount() {
+        QueryWrapper<SmAlarmEntity> queryWrapper = new QueryWrapper<SmAlarmEntity>();
+        queryWrapper.eq("DATE_FORMAT(create_time, '%Y-%m-%d')", DateUtil.format(new Date(), "yyyy-MM-dd"))
+                .isNotNull("type").groupBy("device_sn");
+        return smAlarmService.count(queryWrapper);
+    }
 }

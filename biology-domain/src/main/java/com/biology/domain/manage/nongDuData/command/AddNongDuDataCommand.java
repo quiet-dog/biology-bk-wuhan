@@ -17,4 +17,6 @@ public class AddNongDuDataCommand {
     private Double biologicalConcentration;
 
     private Integer alarm;
+
+    private Integer workingStatus;
 }

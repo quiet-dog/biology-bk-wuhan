@@ -20,9 +20,6 @@ public class XlArchiveDTO {
 
     private Long userId;
 
-    @ExcelColumn(name = "状态")
-    private String status;
-
     @ExcelColumn(name = "人员工号")
     private String jobCode;
 
@@ -34,6 +31,9 @@ public class XlArchiveDTO {
 
     @ExcelColumn(name = "所属部门")
     private String deptName;
+
+    @ExcelColumn(name = "状态")
+    private String status;
 
     public XlArchiveDTO(XlArchiveEntity entity) {
         if (entity != null) {

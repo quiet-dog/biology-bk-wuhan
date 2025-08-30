@@ -4,8 +4,10 @@ import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.annotation.ExcelColumn;
 import com.biology.domain.manage.xwAlarm.db.XwAlarmEntity;
+import com.biology.domain.manage.xwDevice.db.XwDeviceEntity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -52,6 +54,8 @@ public class XwAlarmDTO {
     @Schema(description = "行为报警ID")
     private Long xwAlarmId;
 
+    private String content;
+
     private Date createTime;
 
     private Date updateTime;
@@ -77,6 +81,16 @@ public class XwAlarmDTO {
                 setFlagStr("误报");
             }
         }
+
+        if (getCameraId() != null) {
+            QueryWrapper<XwDeviceEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("camera_id", getCameraId());
+            XwDeviceEntity xwDeviceEntity = new XwDeviceEntity().selectOne(queryWrapper);
+            if (xwDeviceEntity != null) {
+                setContent(xwDeviceEntity.getContent());
+            }
+        }
+
     }
 
 }

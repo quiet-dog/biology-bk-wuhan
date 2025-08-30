@@ -42,9 +42,9 @@ public class SmDeviceQuery extends AbstractPageQuery<SmDeviceEntity> {
 
         QueryWrapper<SmDeviceEntity> queryWrapper = new QueryWrapper<SmDeviceEntity>();
         queryWrapper
-                .eq(!StrUtil.isEmpty(getDeviceSn()), "device_sn", getDeviceSn())
-                .eq(!StrUtil.isEmpty(getArea()), "area", getArea())
-                .eq(!StrUtil.isEmpty(getName()), "name", getName())
+                .like(!StrUtil.isEmpty(getDeviceSn()), "device_sn", getDeviceSn())
+                .like(!StrUtil.isEmpty(getArea()), "area", getArea())
+                .like(!StrUtil.isEmpty(getName()), "name", getName())
                 .in(smDeviceIds != null && smDeviceIds.size() > 0, "sm_device_id", smDeviceIds)
                 .inSql(!StrUtil.isEmpty(getPersonnelName()), "personnel_id",
                         String.format("select personnel_id from manage_personnel where name like '%s'",
@@ -71,6 +71,7 @@ public class SmDeviceQuery extends AbstractPageQuery<SmDeviceEntity> {
                 }
             }
         }
+
         return queryWrapper;
     }
 

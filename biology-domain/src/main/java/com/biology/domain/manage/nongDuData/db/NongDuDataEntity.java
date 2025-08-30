@@ -36,6 +36,9 @@ public class NongDuDataEntity extends BaseEntity<NongDuDataEntity> {
     @TableField(value = "alarm")
     private Integer alarm;
 
+    @TableField(value = "working_status")
+    private Integer workingStatus;
+
     @Override
     public Serializable pkVal() {
         return this.nongDuDataId;
