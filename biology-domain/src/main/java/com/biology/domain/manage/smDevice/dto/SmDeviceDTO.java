@@ -51,6 +51,8 @@ public class SmDeviceDTO {
     @ExcelColumn(name = "操作员")
     private String personnelName;
 
+    private String code;
+
     private Boolean isOnline;
 
     @ExcelColumn(name = "设备状态")
@@ -74,6 +76,7 @@ public class SmDeviceDTO {
         if (getPersonnelId() != null && getPersonnelId() != 0) {
             PersonnelEntity pEntity = new PersonnelEntity().selectById(getPersonnelId());
             setPersonnelName(pEntity.getName());
+            setCode(pEntity.getCode());
         }
     }
 

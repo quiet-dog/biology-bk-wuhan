@@ -13,12 +13,12 @@ public class XsDataFun1DTO {
     @JsonAlias("Online")
     private Integer online;
 
-    @JsonAlias("WordTime")
-    private Integer wordTime;
+    @JsonAlias("WorkTime")
+    private Integer workTime;
 
     @JsonAlias("WorkStatus")
     private Integer workStatus;
 
-    @JsonAlias("HiginVoltageStatus")
+    @JsonAlias("HighVoltageStatus")
     private Integer highVoltageStatus;
 }

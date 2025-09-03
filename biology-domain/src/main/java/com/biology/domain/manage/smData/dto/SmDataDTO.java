@@ -37,6 +37,8 @@ public class SmDataDTO {
     @Schema(description = "绑定人名称")
     private String personnelName;
 
+    private String code;
+
     @ExcelColumn(name = "电量")
     @Schema(description = "电量")
     private Double battery;
@@ -97,6 +99,7 @@ public class SmDataDTO {
             SmDeviceDTO sDto = new SmDeviceDTO(smDeviceEntity);
             setDeviceSn(sDto.getDeviceSn());
             setPersonnelName(sDto.getPersonnelName());
+            setCode(sDto.getCode());
         }
     }
 

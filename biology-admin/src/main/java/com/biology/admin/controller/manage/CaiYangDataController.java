@@ -22,6 +22,7 @@ import com.biology.domain.manage.caiYangData.CaiYangDataApplicationService;
 import com.biology.domain.manage.caiYangData.command.AddCaiYangDataCommand;
 import com.biology.domain.manage.caiYangData.command.UpdateCaiYangDataCommand;
 import com.biology.domain.manage.caiYangData.dto.CaiYangDataDTO;
+import com.biology.domain.manage.caiYangData.dto.CaiYangFunDTO;
 import com.biology.domain.manage.caiYangData.query.CaiYangDataQuery;
 import com.biology.domain.manage.nongDuData.dto.NongDuDataDTO;
 import com.biology.domain.manage.nongDuData.query.NongDuDataQuery;
@@ -36,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @Validated
 @RequiredArgsConstructor
 public class CaiYangDataController extends BaseController {
+
     private final CaiYangDataApplicationService caiYangDataApplicationService;
 
     @Operation(summary = "添加采样数据")
@@ -72,6 +74,14 @@ public class CaiYangDataController extends BaseController {
             @PathVariable(value = "caiYangDataId", required = false) Long caiYangDataId) {
         CaiYangDataDTO caiYangDataDTO = caiYangDataApplicationService.getCaiYangDataInfo(caiYangDataId);
         return ResponseDTO.ok(caiYangDataDTO);
+    }
+
+    @PostMapping("/getCaiYangSend")
+    public ResponseDTO<Void> getCaiYangSend(@RequestBody List<CaiYangFunDTO> cDto) {
+
+        System.out.println("/getCaiYangSend cDto = " + cDto);
+        caiYangDataApplicationService.getCaiYangSend(cDto);
+        return ResponseDTO.ok();
     }
 
     @Operation(summary = "采样数据列表导出")

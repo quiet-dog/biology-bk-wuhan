@@ -20,6 +20,7 @@ import com.biology.common.core.page.PageDTO;
 import com.biology.common.utils.poi.CustomExcelUtil;
 import com.biology.domain.manage.nongDuData.NongDuDataApplicationService;
 import com.biology.domain.manage.nongDuData.command.AddNongDuDataCommand;
+import com.biology.domain.manage.nongDuData.command.NongDuDTO;
 import com.biology.domain.manage.nongDuData.command.UpdateNongDuDataCommand;
 import com.biology.domain.manage.nongDuData.dto.NongDuDataDTO;
 import com.biology.domain.manage.nongDuData.query.NongDuDataQuery;
@@ -78,4 +79,12 @@ public class NongDuDataController extends BaseController {
         PageDTO<NongDuDataDTO> list = nongDuDataApplicationService.getNongDuDatas(query);
         CustomExcelUtil.writeToResponse(list.getRows(), NongDuDataDTO.class, response);
     }
+
+    @PostMapping("/nongDuDateGet")
+    public void nongDuDateGet(@RequestBody NongDuDTO nDto) {
+        System.out.println("/nongDuDateGet nDto = " + nDto);
+        nongDuDataApplicationService.nongDuDateGet(nDto);
+        return;
+    }
+
 }

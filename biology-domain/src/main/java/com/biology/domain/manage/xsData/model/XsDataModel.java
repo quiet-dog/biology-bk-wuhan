@@ -79,8 +79,4 @@ public class XsDataModel extends XsDataEntity {
                 .subscribe();
     }
 
-    public boolean insert() {
-        return true;
-    }
-
 }

@@ -79,7 +79,9 @@ public class XsDataApplicationService {
             if (xEntity == null || (xEntity != null && xEntity.getEndTime() != null)) {
                 AddXsDataCommand aCommand = new AddXsDataCommand();
                 aCommand.setDeviceSn(x.getDeviceName());
-                create(aCommand);
+                if (x.getWorkStatus() != null && x.getWorkStatus().equals(1)) {
+                    create(aCommand);
+                }
             } else {
                 if (x.getWorkStatus().equals(0)) {
                     xEntity.setEndTime(timestamp);

@@ -70,6 +70,7 @@ public class CaiYangDataApplicationService {
     public void getCaiYangSend(List<CaiYangFunDTO> cDto) {
         long timestamp = System.currentTimeMillis();
         for (CaiYangFunDTO c : cDto) {
+            System.out.println("===================cDto = " + c);
             CacheCenter.caiYangFunCache.set(c.getDeviceName(), c);
 
             AddCaiYangDataCommand command = new AddCaiYangDataCommand();
@@ -79,9 +80,12 @@ public class CaiYangDataApplicationService {
                     .last("LIMIT 1");
             CaiYangDataEntity entity = caiYangDataService.getBaseMapper().selectOne(queryWrapper);
             if (entity == null || (entity != null && entity.getEndTime() != null)) {
-                create(command);
+                if (c.getWorkStatus() != null && c.getWorkStatus().equals(1)) {
+                    create(command);
+                }
             } else {
                 if (c.getWorkStatus().equals(2)) {
+                    entity.setWorkTime(c.getWorkTime() != null ? c.getWorkTime().longValue() : 0);
                     entity.setEndTime(timestamp);
                     entity.updateById();
                 }

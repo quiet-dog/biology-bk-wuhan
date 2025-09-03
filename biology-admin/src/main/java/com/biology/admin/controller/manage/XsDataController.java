@@ -83,6 +83,7 @@ public class XsDataController extends BaseController {
 
     @PostMapping("/xiaoSha")
     public ResponseDTO<Void> xiaoSha(@RequestBody List<XsDataFun1DTO> data) {
+        System.out.println("/xiaoSha data = " + data);
         xsDataApplicationService.xiaoSha(data);
         return ResponseDTO.ok();
     }
