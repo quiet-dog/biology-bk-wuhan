@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,8 +52,9 @@ public class SmDeviceController extends BaseController {
     }
 
     @Operation(summary = "更新生命设备")
-    @PostMapping("/{smDeviceId}")
-    public ResponseDTO<Void> update(@RequestBody UpdateSmDeviceCommand command) {
+    @PutMapping("/{smDeviceId}")
+    public ResponseDTO<Void> update(@PathVariable Long smDeviceId, @RequestBody UpdateSmDeviceCommand command) {
+        command.setSmDeviceId(smDeviceId);
         smDeviceApplicationService.update(command);
         return ResponseDTO.ok();
     }

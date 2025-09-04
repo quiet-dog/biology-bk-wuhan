@@ -69,7 +69,10 @@ public class NongDuDataApplicationService {
     }
 
     public void nongDuDateGet(NongDuDTO dataDTO) {
-        CacheCenter.jianCeDataCache.set("deviceSn", dataDTO);
+        if (dataDTO.getDeviceSn() == null) {
+            dataDTO.setDeviceSn("deviceSn");
+        }
+        CacheCenter.jianCeDataCache.set(dataDTO.getDeviceSn(), dataDTO);
 
         AddNongDuDataCommand aCommand = new AddNongDuDataCommand();
         aCommand.setBiologicalConcentration(dataDTO.getBiologicalConcentrationToDouble());

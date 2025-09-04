@@ -33,6 +33,8 @@ public class CaiYangDataDTO {
     @ExcelColumn(name = "开始时间")
     private Date createTime;
 
+    private String runTime;
+
     public CaiYangDataDTO(CaiYangDataEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
@@ -46,6 +48,19 @@ public class CaiYangDataDTO {
             LocalDateTime dateTime = Instant.ofEpochMilli(endTime)
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
+            // 计算差值 s
+            long diffMillis = endTime - createTime.getTime();
+            long seconds = diffMillis / 1000;
+            long hours = seconds / 3600;
+            long minutes = (seconds % 3600) / 60;
+            long secs = seconds % 60;
+            if (hours > 0) {
+                setRunTime(String.format("%d小时%d分%d秒", hours, minutes, secs));
+            } else if (minutes > 0) {
+                setRunTime(String.format("%d分%d秒", minutes, secs));
+            } else {
+                setRunTime(String.format("%d秒", secs));
+            }
             // 格式化输出
             setEndTimeStr(dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }

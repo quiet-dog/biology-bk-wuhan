@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,8 +47,9 @@ public class XwDeviceController extends BaseController {
     }
 
     @Operation(summary = "更新行为设备")
-    @PostMapping("/{xwDeviceId}")
-    public ResponseDTO<Void> update(@RequestBody UpdateXwDeviceCommand command) {
+    @PutMapping("/{xwDeviceId}")
+    public ResponseDTO<Void> update(@PathVariable Long xwDeviceId, @RequestBody UpdateXwDeviceCommand command) {
+        command.setXwDeviceId(xwDeviceId);
         xwDeviceApplicationService.update(command);
         return ResponseDTO.ok();
     }
