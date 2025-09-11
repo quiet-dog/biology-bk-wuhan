@@ -21,7 +21,7 @@ public class NongDuDataQuery extends AbstractPageQuery<NongDuDataEntity> {
     public QueryWrapper<NongDuDataEntity> addQueryCondition() {
         QueryWrapper<NongDuDataEntity> queryWrapper = new QueryWrapper<NongDuDataEntity>();
         queryWrapper.like(!StrUtil.isEmpty(deviceSn), "device_sn", deviceSn)
-                .eq(!StrUtil.isEmpty(workStatus), "working_status", workStatus.equals("0") ? 0 : 1)
+                .eq(!StrUtil.isEmpty(workStatus), "working_status", "0".equals(workStatus) ? 0 : 1)
                 .inSql(!StrUtil.isEmpty(area), "device_sn",
                         "SELECT device_sn FROM manage_jian_ce_device WHERE area like '%" + area + "%'");
         ;

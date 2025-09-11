@@ -3,8 +3,7 @@ package com.biology.domain.manage.kongTiaoData.command;
 import lombok.Data;
 
 @Data
-public class AddKongTiaoDataCommand {
-
+public class KongTiaoDataOpc {
     private String deviceSn;
 
     private Double zhiBanGongKuanYaLiSheDing;

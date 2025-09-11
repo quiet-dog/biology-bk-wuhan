@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "浓度数据", description = "浓度数据的增删查改")
+@Tag(name = "监测数据", description = "监测数据的增删查改")
 @RestController
 @RequestMapping("/manage/nongDuData")
 @Validated
@@ -37,35 +37,35 @@ import lombok.RequiredArgsConstructor;
 public class NongDuDataController extends BaseController {
     private final NongDuDataApplicationService nongDuDataApplicationService;
 
-    @Operation(summary = "添加浓度数据")
+    @Operation(summary = "添加监测数据")
     @PostMapping
     public ResponseDTO<Void> add(@RequestBody AddNongDuDataCommand command) {
         nongDuDataApplicationService.create(command);
         return ResponseDTO.ok();
     }
 
-    @Operation(summary = "更新浓度数据")
+    @Operation(summary = "更新监测数据")
     @PostMapping("/{nongDuDataId}")
     public ResponseDTO<Void> update(@RequestBody UpdateNongDuDataCommand command) {
         nongDuDataApplicationService.update(command);
         return ResponseDTO.ok();
     }
 
-    @Operation(summary = "删除浓度数据")
+    @Operation(summary = "删除监测数据")
     @DeleteMapping
     public ResponseDTO<Void> deleteReveives(@RequestParam List<Long> reveiveIds) {
         nongDuDataApplicationService.deleteReveives(reveiveIds);
         return ResponseDTO.ok();
     }
 
-    @Operation(summary = "获取浓度数据列表")
+    @Operation(summary = "获取监测数据列表")
     @GetMapping
     public ResponseDTO<PageDTO<NongDuDataDTO>> list(NongDuDataQuery query) {
         PageDTO<NongDuDataDTO> list = nongDuDataApplicationService.getNongDuDatas(query);
         return ResponseDTO.ok(list);
     }
 
-    @Operation(summary = "获取浓度数据信息")
+    @Operation(summary = "获取监测数据信息")
     @GetMapping("/{nongDuDataId}")
     public ResponseDTO<NongDuDataDTO> info(
             @PathVariable(value = "nongDuDataId", required = false) Long nongDuDataId) {
@@ -73,7 +73,7 @@ public class NongDuDataController extends BaseController {
         return ResponseDTO.ok(nongDuDataDTO);
     }
 
-    @Operation(summary = "浓度数据列表导出")
+    @Operation(summary = "监测数据列表导出")
     @GetMapping("/excel")
     public void exportUserByExcel(HttpServletResponse response, NongDuDataQuery query) {
         PageDTO<NongDuDataDTO> list = nongDuDataApplicationService.getNongDuDatas(query);

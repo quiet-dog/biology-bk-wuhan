@@ -2,6 +2,7 @@ package com.biology.domain.manage.xwAlarm.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,40 +10,40 @@ import lombok.Data;
 
 @Data
 public class XingWeiDTO {
-    @JsonProperty("alarm_id")
+    @JsonAlias("alarm_id")
     private Long alarmId;
 
-    @JsonProperty("seat_number")
+    @JsonAlias("seat_number")
     private String seatNumber;
 
-    @JsonProperty("pic_path")
+    @JsonAlias("pic_path")
     private String picPath;
 
-    @JsonProperty("pic_path_org")
+    @JsonAlias("pic_path_org")
     private String picPathOrg;
 
-    @JsonProperty("time_stamp")
+    @JsonAlias("time_stamp")
     private Double timeStamp;
 
-    @JsonProperty("camera_id")
+    @JsonAlias("camera_id")
     private String cameraId;
 
     private Long flag;
 
-    @JsonProperty("filter_flag")
+    @JsonAlias("filter_flag")
     private Long filterFlag;
 
-    @JsonProperty("function_type")
+    @JsonAlias("function_type")
     private Long functionType;
 
-    @JsonProperty("display_flag")
+    @JsonAlias("display_flag")
     private Long displayFlag;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
-    private LocalDateTime createdAt;
+    @JsonAlias("created_at")
+    private String createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
-    private LocalDateTime pushTime;
+    @JsonAlias("push_time")
+    private String pushTime;
 
     public Long getTimeStampAsMillis() {
         if (timeStamp == null)

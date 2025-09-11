@@ -1,6 +1,9 @@
 package com.biology.domain.manage.threshold;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -125,4 +128,28 @@ public class ThresholdApplicationService {
         return result;
     }
 
+    // 获取运行时长
+    public String getRunTime(Long thresholdId) {
+        ThresholdModel thresholdModel = thresholdFactory.loadById(thresholdId);
+        thresholdModel.getEquipmentId();
+        // 查询这个表的所有equipmentId为这个的threhsoldId
+        QueryWrapper<ThresholdEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("equipment_id", thresholdModel.getEquipmentId());
+        List<ThresholdEntity> thresholdEntities = new ThresholdEntity().selectList(queryWrapper);
+        List<Long> Ids = new ArrayList<>();
+        for (ThresholdEntity thresholdEntity : thresholdEntities) {
+            Ids.add(thresholdEntity.getThresholdId());
+        }
+        String result = thresholdService.getRunTime(Ids);
+        // 将 xx:xx:xx 转换为 xx小时xx分xx秒
+        if (result != null) {
+            String[] times = result.split(":");
+            String hours = times[0];
+            String minutes = times[1];
+            String seconds = times[2];
+            return hours + "小时" + minutes + "分" + seconds + "秒";
+        } else {
+            return "0小时0分0秒";
+        }
+    }
 }

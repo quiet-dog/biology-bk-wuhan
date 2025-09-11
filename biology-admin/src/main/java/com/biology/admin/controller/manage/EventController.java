@@ -379,6 +379,12 @@ public class EventController extends BaseController {
         return ResponseDTO.ok(eventApplicationService.getAllEnvironmentAreaEchart());
     }
 
+    @Operation(summary = "数据大屏根据获取不同类型的全部报警数量")
+    @GetMapping("/getGongYiJieDianAreaEchart")
+    public ResponseDTO<List<AllEventEchartDTO>> getGongYiJieDianAreaEchart() {
+        return ResponseDTO.ok(eventApplicationService.getGongYiJieDianAreaEchart());
+    }
+
     @PostMapping("/getAreaStatisticsByDate")
     public ResponseDTO<DareaResultDTO> getAreaStatisticsByDate(@RequestBody AllAreaDTO query) {
         return ResponseDTO

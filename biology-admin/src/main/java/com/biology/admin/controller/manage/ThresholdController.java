@@ -78,4 +78,10 @@ public class ThresholdController extends BaseController {
     public ResponseDTO<OnlineThresholdEchart> getDeviceStatusEchart() {
         return ResponseDTO.ok(thresholdApplicationService.getDeviceStatusEchart());
     }
+
+    @Operation(summary = "获取运行时长")
+    @GetMapping("/runTime/{thresholdId}")
+    public ResponseDTO<String> getRunTime(@PathVariable Long thresholdId) {
+        return ResponseDTO.ok(thresholdApplicationService.getRunTime(thresholdId));
+    }
 }

@@ -1,5 +1,7 @@
 package com.biology.domain.manage.threshold.db;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -13,6 +15,11 @@ public class ThresholdServiceImpl extends ServiceImpl<ThresholdMapper, Threshold
         QueryWrapper<ThresholdEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("equipment_id", equipmentId);
         return baseMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public String getRunTime(List<Long> Ids) {
+        return baseMapper.getRunTime(Ids);
     }
 
 }

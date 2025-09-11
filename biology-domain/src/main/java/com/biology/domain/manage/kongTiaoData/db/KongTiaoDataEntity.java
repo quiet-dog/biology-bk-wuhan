@@ -28,61 +28,47 @@ public class KongTiaoDataEntity extends BaseEntity<KongTiaoDataEntity> {
     @TableField(value = "device_sn")
     private String deviceSn;
 
-    // 值班工况压力设定值
-    @TableField(value = "duty_pressure_set_value")
-    private Double dutyPressureSetValue;
+    @TableField(value = "zhi_ban_gong_kuan_ya_li_she_ding")
+    private Double zhiBanGongKuanYaLiSheDing;
 
-    // 值班工况风量设定值
-    @TableField(value = "duty_air_volume_set_value")
-    private Double dutyAirVolumeSetValue;
+    @TableField(value = "zhi_ban_gong_kuan_feng_liang_she_ding")
+    private Double zhiBanGongKuanFengLiangSheDing;
 
-    // 风阀稳定状态标志位
-    @TableField(value = "wind_valve_stable_status")
-    private Integer windValveStableStatus;
+    @TableField(value = "feng_fa_wen_ding_zhuang_tai")
+    private Integer fengFaWenDingZhuangTai;
 
-    // 阀位反馈
-    @TableField(value = "valve_feedback")
-    private Integer valveFeedback;
+    @TableField(value = "fa_wei_fan_kuan")
+    private Integer faWeiFanKuan;
 
-    // 强制阀位的设定值
-    @TableField(value = "force_valve_set_value")
-    private Integer forceValveSetValue;
+    @TableField(value = "qiang_zhi_fa_wei_she_ding")
+    private Integer qiangZhiFaWeiSheDing;
 
-    // 强制模式开关
-    @TableField(value = "force_mode_switch")
-    private Integer forceModeSwitch;
+    @TableField(value = "qiang_zhi_mo_shi_kai_guan")
+    private Integer qiangZhiMoShiKaiGuan;
 
-    // PID控制积分系数
-    @TableField(value = "pid_integral_coefficient")
-    private Double pidIntegralCoefficient;
+    @TableField(value = "pid_kong_zhi_ji_fen_xi_shu")
+    private Integer pidKongZhiJiFenXiShu;
 
-    // PID控制比例系数
-    @TableField(value = "pid_proportional_coefficient")
-    private Double pidProportionalCoefficient;
+    @TableField(value = "pod_kong_zhi_bi_li_xi_shu")
+    private Integer podKongZhiBiLiXiShu;
 
-    // 风量反馈
-    @TableField(value = "air_volume_feedback")
-    private Double airVolumeFeedback;
+    @TableField(value = "feng_liang_fan_kui")
+    private Integer fengLiangFanKui;
 
-    // 房间实际压力
-    @TableField(value = "room_actual_pressure")
-    private Double roomActualPressure;
+    @TableField(value = "fang_jian_shi_ji_ya_li")
+    private Double fangJianShiJiYaLi;
 
-    // 工况模式
-    @TableField(value = "work_mode")
-    private Integer workMode;
+    @TableField(value = "gong_kuang_mo_shi")
+    private Integer gongKuangMoShi;
 
-    // 双工况切换时间
-    @TableField(value = "dual_work_mode_switch_time")
-    private Long dualWorkModeSwitchTime;
+    @TableField(value = "shuang_gong_kuang_qie_huan_shi_jian")
+    private Integer shuangGongKuangQieHuanShiJian;
 
-    // 风量的设定值
-    @TableField(value = "air_volume_set_value")
-    private Double airVolumeSetValue;
+    @TableField(value = "feng_liang_she_ding")
+    private Integer fengLiangSheDing;
 
-    // 压力的设定值
-    @TableField(value = "pressure_feedback")
-    private Double pressureFeedback;
+    @TableField(value = "ya_li_she_ding")
+    private Double yaLiSheDing;
 
     @Override
     public Serializable pkVal() {

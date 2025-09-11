@@ -45,5 +45,7 @@ public interface EventService extends IService<EventEntity> {
 
     public List<AllEventEchartDTO> getAllEnvironmentAreaEchart();
 
+    public List<AllEventEchartDTO> getGongYiJieDianAreaEchart();
+
     public DareaResultDTO getAreaStatisticsByDate(String startTime, String endTime);
 }

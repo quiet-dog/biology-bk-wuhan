@@ -396,6 +396,10 @@ public class EventServiceImpl extends ServiceImpl<EventMapper, EventEntity> impl
         return baseMapper.getAllEnvironmentAreaEchart();
     }
 
+    public List<AllEventEchartDTO> getGongYiJieDianAreaEchart() {
+        return baseMapper.getGongYiJieDianAreaEchart();
+    }
+
     public DareaResultDTO getAreaStatisticsByDate(String startTime, String endTime) {
         List<DareaDTO> temperatureData = baseMapper.getAreaStatisticsByDate(startTime, endTime);
         System.out.println("======================");

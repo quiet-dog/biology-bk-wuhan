@@ -489,6 +489,10 @@ public class EventApplicationService {
         return eventService.getAllEnvironmentAreaEchart();
     }
 
+    public List<AllEventEchartDTO> getGongYiJieDianAreaEchart() {
+        return eventService.getGongYiJieDianAreaEchart();
+    }
+
     public DareaResultDTO getAreaStatisticsByDate(String startTime, String endTime) {
         return eventService.getAreaStatisticsByDate(startTime, endTime);
     }

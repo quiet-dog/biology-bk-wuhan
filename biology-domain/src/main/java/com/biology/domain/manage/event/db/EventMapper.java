@@ -266,4 +266,7 @@ public interface EventMapper extends BaseMapper<EventEntity> {
                         + " WHERE e.environment_id > 0"
                         + " GROUP BY q.e_area")
         List<AllEventEchartDTO> getAllEnvironmentAreaEchart();
+
+        @Select("SELECT installation_location as name, COUNT(*) as value from manage_equipment where equipment_id in (select equipment_id from manage_craft_node_equipment where craft_node_id in (select craft_node_id from manage_event where craft_node_id is not null)) group by installation_location")
+        List<AllEventEchartDTO> getGongYiJieDianAreaEchart();
 }
