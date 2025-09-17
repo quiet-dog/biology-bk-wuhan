@@ -26,11 +26,14 @@ public class DoorQuery extends AbstractPageQuery<DoorEntity> {
     @Schema(description = "是否白天")
     private Boolean IsDay;
 
+    private String enterStatus;
+
     @Override
     public QueryWrapper<DoorEntity> addQueryCondition() {
         QueryWrapper<DoorEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StrUtil.isNotEmpty(doorCode), "door_code", doorCode)
                 .like(StrUtil.isNotEmpty(doorPlace), "door_place", doorPlace)
+                .eq(StrUtil.isNotEmpty(enterStatus), "enter_status", enterStatus)
                 .inSql(StrUtil.isNotEmpty(name), "personnel_id",
                         "select personnel_id from manage_personnel where name like '%" + name + "%'");
         setTimeRangeColumn("create_time");
