@@ -5,7 +5,7 @@
 }
 :9080 {
 	#tls /home/zks/Projects/private/biology-bk-wuhan/certs/cert.pem /home/zks/Projects/private/biology-bk-wuhan/certs/key.pem
-	# tls /home/zks/Downloads/certs/cert.pem /home/zks/Downloads/certs/key.pem
+	tls /home/zks/Downloads/certs/cert.pem /home/zks/Downloads/certs/key.pem
 	# API 路径代理
 	handle_path /api/* {
 		reverse_proxy http://127.0.0.1:9020
@@ -73,6 +73,10 @@
 
 	handle_path /threed/* {
 		reverse_proxy http://127.0.0.1:8080
+	}
+
+	handle /onlinePreview {
+		reverse_proxy http://192.168.0.11:8012
 	}
 
 	@postfoo {
@@ -356,3 +360,95 @@
 	reverse_proxy http://192.168.0.11:9001
 }
 
+:17790 {
+
+	handle_path /api/* {
+		reverse_proxy http://127.0.0.1:9020
+	}
+
+	handle_path /minioapi/* {
+		reverse_proxy http://127.0.0.1:9000
+	}
+
+	handle /kkfile/* {
+		reverse_proxy 192.168.0.11:8012 {
+			header_up X-Forwarded-Proto {scheme}
+			header_up Host {host}
+			header_up X-Real-IP {remote}
+			header_up X-Forwarded-For {remote}
+		}
+	}
+
+	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
+	@ws {
+		path /ws-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	# sw websocket 
+	@swws {
+		path /sw-api/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @swws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /sw-api
+		reverse_proxy http://127.0.0.1:8020 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	@videows {
+		path /videows/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
+	handle @videows {
+		uri strip_prefix /videows
+		# 重写路径，去掉 /videows 前缀
+		reverse_proxy http://127.0.0.1:8080 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	handle @ws {
+		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
+		uri strip_prefix /ws-api
+		reverse_proxy http://127.0.0.1:9020 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	handle_path /threed/* {
+		reverse_proxy http://127.0.0.1:8080
+	}
+
+	@postfoo {
+		method GET
+		path /api/file/preview*
+	}
+
+	handle @postfoo {
+		# 加上/biology
+		uri replace /api/file/preview /biology
+		reverse_proxy http://192.168.0.11:9000
+	}
+	
+	handle {
+		root * /home/zks/Projects/private/biology-center/dist
+		try_files {path}.html {path} /index.html
+		file_server
+		encode gzip zstd
+	}
+}
+
+:8012 {
+	reverse_proxy 192.168.0.11:8012
+}

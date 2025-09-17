@@ -59,13 +59,15 @@ public class EquipmentMaintenanceManualApplicationService {
         }
     }
 
-    public PageDTO<EquipmentMaintenanceManualDTO> getMaintenanceManualList(SearchEquipmentMaintenanceManualQuery query) {
+    public PageDTO<EquipmentMaintenanceManualDTO> getMaintenanceManualList(
+            SearchEquipmentMaintenanceManualQuery query) {
         if (CollectionUtil.isNotEmpty(query.getIds())) {
             query.setPageNum(1);
             query.setPageSize(query.getIds().size());
         }
 
-        Page<EquipmentMaintenanceManualEntity> page = equipmentMaintenanceManualService.page(query.toPage(), query.toQueryWrapper());
+        Page<EquipmentMaintenanceManualEntity> page = equipmentMaintenanceManualService.page(query.toPage(),
+                query.toQueryWrapper());
         List<EquipmentMaintenanceManualDTO> records = page.getRecords().stream().map(entity -> {
             EquipmentMaintenanceManualDTO dto = new EquipmentMaintenanceManualDTO(entity);
             EquipmentModel equipmentModel = equipmentFactory.loadById(entity.getEquipmentId());
@@ -80,6 +82,9 @@ public class EquipmentMaintenanceManualApplicationService {
         EquipmentMaintenanceManualDTO dto = new EquipmentMaintenanceManualDTO(manualModel);
         EquipmentModel equipmentModel = equipmentFactory.loadById(manualModel.getEquipmentId());
         dto.setEquipment(new EquipmentDTO(equipmentModel));
+        if (dto.getEquipment() != null) {
+            dto.setEquipmentName(dto.getEquipment().getEquipmentName());
+        }
         return dto;
     }
 
@@ -87,4 +92,4 @@ public class EquipmentMaintenanceManualApplicationService {
     private String generateSerialNumber() {
         return "SN-" + System.currentTimeMillis(); // 简单的示例，使用当前时间戳生成唯一编号
     }
-} 
+}

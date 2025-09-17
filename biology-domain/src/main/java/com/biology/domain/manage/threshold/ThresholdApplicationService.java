@@ -105,6 +105,7 @@ public class ThresholdApplicationService {
         long eqTotal = new EquipmentEntity().selectCount(new QueryWrapper<>());
         // long enTotal = environmentService.count();
         long allTotal = eqTotal;
+
         result.setTotal(allTotal);
         result.setExceptionCount(0);
         result.setOnlineCount(0);
@@ -112,7 +113,7 @@ public class ThresholdApplicationService {
         List<OnlineDTO> cacheList = CacheCenter.onlineCache.getAllCache();
         if (cacheList != null && cacheList.size() > 0) {
             cacheList.forEach(onlineDTO -> {
-                if ((onlineDTO.getEquipmentId() != null)) {
+                if (onlineDTO.getEquipmentId() != null && onlineDTO.getEquipmentId() > 0) {
                     // 异常的设备
                     if (onlineDTO.getIsException() && onlineDTO.getIsOnline()) {
                         result.setExceptionCount(result.getExceptionCount() + 1);

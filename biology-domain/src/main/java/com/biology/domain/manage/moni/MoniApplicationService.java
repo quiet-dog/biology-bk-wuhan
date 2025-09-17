@@ -154,15 +154,16 @@ public class MoniApplicationService {
                             .getById(moniThresholdEntity.getEnvironmentId());
 
                     eDto.setEnvironmentId(moniThresholdEntity.getEnvironmentId());
-                    if (environmentEntity.getUnitName() != null) {
-                        if (environmentEntity.getUnitName().equals("电")) {
-                            eDto.setElectricityValue(randomValue);
-                        } else if (environmentEntity.getUnitName().equals("水")) {
-                            eDto.setWaterValue(randomValue);
-                        } else {
-                            eDto.setValue(randomValue);
-                        }
-                    }
+                    // if (environmentEntity.getUnitName() != null) {
+                    // if (environmentEntity.getUnitName().equals("电")) {
+                    // eDto.setElectricityValue(randomValue);
+                    // } else if (environmentEntity.getUnitName().equals("水")) {
+                    // eDto.setWaterValue(randomValue);
+                    // } else {
+                    // }
+                    // }
+                    eDto.setValue(randomValue);
+
                     // eDto.setValue(randomValue);
                     dto.setEnvironmentAlarmInfo(eDto);
                 }
@@ -223,10 +224,20 @@ public class MoniApplicationService {
             // 添加数据
             AddDetectionCommand addDetectionCommand = new AddDetectionCommand();
             addDetectionCommand.setEnvironmentId(deviceDTO.getEnvironmentAlarmInfo().getEnvironmentId());
-            addDetectionCommand.setValue(deviceDTO.getEnvironmentAlarmInfo().getValue());
-            addDetectionCommand.setPower(deviceDTO.getEnvironmentAlarmInfo().getPower());
-            addDetectionCommand.setWaterValue(deviceDTO.getEnvironmentAlarmInfo().getWaterValue());
-            addDetectionCommand.setElectricityValue(deviceDTO.getEnvironmentAlarmInfo().getElectricityValue());
+            if (environmentEntity.getUnitName() != null) {
+                if (environmentEntity.getUnitName().equals("电")) {
+                    addDetectionCommand.setElectricityValue(deviceDTO.getEnvironmentAlarmInfo().getValue());
+                } else if (environmentEntity.getUnitName().equals("水")) {
+                    addDetectionCommand.setWaterValue(deviceDTO.getEnvironmentAlarmInfo().getValue());
+                } else {
+                    addDetectionCommand.setValue(deviceDTO.getEnvironmentAlarmInfo().getValue());
+                }
+            } else {
+                addDetectionCommand.setValue(deviceDTO.getEnvironmentAlarmInfo().getValue());
+            }
+
+            // addDetectionCommand.setPower(deviceDTO.getEnvironmentAlarmInfo().getPower());
+            // addDetectionCommand.setWaterValue(deviceDTO.getEnvironmentAlarmInfo().getWaterValue());
             DetectionModel detectionModel = detectionApplicationService.addDetection(addDetectionCommand);
 
             // 检查是否报警
@@ -280,12 +291,6 @@ public class MoniApplicationService {
             ThresholdEntity thresholdEntity = new ThresholdEntity().selectOne(queryWrapper1);
             deviceDTO.getEquipmentInfo().setEquipmentId(thresholdEntity.getEquipmentId());
 
-            if (deviceDTO.getEquipmentInfo().getEquipmentId() != null) {
-                redisId = "equipment-" + deviceDTO.getEquipmentInfo().getEquipmentId();
-                oDto.setEquipmentId(deviceDTO.getEquipmentInfo().getEquipmentId());
-                CacheCenter.onlineCache.set(redisId, oDto);
-            }
-
             if (deviceDTO.getEquipmentInfo().getThresholdId() != null) {
                 System.out.printf(
                         "进入到设备档案获取阈值设置当中========================================================= \n");
@@ -293,6 +298,29 @@ public class MoniApplicationService {
                 oDto.setThresholdData(deviceDTO.getEquipmentInfo().getValue());
                 oDto.setThresholdId(deviceDTO.getEquipmentInfo().getThresholdId());
                 CacheCenter.onlineCache.set(redisId, oDto);
+
+                if (deviceDTO.getEquipmentInfo().getEquipmentId() != null) {
+                    List<ThresholdEntity> l = new ThresholdEntity().selectList(new QueryWrapper<ThresholdEntity>()
+                            .eq("equipment_id", deviceDTO.getEquipmentInfo().getEquipmentId()));
+                    redisId = "equipment-" + deviceDTO.getEquipmentInfo().getEquipmentId();
+                    Boolean isYiChang = false;
+                    oDto.setEquipmentId(deviceDTO.getEquipmentInfo().getEquipmentId());
+                    //
+                    if (l != null && l.size() > 0) {
+                        for (Integer i = 0; i < l.size(); i++) {
+                            String tid = "threshold-" + l.get(i).getThresholdId().toString();
+                            OnlineDTO o = CacheCenter.onlineCache.getObjectById(tid);
+                            if (o == null) {
+                                isYiChang = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        isYiChang = true;
+                    }
+                    oDto.setIsException(isYiChang);
+                    CacheCenter.onlineCache.set(redisId, oDto);
+                }
             }
 
             QueryWrapper<EquipmentEntity> queryWrapper2 = new QueryWrapper<>();

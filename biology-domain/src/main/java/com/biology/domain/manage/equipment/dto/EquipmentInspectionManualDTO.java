@@ -28,8 +28,8 @@ public class EquipmentInspectionManualDTO {
     // @Schema(description = "设备编号")
     // private String equipmentCode;
 
-    // @Schema(description = "设备名称")
-    // private String equipmentName;
+    @Schema(description = "设备名称")
+    private String equipmentName;
 
     @Schema(description = "适用范围")
     private String suitableScope;
@@ -55,8 +55,10 @@ public class EquipmentInspectionManualDTO {
     @Schema(description = "是否删除")
     private Boolean deleted;
 
-
     public EquipmentInspectionManualDTO(EquipmentInspectionManualEntity entity) {
         BeanUtils.copyProperties(entity, this);
+        if (getEquipment() != null) {
+            setEquipmentName(equipment.getEquipmentName());
+        }
     }
-} 
+}

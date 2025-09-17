@@ -22,6 +22,8 @@ public class EquipmentRepairRecordDTO {
     @Schema(description = "设备")
     private EquipmentDTO equipment;
 
+    private String equipmentName;
+
     @Schema(description = "维修编号")
     private String repairCode;
 
@@ -57,5 +59,8 @@ public class EquipmentRepairRecordDTO {
 
     public EquipmentRepairRecordDTO(EquipmentRepairRecordEntity entity) {
         BeanUtils.copyProperties(entity, this);
+        if (entity != null && equipment != null) {
+            setEquipmentName(equipment.getEquipmentName());
+        }
     }
 }

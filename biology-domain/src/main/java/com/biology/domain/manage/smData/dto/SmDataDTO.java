@@ -37,6 +37,9 @@ public class SmDataDTO {
     @Schema(description = "绑定人名称")
     private String personnelName;
 
+    @Schema(description = "岗位")
+    private String post;
+
     private String code;
 
     @ExcelColumn(name = "电量")
@@ -100,6 +103,7 @@ public class SmDataDTO {
             setDeviceSn(sDto.getDeviceSn());
             setPersonnelName(sDto.getPersonnelName());
             setCode(sDto.getCode());
+            setPost(sDto.getPost());
         }
     }
 

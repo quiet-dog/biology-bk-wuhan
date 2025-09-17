@@ -21,6 +21,8 @@ public class EquipmentMaintenanceManualDTO {
     @Schema(description = "设备")
     private EquipmentDTO equipment;
 
+    private String equipmentName;
+
     @Schema(description = "手册版本")
     private String manualVersion;
 
@@ -45,4 +47,4 @@ public class EquipmentMaintenanceManualDTO {
     public EquipmentMaintenanceManualDTO(EquipmentMaintenanceManualEntity entity) {
         BeanUtils.copyProperties(entity, this);
     }
-} 
+}

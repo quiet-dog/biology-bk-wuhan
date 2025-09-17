@@ -20,6 +20,9 @@ public class DoorDTO {
     @Schema(description = "人员信息")
     private PersonnelDTO personnel;
 
+    @Schema(description = "员工编号")
+    private String code;
+
     @Schema(description = "门禁编号")
     private String doorCode;
 
@@ -106,6 +109,9 @@ public class DoorDTO {
             PersonnelEntity entity = personnelEntity.selectById(personnelId);
             if (entity != null) {
                 personnel = new PersonnelDTO(entity);
+                if (personnel != null) {
+                    code = personnel.getCode();
+                }
             }
         }
     }

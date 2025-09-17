@@ -31,7 +31,6 @@ public class EquipmentInspectionManualApplicationService {
     private final EquipmentInspectionManualService equipmentInspectionManualService;
     private final EquipmentFactory equipmentFactory;
 
-    
     public void createInspectionManual(AddEquipmentInspectionManualCommand command) {
         EquipmentInspectionManualModel manualModel = equipmentInspectionManualFactory.create();
         if (command.getManualCode() == null || command.getManualCode().isEmpty()) {
@@ -74,7 +73,8 @@ public class EquipmentInspectionManualApplicationService {
             query.setPageSize(query.getIds().size());
         }
 
-        Page<EquipmentInspectionManualEntity> page = equipmentInspectionManualService.page(query.toPage(), query.toQueryWrapper());
+        Page<EquipmentInspectionManualEntity> page = equipmentInspectionManualService.page(query.toPage(),
+                query.toQueryWrapper());
         List<EquipmentInspectionManualDTO> records = page.getRecords().stream().map(entity -> {
             EquipmentInspectionManualDTO dto = new EquipmentInspectionManualDTO(entity);
             // 通过equipmentId查询equipment表获取设备
@@ -91,10 +91,13 @@ public class EquipmentInspectionManualApplicationService {
         // 通过equipmentId查询equipment表获取设备
         EquipmentModel equipmentModel = equipmentFactory.loadById(manualModel.getEquipmentId());
         dto.setEquipment(new EquipmentDTO(equipmentModel));
+        if (dto.getEquipment() != null) {
+            dto.setEquipmentName(dto.getEquipment().getEquipmentName());
+        }
         return dto;
     }
 
     private String generateSerialNumber() {
         return "SN-" + System.currentTimeMillis();
     }
-} 
+}

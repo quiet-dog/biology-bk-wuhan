@@ -35,6 +35,9 @@ public class SmDeviceDTO {
     @Schema(description = "人员Id")
     private Long personnelId;
 
+    @Schema(description = "岗位")
+    private String post;
+
     @ExcelColumn(name = "所属区域")
     @Schema(description = "区域")
     private String area;
@@ -77,6 +80,7 @@ public class SmDeviceDTO {
             PersonnelEntity pEntity = new PersonnelEntity().selectById(getPersonnelId());
             setPersonnelName(pEntity.getName());
             setCode(pEntity.getCode());
+            setPost(pEntity.getPost());
         }
     }
 

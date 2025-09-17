@@ -29,6 +29,7 @@ public class EquipmentInspectionRecordApplicationService {
     private final EquipmentInspectionRecordFactory equipmentInspectionRecordFactory;
     private final EquipmentInspectionRecordService equipmentInspectionRecordService;
     private final EquipmentFactory equipmentFactory;
+
     public void createInspectionRecord(AddEquipmentInspectionRecordCommand command) {
         EquipmentInspectionRecordModel inspectionModel = equipmentInspectionRecordFactory.create();
         inspectionModel.loadAddCommand(command);
@@ -40,7 +41,8 @@ public class EquipmentInspectionRecordApplicationService {
     }
 
     public void updateInspectionRecord(UpdateEquipmentInspectionRecordCommand command) {
-        EquipmentInspectionRecordModel inspectionModel = equipmentInspectionRecordFactory.loadById(command.getRecordId());
+        EquipmentInspectionRecordModel inspectionModel = equipmentInspectionRecordFactory
+                .loadById(command.getRecordId());
         inspectionModel.loadUpdateCommand(command);
         inspectionModel.update();
     }
@@ -53,8 +55,9 @@ public class EquipmentInspectionRecordApplicationService {
     }
 
     public PageDTO<EquipmentInspectionRecordDTO> getInspectionRecordList(SearchEquipmentInspectionQuery query) {
-        
-        Page<EquipmentInspectionRecordEntity> page = equipmentInspectionRecordService.page(query.toPage(), query.toQueryWrapper());
+
+        Page<EquipmentInspectionRecordEntity> page = equipmentInspectionRecordService.page(query.toPage(),
+                query.toQueryWrapper());
         List<EquipmentInspectionRecordDTO> records = page.getRecords().stream().map(entity -> {
             EquipmentInspectionRecordDTO dto = new EquipmentInspectionRecordDTO(entity);
             EquipmentModel equipmentModel = equipmentFactory.loadById(entity.getEquipmentId());
@@ -69,6 +72,9 @@ public class EquipmentInspectionRecordApplicationService {
         EquipmentInspectionRecordDTO dto = new EquipmentInspectionRecordDTO(inspectionModel);
         EquipmentModel equipmentModel = equipmentFactory.loadById(inspectionModel.getEquipmentId());
         dto.setEquipment(new EquipmentDTO(equipmentModel));
+        if (dto.getEquipment() != null) {
+            dto.setEquipmentName(dto.getEquipment().getEquipmentName());
+        }
         return dto;
     }
-} 
+}

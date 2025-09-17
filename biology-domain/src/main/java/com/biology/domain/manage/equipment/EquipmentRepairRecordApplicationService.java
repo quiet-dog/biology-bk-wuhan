@@ -78,6 +78,9 @@ public class EquipmentRepairRecordApplicationService {
         EquipmentRepairRecordDTO dto = new EquipmentRepairRecordDTO(repairModel);
         EquipmentModel equipmentModel = equipmentFactory.loadById(repairModel.getEquipmentId());
         dto.setEquipment(new EquipmentDTO(equipmentModel));
+        if (dto.getEquipment() != null) {
+            dto.setEquipmentName(dto.getEquipment().getEquipmentName());
+        }
         return dto;
     }
 
