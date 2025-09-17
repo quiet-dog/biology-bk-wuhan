@@ -19,6 +19,10 @@ public class DoorServiceImpl extends ServiceImpl<DoorMapper, DoorEntity> impleme
         if (dayStatus == null) {
             return 0.0;
         }
+        // 如果大与allCOunt直接1
+        if (dayStatus > allCount) {
+            return 1.0;
+        }
         return (double) dayStatus / allCount;
     }
 
