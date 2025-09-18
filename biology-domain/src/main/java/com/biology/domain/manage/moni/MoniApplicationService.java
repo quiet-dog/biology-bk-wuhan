@@ -199,6 +199,7 @@ public class MoniApplicationService {
         } catch (Exception e) {
         }
 
+        System.out.printf("发送数据为：%s \n", deviceDTO.toString());
         AddEventCommand command = new AddEventCommand();
         OnlineDTO oDto = new OnlineDTO();
         oDto.setIsOnline(true);

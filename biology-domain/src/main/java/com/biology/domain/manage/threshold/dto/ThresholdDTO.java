@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.biology.common.annotation.ExcelColumn;
 import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.emergency.db.EmergencyEntity;
 import com.biology.domain.manage.emergency.db.EmergencyFileEntity;
@@ -23,6 +24,7 @@ import com.biology.domain.manage.threshold.db.ThresholdEmergencyEntity;
 import com.biology.domain.manage.threshold.db.ThresholdEntity;
 import com.biology.domain.manage.threshold.db.ThresholdSopEntity;
 import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
+import com.biology.domain.manage.websocket.dto.OnlineDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -77,6 +79,10 @@ public class ThresholdDTO {
 
     private List<String> sopPaths;
 
+    @Schema(description = "值")
+    @ExcelColumn(name = "值")
+    private Object value;
+
     @Schema(description = "创建时间")
     private Date createTime;
 
@@ -92,6 +98,7 @@ public class ThresholdDTO {
             insertValues();
             insertEmergency();
             insertSop();
+            insertValue();
         }
     }
 
@@ -172,4 +179,17 @@ public class ThresholdDTO {
             }
         }
     }
+
+    public void insertValue() {
+        if (getThresholdId() != null && getThresholdId() > 0) {
+            String redisId = "threshold-" + getThresholdId().toString();
+            OnlineDTO onlineDTO = CacheCenter.onlineCache.getObjectById(redisId);
+            if (onlineDTO != null) {
+                setValue(onlineDTO.getThresholdData());
+            } else {
+                setValue("-");
+            }
+        }
+    }
+
 }

@@ -129,33 +129,34 @@ public class RedisCacheService {
 
         onlineCache = new RedisCacheTemplate<OnlineDTO>(redisUtil,
                 CacheKeyEnum.ONLINE_DEVICE_KEY) {
-            @Override
-            public OnlineDTO getObjectFromDb(Object id) {
-                OnlineDTO oDto = new OnlineDTO();
-                // id为 type-id
-                String[] split = id.toString().split("-");
-                String type = split[0];
-                if (type.equals("equipment")) {
-                    if (split.length > 1) {
-                        // 设备id
-                        oDto.setEquipmentId(Long.parseLong(split[1]));
-                    }
+            // @Override
+            // public OnlineDTO getObjectFromDb(Object id) {
+            // OnlineDTO oDto = new OnlineDTO();
+            // // id为 type-id
+            // String[] split = id.toString().split("-");
+            // String type = split[0];
+            // if (type.equals("equipment")) {
+            // if (split.length > 1) {
+            // // 设备id
+            // oDto.setEquipmentId(Long.parseLong(split[1]));
+            // }
 
-                }
-                if (type.equals("threshold")) {
-                    if (split.length > 1) {
-                        // 检测id
-                        oDto.setThresholdId(Long.parseLong(split[1]));
-                    }
-                }
-                if (type.equals("environment")) {
-                    if (split.length > 1) {
-                        // 环境id
-                        oDto.setEnvironmentId(Long.parseLong(split[1]));
-                    }
-                }
-                return oDto;
-            }
+            // }
+            // if (type.equals("threshold")) {
+            // if (split.length > 1) {
+            // // 检测id
+            // oDto.setThresholdId(Long.parseLong(split[1]));
+            // }
+            // }
+            // if (type.equals("environment")) {
+            // if (split.length > 1) {
+            // // 环境id
+            // oDto.setEnvironmentId(Long.parseLong(split[1]));
+            // }
+            // }
+            // return oDto;
+            // }
+
         };
 
         thresholdValuesCache = new RedisCacheTemplate<List<ThresholdValueEntity>>(redisUtil,

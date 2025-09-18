@@ -10,6 +10,7 @@ import com.biology.common.utils.time.DatePickUtil;
 import com.biology.domain.manage.equipment.dto.EquipmentDataStockDTO;
 import com.biology.domain.manage.equipment.dto.EquipmentDataStockEchartDTO;
 import com.biology.domain.manage.equipment.dto.TotalTimeDTO;
+import com.biology.domain.manage.threshold.db.ThresholdEntity;
 
 @Service
 public class EquipmentDataServiceImpl extends ServiceImpl<EquipmentDataMapper, EquipmentDataEntity>
@@ -29,8 +30,6 @@ public class EquipmentDataServiceImpl extends ServiceImpl<EquipmentDataMapper, E
         for (String s : echartDTO.getTime()) {
             Boolean isExit = false;
             for (EquipmentDataStockDTO equipmentDataStockDTO : list) {
-                System.out.println("=========================");
-                System.out.println(s + "====" + equipmentDataStockDTO.getTime());
                 if (s.equals(equipmentDataStockDTO.getTime())) {
                     isExit = true;
                     echartDTO.getData().add(equipmentDataStockDTO.getData());
@@ -42,6 +41,17 @@ public class EquipmentDataServiceImpl extends ServiceImpl<EquipmentDataMapper, E
             }
         }
 
+        ThresholdEntity tEntity = new ThresholdEntity().selectById(threshold);
+        if (tEntity != null) {
+            echartDTO.setUnitName(tEntity.getUnit());
+            echartDTO.setSensorName(tEntity.getSensorName());
+
+            EquipmentEntity eEntity = new EquipmentEntity().selectById(tEntity.getEquipmentId());
+            if (eEntity != null) {
+                echartDTO.setEquipmentName(eEntity.getEquipmentName());
+                echartDTO.setEquipmentCode(eEntity.getEquipmentCode());
+            }
+        }
         // for (EquipmentDataStockDTO equipmentDataStockDTO : list) {
         // echartDTO.getData().add(equipmentDataStockDTO.getData());
         // echartDTO.getTime().add(equipmentDataStockDTO.getTime());

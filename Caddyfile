@@ -5,14 +5,14 @@
 }
 :9080 {
 	#tls /home/zks/Projects/private/biology-bk-wuhan/certs/cert.pem /home/zks/Projects/private/biology-bk-wuhan/certs/key.pem
-	tls /home/zks/Downloads/certs/cert.pem /home/zks/Downloads/certs/key.pem
+	#tls /home/zks/Downloads/certs/cert.pem /home/zks/Downloads/certs/key.pem
 	# API 路径代理
 	handle_path /api/* {
 		reverse_proxy http://127.0.0.1:9020
 	}
 
 	handle_path /minioapi/* {
-		reverse_proxy http://127.0.0.1:9000
+		reverse_proxy http://192.168.0.11:9000
 	}
 
 	handle /kkfile/* {
@@ -23,6 +23,7 @@
 			header_up X-Forwarded-For {remote}
 		}
 	}
+
 
 	# WebSocket 请求代理，直接匹配 /ws-api 路径并去掉 /ws-api 前缀
 	@ws {
@@ -92,7 +93,7 @@
 
 	# 静态文件处理
 	handle {
-		root * /home/zks/Projects/private/biology-fd-wuhan/dist
+		root * /home/zks/Projects/private/biology-fd-beijing/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd
@@ -178,7 +179,7 @@
 
 	# 静态文件处理
 	handle {
-		root * /home/zks/Projects/private/biology-screen-wuhan/dist
+		root * /home/zks/Projects/private/screen/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd

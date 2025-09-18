@@ -1,5 +1,7 @@
 package com.biology.domain.manage.detection;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -195,6 +197,13 @@ public class DetectionApplicationService {
     public DareaResultDTO getTemperatureDataByAreaAndTimeSlot(String unitName, String beginTime, String endTime) {
         List<DareaDTO> temperatureData = detectionService.getTemperatureDataByAreaAndTimeSlot(unitName, beginTime,
                 endTime);
+
+        // 把大于当前的时间数据都去掉
+        temperatureData = temperatureData.stream()
+                .filter(item -> item.getTimeSlot()
+                        .compareTo(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))) <= 0)
+                .collect(Collectors.toList());
+
         Set<String> timeSlotsSet = new TreeSet<>(); // 自动排序时间
         Set<String> areasSet = new HashSet<>();
         Map<String, Map<String, Double>> areaToTimeValueMap = new HashMap<>();

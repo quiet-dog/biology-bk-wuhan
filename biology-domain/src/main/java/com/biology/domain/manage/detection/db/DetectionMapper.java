@@ -378,7 +378,8 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         "SELECT " +
                         "    a.e_area AS area, " +
                         "    DATE_FORMAT(t.time_point, '%H:%i') AS time_slot, " +
-                        "    IFNULL(av.avg_value, 0) AS avg_value " +
+                        // " IFNULL(av.avg_value, 0) AS avg_value " +
+                        "  av.avg_value " +
                         "FROM area_list a " +
                         "CROSS JOIN time_slots t " +
                         "LEFT JOIN avg_values av ON a.e_area = av.e_area AND t.time_point = av.time_slot " +
