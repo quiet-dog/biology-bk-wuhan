@@ -9,6 +9,7 @@ import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.equipment.EquipmentDataApplicationService;
 import com.biology.domain.manage.equipment.command.AddEquipmentDataCommand;
+import com.biology.domain.manage.equipment.command.EquipmentDataHistory;
 // import com.biology.domain.manage.equipment.command.ExcelEquipmentDataCommand;
 import com.biology.domain.manage.equipment.command.UpdateEquipmentDataCommand;
 import com.biology.domain.manage.equipment.dto.EquipmentDataDTO;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "设备数据管理")
 @RestController
@@ -79,6 +81,12 @@ public class EquipmentDataController extends BaseController {
     @GetMapping("/totalTime")
     public ResponseDTO<TotalTimeDTO> getTotalTime(Long equipmentId) {
         return ResponseDTO.ok(equipmentDataApplicationService.getTotalTime(equipmentId));
+    }
+
+    @Operation(summary = "获取设备数据历史统计当天详情")
+    @PostMapping("/historyData")
+    public ResponseDTO<Map<String, Object>> getEquipmentDataByEquipmentId(@RequestBody EquipmentDataHistory command) {
+        return ResponseDTO.ok(equipmentDataApplicationService.getEquipmentDataByEquipmentId(command));
     }
 
     // @Operation(summary = "下载设备数据导入模板")

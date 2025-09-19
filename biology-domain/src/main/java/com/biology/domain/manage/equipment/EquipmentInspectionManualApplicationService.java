@@ -73,27 +73,30 @@ public class EquipmentInspectionManualApplicationService {
             query.setPageSize(query.getIds().size());
         }
 
+        // Page<EquipmentInspectionManualEntity> page =
+        // equipmentInspectionManualService.page(query.toPage(),
+        // query.toQueryWrapper());
+
         Page<EquipmentInspectionManualEntity> page = equipmentInspectionManualService.page(query.toPage(),
                 query.toQueryWrapper());
-        List<EquipmentInspectionManualDTO> records = page.getRecords().stream().map(entity -> {
-            EquipmentInspectionManualDTO dto = new EquipmentInspectionManualDTO(entity);
-            // 通过equipmentId查询equipment表获取设备
-            EquipmentModel equipmentModel = equipmentFactory.loadById(entity.getEquipmentId());
-            dto.setEquipment(new EquipmentDTO(equipmentModel));
-            return dto;
-        }).collect(Collectors.toList());
+        List<EquipmentInspectionManualDTO> records = page.getRecords().stream().map(EquipmentInspectionManualDTO::new)
+                .collect(Collectors.toList());
+
+        // List<EquipmentInspectionManualDTO> records =
+        // page.getRecords().stream().map(entity -> {
+        // EquipmentInspectionManualDTO dto = new EquipmentInspectionManualDTO(entity);
+        // // 通过equipmentId查询equipment表获取设备
+        // EquipmentModel equipmentModel =
+        // equipmentFactory.loadById(entity.getEquipmentId());
+        // dto.setEquipment(new EquipmentDTO(equipmentModel));
+        // return dto;
+        // }).collect(Collectors.toList());
         return new PageDTO<>(records, page.getTotal());
     }
 
     public EquipmentInspectionManualDTO getInspectionManualInfo(Long manualId) {
         EquipmentInspectionManualModel manualModel = equipmentInspectionManualFactory.loadById(manualId);
         EquipmentInspectionManualDTO dto = new EquipmentInspectionManualDTO(manualModel);
-        // 通过equipmentId查询equipment表获取设备
-        EquipmentModel equipmentModel = equipmentFactory.loadById(manualModel.getEquipmentId());
-        dto.setEquipment(new EquipmentDTO(equipmentModel));
-        if (dto.getEquipment() != null) {
-            dto.setEquipmentName(dto.getEquipment().getEquipmentName());
-        }
         return dto;
     }
 

@@ -1,5 +1,7 @@
 package com.biology.domain.manage.equipment.db;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -12,4 +14,6 @@ public interface EquipmentDataService extends IService<EquipmentDataEntity> {
     public EquipmentDataStockEchartDTO getEquipmentDataStockDay(Long threshold);
 
     public TotalTimeDTO getTotalTime(Long equipmentId);
+
+    public Map<String, Object> getEquipmentDataByEquipmentId(Long threshold, String dayTime);
 }

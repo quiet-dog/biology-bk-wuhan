@@ -24,4 +24,52 @@ public interface EquipmentDataMapper extends BaseMapper<EquipmentDataEntity> {
                         + " FROM manage_equipment_data WHERE monitoring_indicator = '电压' AND equipment_id = #{equipmentId}"
                         + " ) as subquery")
         public Integer getTotalTime(@Param("equipmentId") Long equipmentId);
+
+        // 我需要00:00-23:00的所有时间, 从00:00开始,每个小时的平均值,时间返回00:00-23:00,如果时间没数据的话返回时间数据为null
+        /**
+         * WITH RECURSIVE hours AS (
+         * SELECT CAST('2025-09-18 00:00:00' AS DATETIME) AS hour_point
+         * UNION ALL
+         * SELECT DATE_ADD(hour_point, INTERVAL 1 HOUR)
+         * FROM hours
+         * WHERE hour_point < '2025-09-18 23:00:00'
+         * )
+         * SELECT
+         * DATE_FORMAT(h.hour_point, '%H:00') AS time,
+         * AVG(m.equipment_data) AS data
+         * FROM hours h
+         * LEFT JOIN manage_equipment_data m
+         * ON m.create_time >= h.hour_point
+         * AND m.create_time < DATE_ADD(h.hour_point, INTERVAL 1 HOUR)
+         * GROUP BY h.hour_point
+         * ORDER BY h.hour_point;
+         * 
+         * @param thresholdId
+         * @param currenTime
+         * @return
+         */
+
+        // 将上面的sql转换为mybatis的sql,并且将时间改为currenTime,再加上thresholdId和currenTime
+        @Select({
+                        "WITH RECURSIVE hours AS (",
+                        "    SELECT CAST(CONCAT(#{currenTime}, ' 00:00:00') AS DATETIME) AS hour_point",
+                        "    UNION ALL",
+                        "    SELECT DATE_ADD(hour_point, INTERVAL 1 HOUR)",
+                        "    FROM hours",
+                        "    WHERE hour_point < CAST(CONCAT(#{currenTime}, ' 23:00:00') AS DATETIME)",
+                        ")",
+                        "SELECT",
+                        "    DATE_FORMAT(h.hour_point, '%H:00') AS time,",
+                        "    AVG(m.equipment_data) AS data",
+                        "FROM hours h",
+                        "LEFT JOIN manage_equipment_data m",
+                        "       ON m.create_time >= h.hour_point",
+                        "      AND m.create_time < DATE_ADD(h.hour_point, INTERVAL 1 HOUR)",
+                        "      AND m.threshold_id = #{thresholdId}",
+                        "GROUP BY h.hour_point",
+                        "ORDER BY h.hour_point"
+        })
+        public List<EquipmentDataStockDTO> getHistoryCurentDay(@Param("thresholdId") Long thresholdId,
+                        @Param("currenTime") String currenTime);
+
 }

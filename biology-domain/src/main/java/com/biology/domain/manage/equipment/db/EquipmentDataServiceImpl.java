@@ -1,7 +1,11 @@
 package com.biology.domain.manage.equipment.db;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
@@ -65,4 +69,30 @@ public class EquipmentDataServiceImpl extends ServiceImpl<EquipmentDataMapper, E
         timeDTO.setTotalTime(value);
         return timeDTO;
     }
+
+    public Map<String, Object> getEquipmentDataByEquipmentId(Long threshold, String dayTime) {
+        Map<String, Object> map = new HashMap<>();
+        List<EquipmentDataStockDTO> list = baseMapper.getHistoryCurentDay(threshold, dayTime);
+        // if (list == null) {
+        // list = Collections.emptyList();
+        // }
+        // dayTime是2025-09-18这种格式,判断是否是今天,如果是今天的话,将list的time大于当前time的数据去掉
+        List<String> xData = new ArrayList<>();
+        List<Double> yData = new ArrayList<>();
+        for (EquipmentDataStockDTO item : list) {
+            if (item != null) {
+                xData.add(item.getTime());
+                yData.add(item.getData());
+            }
+        }
+
+        ThresholdEntity tEntity = new ThresholdEntity().selectById(threshold);
+        map.put("xData", xData);
+        map.put("yData", yData);
+        map.put("unit", tEntity != null ? tEntity.getUnit() : "未知");
+        map.put("list", list);
+
+        return map;
+    }
+
 }

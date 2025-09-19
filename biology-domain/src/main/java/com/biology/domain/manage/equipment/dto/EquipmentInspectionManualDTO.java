@@ -7,7 +7,9 @@ import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
+import com.biology.domain.manage.equipment.db.EquipmentEntity;
 import com.biology.domain.manage.equipment.db.EquipmentInspectionManualEntity;
+import com.biology.domain.manage.equipment.model.EquipmentModel;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Data
@@ -55,8 +57,16 @@ public class EquipmentInspectionManualDTO {
     @Schema(description = "是否删除")
     private Boolean deleted;
 
+    @Schema(description = "手册名称")
+    private String manualName;
+
     public EquipmentInspectionManualDTO(EquipmentInspectionManualEntity entity) {
         BeanUtils.copyProperties(entity, this);
+
+        if (getEquipmentId() != null) {
+            EquipmentEntity equipmentModel = new EquipmentEntity().selectById(getEquipmentId());
+            setEquipment(new EquipmentDTO(equipmentModel));
+        }
         if (getEquipment() != null) {
             setEquipmentName(equipment.getEquipmentName());
         }

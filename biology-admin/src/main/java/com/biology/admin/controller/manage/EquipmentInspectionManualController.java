@@ -54,7 +54,8 @@ public class EquipmentInspectionManualController extends BaseController {
 
     @Operation(summary = "更新设备检修手册")
     @PutMapping("/{manualId}")
-    public ResponseDTO<Void> update(@PathVariable Long manualId, @RequestBody UpdateEquipmentInspectionManualCommand command) {
+    public ResponseDTO<Void> update(@PathVariable Long manualId,
+            @RequestBody UpdateEquipmentInspectionManualCommand command) {
         command.setManualId(manualId);
         equipmentInspectionManualApplicationService.updateInspectionManual(command);
         return ResponseDTO.ok();
@@ -70,21 +71,24 @@ public class EquipmentInspectionManualController extends BaseController {
     @Operation(summary = "获取设备检修手册信息")
     @GetMapping("/{manualId}")
     public ResponseDTO<EquipmentInspectionManualDTO> info(@PathVariable Long manualId) {
-        EquipmentInspectionManualDTO manualDTO = equipmentInspectionManualApplicationService.getInspectionManualInfo(manualId);
+        EquipmentInspectionManualDTO manualDTO = equipmentInspectionManualApplicationService
+                .getInspectionManualInfo(manualId);
         return ResponseDTO.ok(manualDTO);
     }
 
     @Operation(summary = "获取设备检修手册列表")
     @GetMapping
     public ResponseDTO<PageDTO<EquipmentInspectionManualDTO>> list(SearchEquipmentInspectionManualQuery query) {
-        PageDTO<EquipmentInspectionManualDTO> list = equipmentInspectionManualApplicationService.getInspectionManualList(query);
+        PageDTO<EquipmentInspectionManualDTO> list = equipmentInspectionManualApplicationService
+                .getInspectionManualList(query);
         return ResponseDTO.ok(list);
     }
 
     @Operation(summary = "下载设备检修手册导入模板")
     @GetMapping("/excelTemplate")
     public void downloadImportTemplate(HttpServletResponse response) throws IOException {
-        CustomExcelUtil.writeToResponse(ListUtil.toList(new ExcelEquipmentInspectionManualCommand()), ExcelEquipmentInspectionManualCommand.class,
+        CustomExcelUtil.writeToResponse(ListUtil.toList(new ExcelEquipmentInspectionManualCommand()),
+                ExcelEquipmentInspectionManualCommand.class,
                 response);
     }
 
@@ -113,7 +117,6 @@ public class EquipmentInspectionManualController extends BaseController {
         for (ExcelEquipmentInspectionManualCommand excelCommand : excelCommands) {
             AddEquipmentInspectionManualCommand addCommand = new AddEquipmentInspectionManualCommand();
 
-
             // 根据设备编号查询设备ID
             EquipmentModel equipmentModel = equipmentFactory.loadByCode(excelCommand.getEquipmentCode());
             // TODO: 根据Excel数据设置addCommand的属性
@@ -131,4 +134,4 @@ public class EquipmentInspectionManualController extends BaseController {
         return ResponseDTO.ok();
     }
 
-} 
+}

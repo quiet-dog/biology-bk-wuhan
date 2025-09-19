@@ -24,4 +24,7 @@ public class AddEquipmentInspectionManualCommand {
 
     @Schema(description = "检修手册附件路径")
     private JsonNode manualFilePath;
+
+    @Schema(description = "手册名称")
+    private String manualName;
 }

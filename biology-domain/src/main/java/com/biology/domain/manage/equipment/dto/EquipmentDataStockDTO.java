@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class EquipmentDataStockDTO {
     private String time;
-    private double data;
+    private Double data;
 }

@@ -2,6 +2,7 @@ package com.biology.domain.manage.equipment;
 
 import org.springframework.stereotype.Service;
 import com.biology.domain.manage.equipment.command.AddEquipmentDataCommand;
+import com.biology.domain.manage.equipment.command.EquipmentDataHistory;
 import com.biology.domain.manage.equipment.command.UpdateEquipmentDataCommand;
 import com.biology.domain.manage.equipment.dto.EquipmentDTO;
 import com.biology.domain.manage.equipment.dto.EquipmentDataDTO;
@@ -22,6 +23,7 @@ import com.biology.common.core.page.PageDTO;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,6 +91,10 @@ public class EquipmentDataApplicationService {
 
     public TotalTimeDTO getTotalTime(Long equipmentId) {
         return equipmentDataService.getTotalTime(equipmentId);
+    }
+
+    public Map<String, Object> getEquipmentDataByEquipmentId(EquipmentDataHistory command) {
+        return equipmentDataService.getEquipmentDataByEquipmentId(command.getThresholdId(), command.getDayTime());
     }
 
 }

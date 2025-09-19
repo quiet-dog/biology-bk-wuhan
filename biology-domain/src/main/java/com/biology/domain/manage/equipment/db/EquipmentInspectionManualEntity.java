@@ -46,6 +46,10 @@ public class EquipmentInspectionManualEntity extends BaseEntity<EquipmentInspect
     @TableField("is_enabled")
     private Boolean isEnabled;
 
+    @ApiModelProperty("手册名称")
+    @TableField("manual_name")
+    private String manualName;
+
     // @ApiModelProperty("创建时间")
     // @TableField("create_time")
     // private Date createTime;
