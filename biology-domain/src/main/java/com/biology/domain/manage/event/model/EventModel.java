@@ -1,8 +1,11 @@
 package com.biology.domain.manage.event.model;
 
+import java.util.Date;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.alibaba.excel.util.DateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
@@ -28,6 +31,7 @@ import com.biology.domain.manage.websocket.dto.ContentDTO;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
 import com.biology.domain.system.notice.model.NoticeModel;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -100,12 +104,69 @@ public class EventModel extends EventEntity {
     // 广播
     public void boardcast() {
         EventDTO eventDTO = new EventDTO(this);
+
+        if (eventDTO.getEquipmentId() != null && eventDTO.getEquipmentId() > 0) {
+            // 判断最近10分钟内是否存在相同的equpmentId的事件
+            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("equipment_id", eventDTO.getEquipmentId());
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+            if (eventEntity != null) {
+                return;
+            }
+        }
+
+        if (eventDTO.getEnvironmentId() != null && eventDTO.getEnvironmentId() > 0) {
+            // 判断最近10分钟内是否存在相同的environmentId的事件
+            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("environment_id", eventDTO.getEnvironmentId());
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+            if (eventEntity != null) {
+                return;
+            }
+        }
+
+        if (eventDTO.getMaterialsId() != null && eventDTO.getMaterialsId() > 0) {
+            // 判断最近10分钟内是否存在相同的materialsId的事件
+            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("materials_id", eventDTO.getMaterialsId());
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+            if (eventEntity != null) {
+                return;
+            }
+        }
+
+        if (eventDTO.getThresholdId() != null && eventDTO.getThresholdId() > 0) {
+            // 判断最近10分钟内是否存在相同的thresholdId的事件
+            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("threshold_id", eventDTO.getThresholdId());
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+            if (eventEntity != null) {
+                return;
+            }
+        }
+
+        if (eventDTO.getCraftNodeId() != null && eventDTO.getCraftNodeId() > 0) {
+            // 判断最近10分钟内是否存在相同的craftNodeId的事件
+            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("craft_node_id", eventDTO.getCraftNodeId());
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+            if (eventEntity != null) {
+                return;
+            }
+        }
+
         websocketService.sendTopicInfo(eventDTO);
 
         AddNotificationCommand command = new AddNotificationCommand();
         if (eventDTO.getLevel() == null) {
             return;
         }
+
         if (eventDTO.getLevel().equals("紧急") || eventDTO.getLevel().equals("重要")
                 || eventDTO.getLevel().equals("中度")) {
             command.setNotificationType("通知");
