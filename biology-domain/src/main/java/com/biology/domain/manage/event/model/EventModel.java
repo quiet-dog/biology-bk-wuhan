@@ -102,66 +102,12 @@ public class EventModel extends EventEntity {
     }
 
     // 广播
-    public void boardcast() {
+    public void boardcast(Boolean isNotSend) {
         EventDTO eventDTO = new EventDTO(this);
 
-        if (eventDTO.getEquipmentId() != null && eventDTO.getEquipmentId() > 0) {
-            // 判断最近10分钟内是否存在相同的equpmentId的事件
-            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("equipment_id", eventDTO.getEquipmentId());
-            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
-            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
-            if (eventEntity != null) {
-                return;
-            }
+        if (!isNotSend) {
+            websocketService.sendTopicInfo(eventDTO);
         }
-
-        if (eventDTO.getEnvironmentId() != null && eventDTO.getEnvironmentId() > 0) {
-            // 判断最近10分钟内是否存在相同的environmentId的事件
-            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("environment_id", eventDTO.getEnvironmentId());
-            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
-            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
-            if (eventEntity != null) {
-                return;
-            }
-        }
-
-        if (eventDTO.getMaterialsId() != null && eventDTO.getMaterialsId() > 0) {
-            // 判断最近10分钟内是否存在相同的materialsId的事件
-            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("materials_id", eventDTO.getMaterialsId());
-            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
-            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
-            if (eventEntity != null) {
-                return;
-            }
-        }
-
-        if (eventDTO.getThresholdId() != null && eventDTO.getThresholdId() > 0) {
-            // 判断最近10分钟内是否存在相同的thresholdId的事件
-            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("threshold_id", eventDTO.getThresholdId());
-            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
-            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
-            if (eventEntity != null) {
-                return;
-            }
-        }
-
-        if (eventDTO.getCraftNodeId() != null && eventDTO.getCraftNodeId() > 0) {
-            // 判断最近10分钟内是否存在相同的craftNodeId的事件
-            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("craft_node_id", eventDTO.getCraftNodeId());
-            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
-            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
-            if (eventEntity != null) {
-                return;
-            }
-        }
-
-        websocketService.sendTopicInfo(eventDTO);
-
         AddNotificationCommand command = new AddNotificationCommand();
         if (eventDTO.getLevel() == null) {
             return;
@@ -222,8 +168,59 @@ public class EventModel extends EventEntity {
     }
 
     public boolean insert() {
+
+        Boolean isNotSend = false;
+        if (this.getEnvironmentId() != null && this.getEnvironmentId() > 0) {
+            // 判断最近10分钟内是否存在相同的environmentId的事件
+            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("environment_id", this.getEnvironmentId());
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+            if (eventEntity != null) {
+                isNotSend = true;
+            }
+        }
+
+        if (this.getMaterialsId() != null && this.getMaterialsId() > 0) {
+            // 判断最近10分钟内是否存在相同的materialsId的事件
+            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("materials_id", this.getMaterialsId());
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+            if (eventEntity != null) {
+                isNotSend = true;
+            }
+        }
+
+        if (this.getThresholdId() != null && this.getThresholdId() > 0) {
+            // 判断最近10分钟内是否存在相同的thresholdId的事件
+            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("threshold_id", this.getThresholdId());
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+            System.out.println("websocketService.sendTopicInfo(eventDTO)222222==================");
+            System.out.println("=========================aaa" + eventEntity);
+            if (eventEntity != null) {
+                System.out.println("thresholdId事件存在==================");
+                System.out.println(eventEntity.getDescription());
+                isNotSend = true;
+            }
+        }
+
+        if (this.getCraftNodeId() != null && this.getCraftNodeId() > 0) {
+            // 判断最近10分钟内是否存在相同的craftNodeId的事件
+            QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("craft_node_id", this.getCraftNodeId());
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+            if (eventEntity != null) {
+                isNotSend = true;
+            }
+        }
+
+        System.out.println("websocketService.sendTopicInfo(eventDTO)==================");
         super.insert();
-        boardcast();
+        boardcast(isNotSend);
         return true;
     }
 
