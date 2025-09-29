@@ -31,4 +31,9 @@ public interface SmAlarmMapper extends BaseMapper<SmAlarmEntity> {
             "ORDER BY d.dt;\n" + //
             "")
     List<PingGuJieGuoSeriesDTO> getBaoJingCiShuTongJiByRecentWeek();
+
+    @Select({
+            "SELECT COUNT(*) from manage_sm_alarm where DATE(create_time) = CURDATE()"
+    })
+    Integer getJinRiAlarmNum();
 }

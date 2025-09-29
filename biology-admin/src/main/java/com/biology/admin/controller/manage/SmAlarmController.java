@@ -83,4 +83,9 @@ public class SmAlarmController extends BaseController {
     public ResponseDTO<Long> getDayExceptionCount() {
         return ResponseDTO.ok(smAlarmApplicationService.getDayExceptionCount());
     }
+
+    @GetMapping("/getJinRiAlarmNum")
+    public ResponseDTO<Map<String, Object>> getJinRiAlarmNum() {
+        return ResponseDTO.ok(smAlarmApplicationService.getJinRiAlarmNum());
+    }
 }

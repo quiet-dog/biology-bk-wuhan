@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.manage.detection.command.AddDetectionCommand;
@@ -195,6 +196,7 @@ public class DetectionApplicationService {
     }
 
     public DareaResultDTO getTemperatureDataByAreaAndTimeSlot(String unitName, String beginTime, String endTime) {
+
         List<DareaDTO> temperatureData = detectionService.getTemperatureDataByAreaAndTimeSlot(unitName, beginTime,
                 endTime);
 
@@ -245,9 +247,41 @@ public class DetectionApplicationService {
         DareaResultDTO result = new DareaResultDTO();
         result.setXData(xData);
         result.setSeries(seriesList);
+
+        QueryWrapper<EnvironmentEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("unit_name", unitName);
+        queryWrapper.isNotNull("unit");
+        EnvironmentEntity environmentEntity = new EnvironmentEntity().selectOne(queryWrapper);
+        if (environmentEntity != null) {
+            result.setUnitName(environmentEntity.getUnit());
+        }
         return result;
         // return
         // temperatureData.stream().map(DareaDTO::new).collect(Collectors.toList());
     }
 
+    public Map<String, Object> getHistoryDataByEnvironmentId(String beginTime, Long environmentId) {
+
+        System.out.println("=====================================");
+        System.out.println(beginTime);
+        Map<String, Object> result = new HashMap<>();
+        List<DareaDTO> list = detectionService.getHistoryDataByEnvironmentId(beginTime, environmentId);
+        ArrayList<Double> yData = new ArrayList<>();
+        ArrayList<String> xData = new ArrayList<>();
+        for (DareaDTO d : list) {
+            xData.add(d.getTimeSlot());
+            yData.add(d.getAvgValue());
+        }
+        if (list == null || list.size() == 0) {
+            for (int i = 1; i <= 24; i++) {
+                xData.add(i + ":00");
+                yData.add(null);
+            }
+        }
+        result.put("xData", xData);
+        result.put("yData", yData);
+        result.put("e", environmentId);
+        result.put("a", beginTime);
+        return result;
+    }
 }

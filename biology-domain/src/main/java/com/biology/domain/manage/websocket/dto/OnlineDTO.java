@@ -25,4 +25,6 @@ public class OnlineDTO {
 
     @Schema(description = "环境数据")
     private double environmentData;
+
+    private Long time;
 }

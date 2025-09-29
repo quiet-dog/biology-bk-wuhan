@@ -67,4 +67,8 @@ public class XwAlarmServiceImpl extends ServiceImpl<XwAlarmMapper, XwAlarmEntity
     public List<PingGuJieGuoSeriesDTO> jiWeiQuShiBianHuaByDayAll() {
         return baseMapper.jiWeiQuShiBianHuaByDayAll();
     }
+
+    public Integer getJinRiBaoJingNum() {
+        return baseMapper.getJinRiBaoJingNum();
+    }
 }

@@ -80,7 +80,6 @@ public class XwAlarmController extends BaseController {
     @Operation(summary = "获取行为数据信息")
     @PostMapping("/receive")
     public ResponseDTO<Void> getXingWeiAlarm(@RequestBody XingWeiDTO xindian) {
-        System.out.println("xingwei===============" + xindian);
         xwAlarmApplicationService.getXingWeiAlarm(xindian);
         return ResponseDTO.ok();
     }
@@ -106,5 +105,10 @@ public class XwAlarmController extends BaseController {
     public ResponseDTO<Map<String, Object>> jiWeiQuShiBianHua(XwEchartQuery dayType) {
         return ResponseDTO
                 .ok(xwAlarmApplicationService.jiWeiQuShiBianHua(dayType.getDayType(), dayType.getSeatNumber()));
+    }
+
+    @GetMapping("/jinRiBaoJingNum")
+    public ResponseDTO<Map<String, Object>> jinRiBaoJingNum() {
+        return ResponseDTO.ok(xwAlarmApplicationService.jinRiBaoJingNum());
     }
 }

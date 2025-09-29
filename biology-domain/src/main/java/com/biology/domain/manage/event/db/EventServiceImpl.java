@@ -183,6 +183,14 @@ public class EventServiceImpl extends ServiceImpl<EventMapper, EventEntity> impl
         EnvironmentStockEchart eDto = new EnvironmentStockEchart();
         eDto.setDatas(new ArrayList<>());
         eDto.setUnitNames(new ArrayList<>());
+        List<String> unitNames = baseMapper.getEnvironmentUnitAll();
+        for (String unitName : unitNames) {
+            if (unitName.equals("电") || unitName.equals("水")) {
+                continue;
+            }
+            eDto.getUnitNames().add(unitName);
+            eDto.getDatas().add(0);
+        }
         List<EnvironmentStock> list = new ArrayList<>();
         if (query.getDayType().equals("week")) {
             // if (!query.getDescription().equals("") && query.getDescription().isEmpty()) {
@@ -204,8 +212,12 @@ public class EventServiceImpl extends ServiceImpl<EventMapper, EventEntity> impl
             // }
         }
         for (EnvironmentStock environmentStock : list) {
-            eDto.getUnitNames().add(environmentStock.getUnitName());
-            eDto.getDatas().add(environmentStock.getCount());
+            for (String unitName : eDto.getUnitNames()) {
+                if (unitName.equals(environmentStock.getUnitName())) {
+                    eDto.getDatas().set(eDto.getUnitNames().indexOf(unitName), environmentStock.getCount());
+                    break;
+                }
+            }
         }
         return eDto;
     }
@@ -402,53 +414,89 @@ public class EventServiceImpl extends ServiceImpl<EventMapper, EventEntity> impl
 
     public DareaResultDTO getAreaStatisticsByDate(String startTime, String endTime) {
         List<DareaDTO> temperatureData = baseMapper.getAreaStatisticsByDate(startTime, endTime);
-        System.out.println("======================");
-        System.out.println(startTime);
-        System.out.println(endTime);
-        System.out.println(temperatureData.size());
+        for (DareaDTO item : temperatureData) {
+            if (item.getArea() == null) {
+                item.setArea("未知");
+            }
+        }
+        // startTime 和endTime 是YYYY-MM-DD
         // 打印长度
         Set<String> timeSlotsSet = new TreeSet<>(); // 自动排序时间
         Set<String> areasSet = new HashSet<>();
         Map<String, Map<String, Double>> areaToTimeValueMap = new HashMap<>();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate start = LocalDate.parse(startTime, formatter);
+        LocalDate end = LocalDate.parse(endTime, formatter);
+        for (LocalDate date = start; date.compareTo(end) <= 0; date = date.plusDays(1)) {
+            timeSlotsSet.add(date.format(formatter));
+        }
+        List<SeriesDTO> seriesList = new ArrayList<>();
         // 分组数据
         for (DareaDTO item : temperatureData) {
             String area = item.getArea();
-            String timeSlot = item.getTimeSlot();
-            Double value = item.getAvgValue();
+            // String timeSlot = item.getTimeSlot();
+            // Double value = item.getAvgValue();
 
-            timeSlotsSet.add(timeSlot);
-            areasSet.add(area);
+            // areasSet.add(area);
 
-            areaToTimeValueMap
-                    .computeIfAbsent(area, k -> new HashMap<>())
-                    .put(timeSlot, value);
+            // areaToTimeValueMap
+            // .computeIfAbsent(area, k -> new HashMap<>())
+            // .put(timeSlot, value);
+
+            SeriesDTO s = new SeriesDTO();
+            s.setName(area);
+            s.setData(new ArrayList<>());
+            seriesList.add(s);
+        }
+
+        for (SeriesDTO s : seriesList) {
+            for (String timeSlot : timeSlotsSet) {
+                Boolean isExit = false;
+                for (DareaDTO item : temperatureData) {
+                    if (item.getArea().equals(s.getName()) && item.getTimeSlot().equals(timeSlot)) {
+                        isExit = true;
+                        s.getData().add(item.getAvgValue());
+                        break;
+                    }
+                }
+                if (!isExit) {
+                    s.getData().add(0.0);
+                }
+            }
         }
 
         // 转为列表
-        List<String> xData = new ArrayList<>(timeSlotsSet);
-        List<SeriesDTO> seriesList = new ArrayList<>();
+        // List<String> xData = new ArrayList<>(timeSlotsSet);
 
-        for (String area : areasSet) {
-            SeriesDTO seriesItem = new SeriesDTO();
-            seriesItem.setName(area);
+        // for (String area : areasSet) {
+        // SeriesDTO seriesItem = new SeriesDTO();
+        // seriesItem.setName(area);
 
-            List<Double> dataList = new ArrayList<>();
-            Map<String, Double> timeMap = areaToTimeValueMap.get(area);
+        // List<Double> dataList = new ArrayList<>();
+        // Map<String, Double> timeMap = areaToTimeValueMap.get(area);
 
-            for (String timeSlot : xData) {
-                dataList.add(timeMap.getOrDefault(timeSlot, null));
-            }
+        // for (String timeSlot : xData) {
+        // dataList.add(timeMap.getOrDefault(timeSlot, null));
+        // }
 
-            seriesItem.setData(dataList);
-            seriesList.add(seriesItem);
-        }
+        // seriesItem.setData(dataList);
+        // seriesList.add(seriesItem);
+        // }
 
         // 填充返回结构
         DareaResultDTO result = new DareaResultDTO();
-        result.setXData(xData);
+        // 将timeSlotsSet转换为List<String>
+        result.setXData(new ArrayList<>(timeSlotsSet));
         result.setSeries(seriesList);
         return result;
     }
 
+    public List<AllEventEchartDTO> getGongYiJieDianTodayAlarmCount() {
+        return baseMapper.getGongYiJieDianTodayAlarmCount();
+    }
+
+    public Integer getTodayAlarmCount() {
+        return baseMapper.getTodayAlarmCount();
+    }
 }

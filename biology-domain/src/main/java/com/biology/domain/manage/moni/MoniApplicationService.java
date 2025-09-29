@@ -202,6 +202,7 @@ public class MoniApplicationService {
         System.out.printf("发送数据为：%s \n", deviceDTO.toString());
         AddEventCommand command = new AddEventCommand();
         OnlineDTO oDto = new OnlineDTO();
+        oDto.setTime(System.currentTimeMillis());
         oDto.setIsOnline(true);
         oDto.setIsException(false);
         String redisId = new String();
@@ -296,6 +297,7 @@ public class MoniApplicationService {
                 System.out.printf(
                         "进入到设备档案获取阈值设置当中========================================================= \n");
                 redisId = "threshold-" + deviceDTO.getEquipmentInfo().getThresholdId();
+                oDto.setIsOnline(true);
                 oDto.setThresholdData(deviceDTO.getEquipmentInfo().getValue());
                 oDto.setThresholdId(deviceDTO.getEquipmentInfo().getThresholdId());
                 CacheCenter.onlineCache.set(redisId, oDto);
@@ -306,7 +308,6 @@ public class MoniApplicationService {
                     redisId = "equipment-" + deviceDTO.getEquipmentInfo().getEquipmentId();
                     Boolean isYiChang = false;
                     oDto.setEquipmentId(deviceDTO.getEquipmentInfo().getEquipmentId());
-                    //
                     if (l != null && l.size() > 0) {
                         for (Integer i = 0; i < l.size(); i++) {
                             String tid = "threshold-" + l.get(i).getThresholdId().toString();
@@ -421,7 +422,7 @@ public class MoniApplicationService {
     public String checkEnvironmentDescription(EnvironmentEntity environmentEntity,
             double value) {
         return String.format("位号为%s的%s-%s数值为%.2f,触发报警", environmentEntity.getTag(),
-                environmentEntity.getMonitoringPoint(), environmentEntity.getUnitName(), value);
+                environmentEntity.getDescription(), environmentEntity.getUnitName(), value);
     }
 
     public String checkEmergencyAlarmDescription(EquipmentEntity equipmentEntity, ThresholdEntity thresholdEntity,

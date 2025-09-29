@@ -33,10 +33,24 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         if (equipmentIds == null || equipmentIds.isEmpty()) {
             return new ArrayList<>();
         }
-        
+
         return baseMapper.selectList(
-            new QueryWrapper<EquipmentEntity>()
-                .in("equipment_id", equipmentIds)
-        );
+                new QueryWrapper<EquipmentEntity>()
+                        .in("equipment_id", equipmentIds));
+    }
+
+    @Override
+    public Long getAlarmCountByDay() {
+        return baseMapper.getAlarmCountByDay();
+    }
+
+    @Override
+    public Long getAlarmCountByMonth() {
+        return baseMapper.getAlarmCountByMonth();
+    }
+
+    @Override
+    public Long getAlarmCountByYear() {
+        return baseMapper.getAlarmCountByYear();
     }
 }

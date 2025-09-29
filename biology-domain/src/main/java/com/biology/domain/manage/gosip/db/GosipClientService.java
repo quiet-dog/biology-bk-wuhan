@@ -77,6 +77,7 @@ public class GosipClientService {
             for (int i = 0; i < 10; i++) {
                 ChannelDTO channelDTO = new ChannelDTO();
                 channelDTO.setName("test" + i);
+                channelDTO.setChannelid("123123123");
                 channaelListDTO.getList().add(channelDTO);
             }
             return channaelListDTO;

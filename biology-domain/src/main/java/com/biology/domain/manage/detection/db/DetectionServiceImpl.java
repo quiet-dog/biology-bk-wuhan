@@ -607,4 +607,10 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
     public List<DareaDTO> getTemperatureDataByAreaAndTimeSlot(String unitName, String beginTime, String endTime) {
         return baseMapper.getTemperatureDataByAreaAndTimeSlot(unitName, beginTime, endTime);
     }
+
+    public List<DareaDTO> getHistoryDataByEnvironmentId(
+            String beginTime,
+            Long environmentId) {
+        return baseMapper.getHistoryDataByEnvironmentId(beginTime, environmentId);
+    }
 }

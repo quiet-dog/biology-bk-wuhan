@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.knowledge.db.KnowledgeFileEntity;
 import com.biology.domain.manage.sop.command.AddSopCommand;
 import com.biology.domain.manage.sop.db.SopEntity;
@@ -80,7 +81,11 @@ public class SopModel extends SopEntity {
                 kt.setSopId(getSopId());
                 kts.add(kt);
             }
-            return sopFileService.saveBatch(kts);
+            sopFileService.saveBatch(kts);
+            CacheCenter.sopFileCache.set(getSopId(), kts);
+            return true;
+        } else {
+            CacheCenter.sopFileCache.delete(getSopId());
         }
         return true;
     }
@@ -91,6 +96,7 @@ public class SopModel extends SopEntity {
 
     public boolean insert() {
         super.insert();
+        CacheCenter.sopCache.set(getSopId(), this);
         // addEquipmentIds();
         return saveFile();
     }
@@ -98,8 +104,16 @@ public class SopModel extends SopEntity {
     public boolean updateById() {
         cleanFile();
         saveFile();
+        super.updateById();
+        CacheCenter.sopCache.set(getSopId(), this);
         // cleanEquipmentIds();
         // addEquipmentIds();
-        return super.updateById();
+        return true;
+    }
+
+    public boolean deleteById() {
+        CacheCenter.sopCache.delete(getSopId());
+        CacheCenter.sopFileCache.delete(getSopId());
+        return super.deleteById();
     }
 }

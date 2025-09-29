@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -496,4 +498,27 @@ public class EventApplicationService {
     public DareaResultDTO getAreaStatisticsByDate(String startTime, String endTime) {
         return eventService.getAreaStatisticsByDate(startTime, endTime);
     }
+
+    // 统计工艺节点今日报警数量
+    public Map<String, Integer> getGongYiJieDianTodayAlarmCount() {
+        Map<String, Integer> result = new HashMap<>();
+        List<AllEventEchartDTO> list = eventService.getGongYiJieDianTodayAlarmCount();
+        result.put("轻微", 0);
+        result.put("一般", 0);
+        result.put("中度", 0);
+        result.put("重要", 0);
+        result.put("紧急", 0);
+        for (AllEventEchartDTO allEventEchartDTO : list) {
+            result.put(allEventEchartDTO.getName(), allEventEchartDTO.getValue());
+        }
+        return result;
+    }
+
+    public Map<String, Object> getTodatAlarmCount() {
+        Map<String, Object> result = new HashMap<>();
+        Integer num = eventService.getTodayAlarmCount();
+        result.put("num", num);
+        return result;
+    }
+
 }

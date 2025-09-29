@@ -17,6 +17,7 @@ import com.biology.domain.manage.emergency.db.EmergencyFileEntity;
 import com.biology.domain.manage.emergency.dto.EmergencyDTO;
 import com.biology.domain.manage.equipment.db.EquipmentEntity;
 import com.biology.domain.manage.equipment.dto.EquipmentDTO;
+import com.biology.domain.manage.equipment.dto.EquipmentDetailDTO;
 import com.biology.domain.manage.sop.db.SopEntity;
 import com.biology.domain.manage.sop.db.SopFileEntity;
 import com.biology.domain.manage.sop.dto.SopDTO;
@@ -83,6 +84,8 @@ public class ThresholdDTO {
     @ExcelColumn(name = "值")
     private Object value;
 
+    private String valueStyle;
+
     @Schema(description = "创建时间")
     private Date createTime;
 
@@ -110,74 +113,84 @@ public class ThresholdDTO {
     }
 
     public void insertEmergency() {
-        // if (emergencys == null) {
-        // emergencys = new ArrayList<>();
-        // }
-        // ThresholdEmergencyEntity thresholdEmergencyEntityDB = new
-        // ThresholdEmergencyEntity();
+
         // QueryWrapper<ThresholdEmergencyEntity> queryWrapper = new QueryWrapper<>();
         // queryWrapper.eq("threshold_id", getThresholdId());
-        // List<ThresholdEmergencyEntity> thresholdEmergencyEntities =
-        // thresholdEmergencyEntityDB.selectList(queryWrapper);
+        // List<ThresholdEmergencyEntity> thresholdEmergencyEntities = new
+        // ThresholdEmergencyEntity()
+        // .selectList(queryWrapper);
+        // if (thresholdEmergencyEntities != null && thresholdEmergencyEntities.size() >
+        // 0) {
+        // emergencys = new ArrayList<>();
+        // emergencyPaths = new ArrayList<>();
         // for (ThresholdEmergencyEntity thresholdEmergencyEntity :
         // thresholdEmergencyEntities) {
-        // EmergencyEntity emergencyEntity = new EmergencyEntity();
-        // emergencyEntity =
-        // emergencyEntity.selectById(thresholdEmergencyEntity.getEmergencyId());
-        // emergencys.add(new EmergencyDTO(emergencyEntity));
+        // emergencys.add(thresholdEmergencyEntity.getEmergencyId());
         // }
-        // emergencys = CacheCenter.thrsholdEmergencyCache.getObjectById(thresholdId);
-        QueryWrapper<ThresholdEmergencyEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("threshold_id", getThresholdId());
-        List<ThresholdEmergencyEntity> thresholdEmergencyEntities = new ThresholdEmergencyEntity()
-                .selectList(queryWrapper);
+        // if (emergencys != null && emergencys.size() > 0) {
+        // new EmergencyFileEntity()
+        // .selectList(new QueryWrapper<EmergencyFileEntity>().in("emergency_id",
+        // emergencys))
+        // .forEach(emergencyFileEntity -> {
+        // emergencyPaths.add(emergencyFileEntity.getPath());
+        // });
+        // }
+        // }
+
+        emergencys = new ArrayList<>();
+        emergencyPaths = new ArrayList<>();
+        List<ThresholdEmergencyEntity> thresholdEmergencyEntities = CacheCenter.thresholdEmergencyCache
+                .getObjectById(getThresholdId());
         if (thresholdEmergencyEntities != null && thresholdEmergencyEntities.size() > 0) {
-            emergencys = new ArrayList<>();
-            emergencyPaths = new ArrayList<>();
             for (ThresholdEmergencyEntity thresholdEmergencyEntity : thresholdEmergencyEntities) {
                 emergencys.add(thresholdEmergencyEntity.getEmergencyId());
-            }
-            if (emergencys != null && emergencys.size() > 0) {
-                new EmergencyFileEntity()
-                        .selectList(new QueryWrapper<EmergencyFileEntity>().in("emergency_id", emergencys))
-                        .forEach(emergencyFileEntity -> {
-                            emergencyPaths.add(emergencyFileEntity.getPath());
-                        });
+                List<EmergencyFileEntity> emergencyFileEntities = CacheCenter.emergencyFileCache
+                        .getObjectById(thresholdEmergencyEntity.getEmergencyId());
+                if (emergencyFileEntities != null && emergencyFileEntities.size() > 0) {
+                    for (EmergencyFileEntity emergencyFileEntity : emergencyFileEntities) {
+                        emergencyPaths.add(emergencyFileEntity.getPath());
+                    }
+                }
             }
         }
     }
 
     public void insertSop() {
-        // sops = CacheCenter.thrsholdSopCache.getObjectById(thresholdId);
-        // if (sops == null) {
-        // sops = new ArrayList<>();
-        // }
-        // ThresholdSopEntity thresholdSopEntityDB = new ThresholdSopEntity();
         // QueryWrapper<ThresholdSopEntity> queryWrapper = new QueryWrapper<>();
         // queryWrapper.eq("threshold_id", getThresholdId());
-        // List<ThresholdSopEntity> thresholdSopEntities =
-        // thresholdSopEntityDB.selectList(queryWrapper);
+        // List<ThresholdSopEntity> thresholdSopEntities = new
+        // ThresholdSopEntity().selectList(queryWrapper);
+        // if (thresholdSopEntities != null && thresholdSopEntities.size() > 0) {
+        // sops = new ArrayList<>();
+        // sopPaths = new ArrayList<>();
         // for (ThresholdSopEntity thresholdSopEntity : thresholdSopEntities) {
-        // SopEntity sopEntity = new SopEntity();
-        // sopEntity = sopEntity.selectById(thresholdSopEntity.getSopId());
-        // sops.add(new SopDTO(sopEntity));
+        // sops.add(thresholdSopEntity.getSopId());
         // }
-        QueryWrapper<ThresholdSopEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("threshold_id", getThresholdId());
-        List<ThresholdSopEntity> thresholdSopEntities = new ThresholdSopEntity().selectList(queryWrapper);
+        // if (sops != null && sops.size() > 0) {
+        // new SopFileEntity().selectList(new QueryWrapper<SopFileEntity>().in("sop_id",
+        // sops))
+        // .forEach(sopEntity -> {
+        // sopPaths.add(sopEntity.getPath());
+        // });
+        // }
+        // }
+
+        sops = new ArrayList<>();
+        sopPaths = new ArrayList<>();
+        List<ThresholdSopEntity> thresholdSopEntities = CacheCenter.thresholdSopCache.getObjectById(getThresholdId());
         if (thresholdSopEntities != null && thresholdSopEntities.size() > 0) {
-            sops = new ArrayList<>();
-            sopPaths = new ArrayList<>();
             for (ThresholdSopEntity thresholdSopEntity : thresholdSopEntities) {
                 sops.add(thresholdSopEntity.getSopId());
-            }
-            if (sops != null && sops.size() > 0) {
-                new SopFileEntity().selectList(new QueryWrapper<SopFileEntity>().in("sop_id", sops))
-                        .forEach(sopEntity -> {
-                            sopPaths.add(sopEntity.getPath());
-                        });
+                List<SopFileEntity> sopFileEntities = CacheCenter.sopFileCache
+                        .getObjectById(thresholdSopEntity.getSopId());
+                if (sopFileEntities != null && sopFileEntities.size() > 0) {
+                    for (SopFileEntity sopFileEntity : sopFileEntities) {
+                        sopPaths.add(sopFileEntity.getPath());
+                    }
+                }
             }
         }
+
     }
 
     public void insertValue() {
@@ -187,9 +200,29 @@ public class ThresholdDTO {
             if (onlineDTO != null) {
                 setValue(onlineDTO.getThresholdData());
             } else {
-                setValue("-");
+                setValue("暂无数据");
             }
         }
     }
 
+    public void insertValueStyle() {
+        if (getValue() != null && getValue() instanceof Double) {
+
+            Double dV = Double.parseDouble(getValue().toString());
+
+            List<ThresholdValueEntity> thresholdValueEntities = CacheCenter.thresholdValuesCache
+                    .getObjectById(getThresholdId());
+            if (thresholdValueEntities != null && thresholdValueEntities.size() > 0) {
+                for (ThresholdValueEntity thresholdValueEntity : thresholdValueEntities) {
+                    if (dV >= thresholdValueEntity.getMin() && dV <= thresholdValueEntity.getMax()) {
+                        // setValueStyle(thresholdValueEntity.getLevel());
+                        EquipmentDetailDTO equipmentDetailDTO = new EquipmentDetailDTO(null);
+                        setValueStyle(equipmentDetailDTO.CheckThresholdValue(thresholdValueEntities, dV));
+                        break;
+                    }
+                }
+            }
+        }
+
+    }
 }

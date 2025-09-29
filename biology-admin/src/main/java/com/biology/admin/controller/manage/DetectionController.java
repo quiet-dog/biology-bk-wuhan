@@ -3,6 +3,7 @@ package com.biology.admin.controller.manage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +15,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.bouncycastle.asn1.ocsp.ResponseData;
+import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -300,4 +302,11 @@ public class DetectionController extends BaseController {
         return ResponseDTO.ok(detectionApplicationService.getTemperatureDataByAreaAndTimeSlot(query.getUnitName(),
                 query.getBeginTime(), query.getEndTime()));
     }
+
+    @GetMapping("/getHistoryDataByEnvironmentId")
+    public ResponseDTO<Map<String, Object>> getHistoryDataByEnvironmentId(@Param("beginTime") String beginTime,
+            @Param("environmentId") Long environmentId) {
+        return ResponseDTO.ok(detectionApplicationService.getHistoryDataByEnvironmentId(beginTime, environmentId));
+    }
+
 }

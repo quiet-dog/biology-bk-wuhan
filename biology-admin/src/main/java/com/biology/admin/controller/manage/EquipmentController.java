@@ -18,6 +18,7 @@ import com.biology.domain.manage.equipment.command.ExcelEquipmentCommand;
 import com.biology.domain.manage.equipment.command.ExcelEquipmentMaintenanceManualCommand;
 import com.biology.domain.manage.equipment.command.UpdateEquipmentCommand;
 import com.biology.domain.manage.equipment.dto.EquipmentDTO;
+import com.biology.domain.manage.equipment.dto.EquipmentDetailDTO;
 import com.biology.domain.manage.equipment.model.EquipmentModel;
 import com.biology.domain.manage.equipment.query.SearchEquipmentQuery;
 import com.biology.domain.manage.event.dto.EventDTO;
@@ -76,6 +77,13 @@ public class EquipmentController extends BaseController {
     @GetMapping
     public ResponseDTO<PageDTO<EquipmentDTO>> list(SearchEquipmentQuery query) {
         PageDTO<EquipmentDTO> list = equipmentApplicationService.getEquipmentList(query);
+        return ResponseDTO.ok(list);
+    }
+
+    @Operation(summary = "获取设备档案列表")
+    @GetMapping("/detail")
+    public ResponseDTO<PageDTO<EquipmentDetailDTO>> detailList(SearchEquipmentQuery query) {
+        PageDTO<EquipmentDetailDTO> list = equipmentApplicationService.getEquipmentDetailList(query);
         return ResponseDTO.ok(list);
     }
 
@@ -158,5 +166,12 @@ public class EquipmentController extends BaseController {
     public void exportUserByExcel(HttpServletResponse response, SearchEquipmentQuery query) {
         PageDTO<EquipmentDTO> userList = equipmentApplicationService.getEquipmentList(query);
         CustomExcelUtil.writeToResponse(userList.getRows(), EquipmentDTO.class, response);
+    }
+
+    @Operation(summary = "获取设备档案报警统计")
+    @GetMapping("/alarmCount")
+    public ResponseDTO<Long> getAlarmCount(@RequestParam String dayType) {
+        Long alarmCount = equipmentApplicationService.getAlarmCount(dayType);
+        return ResponseDTO.ok(alarmCount);
     }
 }

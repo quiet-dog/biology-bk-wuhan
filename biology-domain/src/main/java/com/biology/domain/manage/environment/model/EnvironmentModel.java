@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.alarmlevel.command.AlarmDetail;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailEntity;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailService;
@@ -96,6 +97,7 @@ public class EnvironmentModel extends EnvironmentEntity {
                 alarmlevelDetails.add(alarmlevelDetailEntity);
             }
             alarmlevelDetailService.saveBatch(alarmlevelDetails);
+            CacheCenter.alarmlevelDetailCache.set(getEnvironmentId(), alarmlevelDetails);
             SendEnvironmentDTO sDto = new SendEnvironmentDTO();
             sDto.setValues(alarmlevelDetails);
             sDto.setEnvironment(this);
@@ -139,6 +141,7 @@ public class EnvironmentModel extends EnvironmentEntity {
                 environmentEmergencyEntities.add(entity);
             }
             environmentEmergencyService.saveBatch(environmentEmergencyEntities);
+            CacheCenter.environmentEmergencyCache.set(getEnvironmentId(), environmentEmergencyEntities);
         }
     }
 

@@ -10,20 +10,20 @@ import com.biology.domain.manage.environment.query.DayStatisticsQuery;
 
 public interface EnvironmentMapper extends BaseMapper<EnvironmentEntity> {
 
-        @Select("SELECT unit,DATE_FORMAT(create_time, '%H:%i:%s') AS data_time,value FROM manage_environment WHERE environment_id = #{environmentId}"
+        @Select("SELECT unit,DATE_FORMAT(create_time, '%H:%i:%s') AS data_time,value FROM manage_environment WHERE environment_id = #{environmentId} and deleted = 0"
                         + " GROUP BY unit,data_time"
                         + " ORDER BY unit,data_time")
         public List<EnvironmentStatisticsDTO> getDayStatistics(Long environmentId);
 
-        @Select("SELECT e_area FROM manage_environment"
+        @Select("SELECT e_area FROM manage_environment where deleted = 0"
                         + " GROUP BY e_area")
         public List<String> getAllArea();
 
-        @Select("SELECT description FROM manage_environment"
+        @Select("SELECT description FROM manage_environment where deleted = 0"
                         + " GROUP BY description")
         public List<String> getAllDes();
 
-        @Select("SELECT unit_name FROM manage_environment"
+        @Select("SELECT unit_name FROM manage_environment where deleted = 0"
                         + " GROUP BY unit_name")
         public List<String> getAllUnitName();
 

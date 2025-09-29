@@ -99,6 +99,7 @@ public class ThresholdModel extends ThresholdEntity {
             emergencyEntities.add(emergencyEntity);
         }
         thresholdEmergencyService.saveBatch(emergencyEntities);
+        CacheCenter.thresholdEmergencyCache.set(getThresholdId(), emergencyEntities);
     }
 
     public void cleanEmergencys() {
@@ -119,6 +120,7 @@ public class ThresholdModel extends ThresholdEntity {
             sopEntities.add(sopEntity);
         }
         thresholdSopService.saveBatch(sopEntities);
+        CacheCenter.thresholdSopCache.set(getThresholdId(), sopEntities);
     }
 
     public void cleanSops() {
@@ -157,6 +159,7 @@ public class ThresholdModel extends ThresholdEntity {
 
     public boolean insert() {
         super.insert();
+        CacheCenter.thresholdCache.set(getThresholdId(), this);
         addEmergencys();
         addSops();
         addValues();
@@ -165,6 +168,7 @@ public class ThresholdModel extends ThresholdEntity {
 
     public boolean updateById() {
         super.updateById();
+        CacheCenter.thresholdCache.set(getThresholdId(), this);
         cleanEmergencys();
         cleanSops();
         addEmergencys();

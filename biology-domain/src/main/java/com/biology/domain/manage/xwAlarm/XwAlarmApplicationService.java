@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.common.cache.CacheCenter;
@@ -163,6 +164,13 @@ public class XwAlarmApplicationService {
         result.put("xData", xData);
         result.put("sData", sData);
 
+        return result;
+    }
+
+    public Map<String, Object> jinRiBaoJingNum() {
+        Map<String, Object> result = new HashMap<>();
+        Integer num = xwAlarmService.getJinRiBaoJingNum();
+        result.put("num", num);
         return result;
     }
 }

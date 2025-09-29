@@ -3,6 +3,7 @@ package com.biology.admin.controller.manage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -389,5 +390,16 @@ public class EventController extends BaseController {
     public ResponseDTO<DareaResultDTO> getAreaStatisticsByDate(@RequestBody AllAreaDTO query) {
         return ResponseDTO
                 .ok(eventApplicationService.getAreaStatisticsByDate(query.getBeginTime(), query.getEndTime()));
+    }
+
+    @Operation(summary = "数据大屏根据获取不同类型的全部报警数量")
+    @GetMapping("/getGongYiJieDianTodayAlarmCount")
+    public ResponseDTO<Map<String, Integer>> getGongYiJieDianTodayAlarmCount() {
+        return ResponseDTO.ok(eventApplicationService.getGongYiJieDianTodayAlarmCount());
+    }
+
+    @GetMapping("/getTodayAlarmCount")
+    public ResponseDTO<Map<String, Object>> getTodatAlarmCount() {
+        return ResponseDTO.ok(eventApplicationService.getTodatAlarmCount());
     }
 }

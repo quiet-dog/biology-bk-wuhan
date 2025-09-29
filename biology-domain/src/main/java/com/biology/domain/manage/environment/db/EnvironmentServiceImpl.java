@@ -23,7 +23,7 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
 
         public EnvironmentTypesDTO getAllGroup() {
                 EnvironmentTypesDTO result = new EnvironmentTypesDTO();
-                result.setArea(baseMapper.getAllDes());
+                result.setArea(baseMapper.getAllArea());
                 result.setUnitName(baseMapper.getAllUnitName());
                 return result;
         }

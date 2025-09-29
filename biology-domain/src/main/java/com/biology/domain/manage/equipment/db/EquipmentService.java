@@ -17,4 +17,10 @@ public interface EquipmentService extends IService<EquipmentEntity> {
 
     EquipmentEntity getByEquipmentCode(String equipmentCode);
 
+    Long getAlarmCountByDay();
+
+    Long getAlarmCountByMonth();
+
+    Long getAlarmCountByYear();
+
 }

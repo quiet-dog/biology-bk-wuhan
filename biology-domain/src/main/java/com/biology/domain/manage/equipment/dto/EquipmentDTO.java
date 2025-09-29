@@ -77,6 +77,7 @@ public class EquipmentDTO {
             queryWrapper.eq("equipment_id", getEquipmentId());
             List<ThresholdEntity> thresholdEntities = new ThresholdEntity().selectList(queryWrapper);
             thresholdList = thresholdEntities;
+
         }
     }
 }

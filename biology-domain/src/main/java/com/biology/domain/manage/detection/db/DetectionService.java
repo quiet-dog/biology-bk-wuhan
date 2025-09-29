@@ -59,4 +59,7 @@ public interface DetectionService extends IService<DetectionEntity> {
 
     public List<DareaDTO> getTemperatureDataByAreaAndTimeSlot(String unitName, String beginTime, String endTime);
 
+    public List<DareaDTO> getHistoryDataByEnvironmentId(
+            String beginTime,
+            Long environmentId);
 }

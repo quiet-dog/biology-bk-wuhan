@@ -160,7 +160,7 @@ public interface EventMapper extends BaseMapper<EventEntity> {
 
         @Select("SELECT n.unit_name,COUNT(*) as count FROM manage_event e JOIN manage_environment n on n.environment_id = e.environment_id"
                         + " WHERE e.create_time >= CURDATE() - INTERVAL 6 DAY AND e.create_time < CURDATE() + INTERVAL 1 DAY"
-                        + " AND e.deleted = 0 AND n.deleted = 0"
+                        + " AND e.deleted = 0 AND n.deleted = 0 AND n.unit_name != '电' AND n.unit_name != '水'"
                         + " GROUP BY n.unit_name")
         public List<EnvironmentStock> getEnvrionmentEventAllWeek();
 
@@ -175,6 +175,7 @@ public interface EventMapper extends BaseMapper<EventEntity> {
 
         @Select("SELECT n.unit_name,COUNT(*) as count FROM manage_event e JOIN manage_environment n on n.environment_id = e.environment_id"
                         + " WHERE e.create_time >= CURDATE() - INTERVAL 1 MONTH AND e.create_time <= NOW()"
+                        + " AND n.unit_name != '电' AND n.unit_name != '水' AND n.deleted = 0"
                         + " GROUP BY n.unit_name")
         public List<EnvironmentStock> getEnvrionmentEventAllMonth();
 
@@ -189,6 +190,7 @@ public interface EventMapper extends BaseMapper<EventEntity> {
 
         @Select("SELECT n.unit_name,COUNT(*) as count FROM manage_event e JOIN manage_environment n on n.environment_id = e.environment_id"
                         + " WHERE  e.create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
+                        + " AND n.unit_name != '电' AND n.unit_name != '水' AND n.deleted = 0"
                         + " GROUP BY n.unit_name")
         public List<EnvironmentStock> getEnvrionmentEventAllYear();
 
@@ -269,4 +271,10 @@ public interface EventMapper extends BaseMapper<EventEntity> {
 
         @Select("SELECT installation_location as name, COUNT(*) as value from manage_equipment where equipment_id in (select equipment_id from manage_craft_node_equipment where craft_node_id in (select craft_node_id from manage_event where craft_node_id is not null)) group by installation_location")
         List<AllEventEchartDTO> getGongYiJieDianAreaEchart();
+
+        @Select("SELECT level as name, COUNT(*) as value from manage_event where type = '工艺节点报警' and DATE(create_time) = CURDATE() group by level")
+        List<AllEventEchartDTO> getGongYiJieDianTodayAlarmCount();
+
+        @Select("SELECT unit_name from manage_environment where deleted = 0 group by unit_name")
+        List<String> getEnvironmentUnitAll();
 }

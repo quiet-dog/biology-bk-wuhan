@@ -8,4 +8,5 @@ import lombok.Data;
 public class DareaResultDTO {
     private List<String> xData;
     private List<SeriesDTO> series;
+    private String unitName;
 }

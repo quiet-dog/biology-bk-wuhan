@@ -1,6 +1,7 @@
 package com.biology.domain.manage.event.db;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -48,4 +49,8 @@ public interface EventService extends IService<EventEntity> {
     public List<AllEventEchartDTO> getGongYiJieDianAreaEchart();
 
     public DareaResultDTO getAreaStatisticsByDate(String startTime, String endTime);
+
+    public List<AllEventEchartDTO> getGongYiJieDianTodayAlarmCount();
+
+    public Integer getTodayAlarmCount();
 }

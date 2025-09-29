@@ -33,4 +33,6 @@ public interface XwAlarmService extends IService<XwAlarmEntity> {
 
     public List<PingGuJieGuoSeriesDTO> jiWeiQuShiBianHuaByYearAll();
 
+    public Integer getJinRiBaoJingNum();
+
 }

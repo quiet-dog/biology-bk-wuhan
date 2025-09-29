@@ -119,4 +119,11 @@ public class SmAlarmApplicationService {
                 .isNotNull("type").groupBy("device_sn");
         return smAlarmService.count(queryWrapper);
     }
+
+    public Map<String, Object> getJinRiAlarmNum() {
+        Map<String, Object> result = new HashMap<>();
+        Integer num = smAlarmService.getJinRiAlarmNum();
+        result.put("num", num);
+        return result;
+    }
 }

@@ -18,4 +18,8 @@ public class SmAlarmServiceImpl extends ServiceImpl<SmAlarmMapper, SmAlarmEntity
     public List<PingGuJieGuoSeriesDTO> getBaoJingCiShuTongJiByRecentWeek() {
         return baseMapper.getBaoJingCiShuTongJiByRecentWeek();
     }
+
+    public Integer getJinRiAlarmNum() {
+        return baseMapper.getJinRiAlarmNum();
+    }
 }

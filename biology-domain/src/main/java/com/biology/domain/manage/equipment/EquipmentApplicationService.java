@@ -16,6 +16,7 @@ import com.biology.domain.manage.equipment.command.UpdateEquipmentCommand;
 import com.biology.domain.manage.equipment.db.EquipmentEntity;
 import com.biology.domain.manage.equipment.db.EquipmentService;
 import com.biology.domain.manage.equipment.dto.EquipmentDTO;
+import com.biology.domain.manage.equipment.dto.EquipmentDetailDTO;
 import com.biology.domain.manage.equipment.model.EquipmentFactory;
 import com.biology.domain.manage.equipment.model.EquipmentModel;
 import com.biology.domain.manage.equipment.query.SearchEquipmentQuery;
@@ -71,6 +72,28 @@ public class EquipmentApplicationService {
     public EquipmentDTO getEquipmentInfo(Long equipmentId) {
         EquipmentModel equipmentModel = equipmentFactory.loadById(equipmentId);
         return new EquipmentDTO(equipmentModel);
+    }
+
+    public PageDTO<EquipmentDetailDTO> getEquipmentDetailList(SearchEquipmentQuery query) {
+        if (CollectionUtil.isNotEmpty(query.getIds())) {
+            query.setPageNum(1);
+            query.setPageSize(query.getIds().size());
+        }
+        Page<EquipmentEntity> page = equipmentService.page(query.toPage(), query.toQueryWrapper());
+        List<EquipmentDetailDTO> records = page.getRecords().stream().map(EquipmentDetailDTO::new)
+                .collect(Collectors.toList());
+        return new PageDTO<>(records, page.getTotal());
+    }
+
+    public Long getAlarmCount(String dayType) {
+        if ("day".equals(dayType)) {
+            return equipmentService.getAlarmCountByDay();
+        } else if ("month".equals(dayType)) {
+            return equipmentService.getAlarmCountByMonth();
+        } else if ("year".equals(dayType)) {
+            return equipmentService.getAlarmCountByYear();
+        }
+        return 0L;
     }
 
     // public EquipmentDTO getOnlineDevice() {

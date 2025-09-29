@@ -4,14 +4,23 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.biology.infrastructure.cache.guava.AbstractGuavaCacheTemplate;
 import com.biology.infrastructure.cache.redis.RedisCacheTemplate;
 import com.biology.infrastructure.user.web.SystemLoginUser;
+import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailEntity;
 import com.biology.domain.manage.caiYangData.dto.CaiYangFunDTO;
 import com.biology.domain.manage.emergency.db.EmergencyEntity;
+import com.biology.domain.manage.emergency.db.EmergencyFileEntity;
 import com.biology.domain.manage.emergency.dto.EmergencyDTO;
+import com.biology.domain.manage.environment.db.EnvironmentEmergencyEntity;
+import com.biology.domain.manage.environment.db.EnvironmentSopEntity;
 import com.biology.domain.manage.knowledge.db.KnowledgeTypeEntity;
 import com.biology.domain.manage.nongDuData.command.NongDuDTO;
 import com.biology.domain.manage.smData.dto.SmDataDTO;
+import com.biology.domain.manage.sop.db.SopEntity;
+import com.biology.domain.manage.sop.db.SopFileEntity;
 import com.biology.domain.manage.sop.dto.SopDTO;
 import com.biology.domain.manage.task.dto.SmOnlineDataDTO;
+import com.biology.domain.manage.threshold.db.ThresholdEmergencyEntity;
+import com.biology.domain.manage.threshold.db.ThresholdEntity;
+import com.biology.domain.manage.threshold.db.ThresholdSopEntity;
 import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
 import com.biology.domain.manage.xsData.command.XsDataFun1DTO;
@@ -52,13 +61,33 @@ public class CacheCenter {
 
     public static RedisCacheTemplate<KnowledgeTypeEntity> knowledgeTypeCache;
 
+    public static RedisCacheTemplate<List<AlarmlevelDetailEntity>> alarmlevelDetailCache;
+
+    public static RedisCacheTemplate<List<EnvironmentEmergencyEntity>> environmentEmergencyCache;
+
+    public static RedisCacheTemplate<List<ThresholdEmergencyEntity>> thresholdEmergencyCache;
+
+    public static RedisCacheTemplate<List<EmergencyFileEntity>> emergencyFileCache;
+
+    public static RedisCacheTemplate<List<EnvironmentSopEntity>> environmentSopCache;
+
+    public static RedisCacheTemplate<List<ThresholdSopEntity>> thresholdSopCache;
+
+    public static RedisCacheTemplate<SopEntity> sopCache;
+
+    public static RedisCacheTemplate<List<SopFileEntity>> sopFileCache;
+
+    public static RedisCacheTemplate<EmergencyEntity> emergencyCache;
+
     public static RedisCacheTemplate<OnlineDTO> onlineCache;
 
     public static RedisCacheTemplate<List<ThresholdValueEntity>> thresholdValuesCache;
 
     public static RedisCacheTemplate<List<EmergencyDTO>> thrsholdEmergencyCache;
 
-    public static RedisCacheTemplate<List<SopDTO>> thrsholdSopCache;
+    // public static RedisCacheTemplate<List<SopDTO>> thrsholdSopCache;
+
+    public static RedisCacheTemplate<ThresholdEntity> thresholdCache;
 
     public static RedisCacheTemplate<SmOnlineDataDTO> smDeviceOnlineCache;
 
@@ -91,6 +120,16 @@ public class CacheCenter {
         xsDataFun1Cache = redisCache.xsDataFun1Cache;
         caiYangFunCache = redisCache.caiYangFunCache;
         jianCeDataCache = redisCache.jianCeDataCache;
+        alarmlevelDetailCache = redisCache.alarmlevelDetailCache;
+        environmentEmergencyCache = redisCache.environmentEmergencyCache;
+        emergencyCache = redisCache.emergencyCache;
+        thresholdCache = redisCache.thresholdCache;
+        thresholdEmergencyCache = redisCache.thresholdEmergencyCache;
+        emergencyFileCache = redisCache.emergencyFileCache;
+        thresholdSopCache = redisCache.thresholdSopCache;
+        sopCache = redisCache.sopCache;
+        sopFileCache = redisCache.sopFileCache;
+        environmentSopCache = redisCache.environmentSopCache;
         // thrsholdEmergencyCache = redisCache.thrsholdEmergencyCache;
         // thrsholdSopCache = redisCache.thrsholdSopCache;
     }

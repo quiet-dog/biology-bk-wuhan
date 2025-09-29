@@ -171,4 +171,9 @@ public interface XwAlarmMapper extends BaseMapper<XwAlarmEntity> {
                         "ORDER BY m.month_num;")
         List<PingGuJieGuoSeriesDTO> jiWeiQuShiBianHuaByYearAll();
 
+        @Select({
+                        "Select count(*) from manage_xw_alarm where DATE(create_time) = CURDATE()"
+        })
+        Integer getJinRiBaoJingNum();
+
 }

@@ -216,7 +216,7 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE d.create_time >= CURDATE() - INTERVAL 6 DAY AND d.create_time < CURDATE() + INTERVAL 1 DAY"
                         + " AND e.unit_name = #{unitName}"
-                        + " AND e.description = #{area}"
+                        + " AND e.e_area = #{area}"
                         + " GROUP BY DATE_FORMAT(d.create_time, '%Y-%m-%d')"
                         + " ORDER BY DATE_FORMAT(d.create_time, '%Y-%m-%d')")
         public List<PowerDTO> getAareUnitNameHistoryWeek(@Param("unitName") String unitName,
@@ -226,7 +226,7 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE d.create_time >= CURDATE() - INTERVAL 1 MONTH AND d.create_time <= NOW()"
                         + " AND e.unit_name = #{unitName}"
-                        + " AND e.description = #{area}"
+                        + " AND e.e_area = #{area}"
                         + " GROUP BY DATE_FORMAT(d.create_time, '%Y-%m-%d')"
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
         public List<PowerDTO> getAareUnitNameHistoryMonth(@Param("unitName") String unitName,
@@ -236,7 +236,7 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE YEAR(d.create_time) = YEAR(CURDATE())"
                         + " AND e.unit_name = #{unitName}"
-                        + " AND e.description = #{area}"
+                        + " AND e.e_area = #{area}"
                         + " GROUP BY DATE_FORMAT(d.create_time, '%m')"
                         + " ORDER BY DATE_FORMAT(d.create_time, '%m')")
         public List<PowerDTO> getAareUnitNameHistoryYear(@Param("unitName") String unitName,
@@ -387,4 +387,29 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
         public List<DareaDTO> getTemperatureDataByAreaAndTimeSlot(@Param("unitName") String unitName,
                         @Param("beginTime") String beginTime,
                         @Param("endTime") String endTime);
+
+        @Select({
+                        "WITH hours AS (",
+                        "    SELECT 0 AS h UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3",
+                        "    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7",
+                        "    UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11",
+                        "    UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15",
+                        "    UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19",
+                        "    UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23",
+                        ")",
+                        "SELECT",
+                        "    CONCAT(LPAD(h.h,2,'0'), ':00') AS time_slot,",
+                        // " ROUND(COALESCE(AVG(e.value), 0), 2) AS avg_value",
+                        "    ROUND(AVG(e.value), 2) AS avg_value",
+                        "FROM hours h",
+                        "LEFT JOIN manage_environment_detection e",
+                        "    ON HOUR(e.create_time) = h.h",
+                        "   AND DATE(e.create_time) = #{beginTime}",
+                        "   AND e.environment_id = #{environmentId}",
+                        "GROUP BY h.h",
+                        "ORDER BY h.h"
+        })
+        public List<DareaDTO> getHistoryDataByEnvironmentId(
+                        @Param("beginTime") String beginTime,
+                        @Param("environmentId") Long environmentId);
 }
