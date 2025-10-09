@@ -24,12 +24,25 @@ public class EmergencyAlarmQuery extends AbstractPageQuery<EmergencyAlarmEntity>
 
     private String exportType;
 
+    private String dStartTime;
+
+    private String dEndTime;
+
+    private String dType;
+
     @Override
     public QueryWrapper<EmergencyAlarmEntity> addQueryCondition() {
         QueryWrapper<EmergencyAlarmEntity> queryWrapper = new QueryWrapper<EmergencyAlarmEntity>();
         queryWrapper.like(StrUtil.isNotEmpty(type), "type", type)
                 .like(StrUtil.isNotEmpty(level), "level", level)
-                .like(StrUtil.isNotEmpty(eventName), "type", eventName);
+                .like(StrUtil.isNotEmpty(eventName), "type", eventName)
+                .inSql(StrUtil.isNotEmpty(dStartTime) && StrUtil.isNotEmpty(dEndTime), "emergency_alarm_id",
+                        String.format(
+                                "select emergency_alarm_id from manage_emergency_event_alarm where emergency_event_id in (select emergency_event_id from manage_emergency_event where create_time BETWEEN '%s 00:00:00' AND '%s 23:59:59')",
+                                dStartTime, dEndTime))
+                .inSql(StrUtil.isNotEmpty(dType), "emergency_alarm_id", String.format(
+                        "select emergency_alarm_id from manage_emergency_event_alarm where emergency_event_id in (select emergency_event_id from manage_emergency_event where type = '%s')",
+                        dType));
 
         setTimeRangeColumn("create_time");
 
