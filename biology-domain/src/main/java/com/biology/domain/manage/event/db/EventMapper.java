@@ -114,14 +114,15 @@ public interface EventMapper extends BaseMapper<EventEntity> {
         public List<AreaStatisticsDTO> getAreaStatistics(@Param("startTime") String startTime,
                         @Param("endTime") String endTime);
 
-        @Select("SELECT m.e_area as area, COUNT(*) AS avgValue,DATE_FORMAT(e.create_time, '%Y-%m-%d') AS timeSlot from manage_emergency_event as e"
+        // m.e_area
+        @Select("SELECT e.type as area, COUNT(*) AS avgValue,DATE_FORMAT(e.create_time, '%Y-%m-%d') AS timeSlot from manage_emergency_event as e"
                         + " LEFT JOIN manage_emergency_event_alarm n on e.emergency_event_id = n.emergency_event_id"
                         + " LEFT JOIN manage_emergency_alarm a on a.emergency_alarm_id = n.emergency_alarm_id"
                         + " LEFT JOIN manage_environment_detection d on d.detection_id = a.detection_id"
                         + " LEFT JOIN manage_environment m on m.environment_id = d.environment_id"
                         + " WHERE e.create_time BETWEEN #{startTime} AND CONCAT(#{endTime}, ' 23:59:59')"
-                        + " AND e.type = '环境报警类'"
-                        + " GROUP BY m.e_area,DATE_FORMAT(e.create_time, '%Y-%m-%d')")
+                        // + " AND e.type = '环境报警类'"
+                        + " GROUP BY e.type,DATE_FORMAT(e.create_time, '%Y-%m-%d')")
         public List<DareaDTO> getAreaStatisticsByDate(@Param("startTime") String startTime,
                         @Param("endTime") String endTime);
 
