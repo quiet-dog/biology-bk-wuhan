@@ -6,7 +6,6 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
-import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.emergency.command.AddEmergencyCommand;
 import com.biology.domain.manage.emergency.command.UpdateEmergencyCommand;
 import com.biology.domain.manage.emergency.db.EmergencyEntity;
@@ -113,7 +112,7 @@ public class EmergencyModel extends EmergencyEntity {
                 emergencyFileServices.add(emergencyFileService);
             });
         }
-        CacheCenter.emergencyFileCache.set(getEmergencyId(), emergencyFileServices);
+
         return emergencyFileService.saveBatch(emergencyFileServices);
     }
 
@@ -151,14 +150,12 @@ public class EmergencyModel extends EmergencyEntity {
 
     public boolean insert() {
         super.insert();
-        CacheCenter.emergencyCache.set(getEmergencyId(), this);
         addEquipmentIds();
         return savePath() && saveKeyword();
     }
 
     public boolean updateById() {
         super.updateById();
-        CacheCenter.emergencyCache.set(getEmergencyId(), this);
         cleanOldPath();
         cleanOldKeyword();
         cleanEquipmentIds();
@@ -170,8 +167,7 @@ public class EmergencyModel extends EmergencyEntity {
         cleanOldPath();
         cleanOldKeyword();
         cleanEquipmentIds();
-        CacheCenter.emergencyCache.delete(getEmergencyId());
-        CacheCenter.emergencyFileCache.delete(getEmergencyId());
+
         return super.deleteById();
     }
 }

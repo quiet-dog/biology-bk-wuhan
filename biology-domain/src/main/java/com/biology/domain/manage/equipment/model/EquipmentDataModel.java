@@ -42,6 +42,7 @@ public class EquipmentDataModel extends EquipmentDataEntity {
 
     public boolean insert() {
         return super.insert();
+        // return equipmentDataService.insertDynamic(this);
     }
 
     public boolean update() {
@@ -51,4 +52,4 @@ public class EquipmentDataModel extends EquipmentDataEntity {
     public boolean deleteById() {
         return super.deleteById();
     }
-} 
+}

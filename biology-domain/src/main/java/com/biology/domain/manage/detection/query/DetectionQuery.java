@@ -1,11 +1,13 @@
 package com.biology.domain.manage.detection.query;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.core.page.AbstractPageQuery;
 import com.biology.domain.manage.detection.db.DetectionEntity;
+import com.biology.infrastructure.config.MyBatisConfig;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -58,6 +60,15 @@ public class DetectionQuery extends AbstractPageQuery<DetectionEntity> {
         if (isIgnore != null && isIgnore) {
             queryWrapper = queryWrapper.eq("water_value", 0);
             queryWrapper = queryWrapper.eq("electricity_value", 0);
+        }
+
+        if (getBeginTime() != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            MyBatisConfig.environmentData.set(sdf.format(getBeginTime()));
+            setBeginTime(null);
+
+        } else {
+            MyBatisConfig.environmentData.set(null);
         }
 
         queryWrapper = queryWrapper

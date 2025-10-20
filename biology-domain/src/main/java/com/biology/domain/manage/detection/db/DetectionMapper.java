@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.biology.domain.manage.detection.dto.DareaDTO;
@@ -128,19 +129,19 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " ORDER BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00')")
         public List<PowerDTO> getHistoryWaterByType();
 
-        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time,SUM(water_value) as data FROM manage_environment_detection"
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time,SUM(water_value) as data FROM manage_dian_shui"
                         + " WHERE create_time >= CURDATE() - INTERVAL 6 DAY AND create_time < CURDATE() + INTERVAL 1 DAY"
                         + " GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')"
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
         public List<PowerDTO> getHistoryWaterByTypeWeek();
 
-        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time,SUM(water_value) as data FROM manage_environment_detection"
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time,SUM(water_value) as data FROM manage_dian_shui"
                         + " WHERE create_time >= CURDATE() - INTERVAL 1 MONTH AND create_time <= NOW()"
                         + " GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')"
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
         public List<PowerDTO> getHistoryWaterByTypeMonth();
 
-        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m') AS time,SUM(water_value) as data FROM manage_environment_detection"
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m') AS time,SUM(water_value) as data FROM manage_dian_shui"
                         + " WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
                         + " GROUP BY DATE_FORMAT(create_time, '%Y-%m')"
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m')")
@@ -152,19 +153,19 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " ORDER BY CONCAT(LPAD(HOUR(create_time), 2, '0'), ':00')")
         public List<PowerDTO> getHistoryElectricityByType();
 
-        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time,SUM(electricity_value) as data FROM manage_environment_detection"
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time,SUM(electricity_value) as data FROM manage_dian_shui"
                         + " WHERE create_time >= CURDATE() - INTERVAL 6 DAY AND create_time < CURDATE() + INTERVAL 1 DAY"
                         + " GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')"
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
         public List<PowerDTO> getHistoryElectricityByTypeWeek();
 
-        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time,SUM(electricity_value) as data FROM manage_environment_detection"
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') AS time,SUM(electricity_value) as data FROM manage_dian_shui"
                         + " WHERE create_time >= CURDATE() - INTERVAL 1 MONTH AND create_time <= NOW()"
                         + " GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')"
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m-%d')")
         public List<PowerDTO> getHistoryElectricityByTypeMonth();
 
-        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m') AS time,SUM(electricity_value) as data FROM manage_environment_detection"
+        @Select("SELECT DATE_FORMAT(create_time, '%Y-%m') AS time,SUM(electricity_value) as data FROM manage_dian_shui"
                         + " WHERE create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
                         + " GROUP BY DATE_FORMAT(create_time, '%Y-%m')"
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m')")
@@ -402,7 +403,7 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         // " ROUND(COALESCE(AVG(e.value), 0), 2) AS avg_value",
                         "    ROUND(AVG(e.value), 2) AS avg_value",
                         "FROM hours h",
-                        "LEFT JOIN manage_environment_detection e",
+                        "LEFT JOIN manage_environment_detection_${suffix} e",
                         "    ON HOUR(e.create_time) = h.h",
                         "   AND DATE(e.create_time) = #{beginTime}",
                         "   AND e.environment_id = #{environmentId}",
@@ -410,6 +411,13 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         "ORDER BY h.h"
         })
         public List<DareaDTO> getHistoryDataByEnvironmentId(
+                        @Param("suffix") String suffix,
                         @Param("beginTime") String beginTime,
                         @Param("environmentId") Long environmentId);
+
+        @Select("SELECT SUM(water_value) from manage_environment_detection where type = '水'")
+        public Double getAllWater(@Param("suffix") String suffix);
+
+        @Select("SELECT SUM(electricity_value) from manage_environment_detection where type = '电'")
+        public Double getAllDian(@Param("suffix") String suffix);
 }

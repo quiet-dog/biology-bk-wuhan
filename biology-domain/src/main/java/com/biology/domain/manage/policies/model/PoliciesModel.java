@@ -74,7 +74,6 @@ public class PoliciesModel extends PoliciesEntity {
                 appendix.setPath(path);
                 appendixList.add(appendix);
             }
-            System.out.println("=============================插入成功=============================");
             return policiesAppendixService.saveBatch(appendixList);
         }
         return true;

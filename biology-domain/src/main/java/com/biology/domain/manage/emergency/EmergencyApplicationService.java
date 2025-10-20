@@ -1,5 +1,6 @@
 package com.biology.domain.manage.emergency;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.emergency.command.AddEmergencyCommand;
 import com.biology.domain.manage.emergency.command.UpdateEmergencyCommand;
 import com.biology.domain.manage.emergency.db.EmergencyEntity;
@@ -39,6 +41,21 @@ public class EmergencyApplicationService {
         emergencyModel.loadAddEmergencyCommand(command);
         emergencyModel.checkEmergencyKeyWord();
         emergencyModel.insert();
+        CacheCenter.emergencyCache.delete(emergencyModel.getEmergencyId());
+        CacheCenter.emergencyFileCache.delete(emergencyModel.getEmergencyId());
+        // List<EmergencyFileEntity> emergencyFileServices = new ArrayList<>();
+        // if (emergencyModel.getPaths() != null &&
+        // !emergencyModel.getPaths().isEmpty()) {
+        // emergencyModel.getPaths().forEach(path -> {
+        // EmergencyFileEntity emergencyFileService = new EmergencyFileEntity();
+        // emergencyFileService.setPath(path);
+        // emergencyFileService.setEmergencyId(emergencyModel.getEmergencyId());
+        // emergencyFileServices.add(emergencyFileService);
+        // });
+        // }
+        // CacheCenter.emergencyFileCache.set(emergencyModel.getEmergencyId(),
+        // emergencyFileServices);
+
     }
 
     public void updateEmergency(UpdateEmergencyCommand command) {
@@ -46,12 +63,31 @@ public class EmergencyApplicationService {
         emergencyModel.loadUpdateEmergencyCommand(command);
         emergencyModel.checkEmergencyKeyWord();
         emergencyModel.updateById();
+        CacheCenter.emergencyCache.delete(emergencyModel.getEmergencyId());
+        CacheCenter.emergencyFileCache.delete(emergencyModel.getEmergencyId());
+        // CacheCenter.emergencyCache.set(emergencyModel.getEmergencyId(),
+        // emergencyModel);
+
+        // List<EmergencyFileEntity> emergencyFileServices = new ArrayList<>();
+        // if (emergencyModel.getPaths() != null &&
+        // !emergencyModel.getPaths().isEmpty()) {
+        // emergencyModel.getPaths().forEach(path -> {
+        // EmergencyFileEntity emergencyFileService = new EmergencyFileEntity();
+        // emergencyFileService.setPath(path);
+        // emergencyFileService.setEmergencyId(emergencyModel.getEmergencyId());
+        // emergencyFileServices.add(emergencyFileService);
+        // });
+        // }
+        // CacheCenter.emergencyFileCache.set(emergencyModel.getEmergencyId(),
+        // emergencyFileServices);
     }
 
     public void deleteEmergencies(List<Long> emergencyIds) {
         for (Long emergencyId : emergencyIds) {
             EmergencyModel emergencyModel = emergencyFactory.loadById(emergencyId);
             emergencyModel.deleteById();
+            CacheCenter.emergencyCache.delete(emergencyId);
+            CacheCenter.emergencyFileCache.delete(emergencyId);
         }
     }
 

@@ -45,12 +45,19 @@ public class ThresholdApplicationService {
         ThresholdModel thresholdModel = thresholdFactory.create();
         thresholdModel.loadAddThresholdCommand(command);
         thresholdModel.insert();
+        CacheCenter.thresholdCache.delete(thresholdModel.getThresholdId());
+        CacheCenter.thresholdEmergencyCache.delete(thresholdModel.getThresholdId());
+        CacheCenter.thresholdSopCache.delete(thresholdModel.getThresholdId());
+
     }
 
     public void updateThreshold(UpdateThresholdCommand command) {
         ThresholdModel thresholdModel = thresholdFactory.loadById(command.getThresholdId());
         thresholdModel.loadUpdateThresholdCommand(command);
         thresholdModel.updateById();
+        CacheCenter.thresholdCache.delete(thresholdModel.getThresholdId());
+        CacheCenter.thresholdEmergencyCache.delete(thresholdModel.getThresholdId());
+        CacheCenter.thresholdSopCache.delete(thresholdModel.getThresholdId());
     }
 
     public void deleteThreshold(Long thresholdId) {

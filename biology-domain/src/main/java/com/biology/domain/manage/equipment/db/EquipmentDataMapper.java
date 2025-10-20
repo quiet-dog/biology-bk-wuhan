@@ -13,11 +13,12 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface EquipmentDataMapper extends BaseMapper<EquipmentDataEntity> {
 
-        @Select("select AVG(equipment_data) AS data,CONCAT(LPAD(FLOOR(HOUR(create_time) / 1) * 1, 2, '0'), ':', LPAD(FLOOR(MINUTE(create_time) / 30) * 30, 2, '0')) AS time from manage_equipment_data"
+        @Select("select AVG(equipment_data) AS data,CONCAT(LPAD(FLOOR(HOUR(create_time) / 1) * 1, 2, '0'), ':', LPAD(FLOOR(MINUTE(create_time) / 30) * 30, 2, '0')) AS time from manage_equipment_data_${suffix}"
                         + " WHERE create_time >= CURDATE() AND threshold_id = #{thresholdId}"
                         + " GROUP BY time"
                         + " ORDER BY time")
-        public List<EquipmentDataStockDTO> getEquipmentDataStockDay(@Param("thresholdId") Long thresholdId);
+        public List<EquipmentDataStockDTO> getEquipmentDataStockDay(@Param("suffix") String suffix,
+                        @Param("thresholdId") Long thresholdId);
 
         @Select("SELECT SUM(CASE WHEN create_time < 60 THEN create_time ELSE 0 END) AS totalTime"
                         + " FROM (SELECT equipment_id,TIMESTAMPDIFF(MINUTE, LAG(create_time) OVER (PARTITION BY equipment_id ORDER BY create_time), create_time) AS create_time"

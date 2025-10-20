@@ -263,7 +263,7 @@
 
 	# 静态文件处理
 	handle {
-		root * /home/zks/Projects/private/biology-fd-beijing/dist
+		root * /home/zks/Projects/private/biology-fd-wuhan/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd
@@ -347,7 +347,7 @@
 
 	# 静态文件处理
 	handle {
-		root * /home/zks/Projects/private/screen/dist
+		root * /home/zks/Projects/private/biology-screen-wuhan/dist
 		try_files {path}.html {path} /index.html
 		file_server
 		encode gzip zstd

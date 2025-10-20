@@ -16,4 +16,9 @@ public interface EquipmentDataService extends IService<EquipmentDataEntity> {
     public TotalTimeDTO getTotalTime(Long equipmentId);
 
     public Map<String, Object> getEquipmentDataByEquipmentId(Long threshold, String dayTime);
+
+    public void createNowTable();
+
+    public boolean insertDynamic(EquipmentDataEntity entity);
+
 }

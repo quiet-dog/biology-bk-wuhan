@@ -82,10 +82,10 @@ public class SopModel extends SopEntity {
                 kts.add(kt);
             }
             sopFileService.saveBatch(kts);
-            CacheCenter.sopFileCache.set(getSopId(), kts);
+            // CacheCenter.sopFileCache.set(getSopId(), kts);
             return true;
         } else {
-            CacheCenter.sopFileCache.delete(getSopId());
+            // CacheCenter.sopFileCache.delete(getSopId());
         }
         return true;
     }
@@ -96,7 +96,7 @@ public class SopModel extends SopEntity {
 
     public boolean insert() {
         super.insert();
-        CacheCenter.sopCache.set(getSopId(), this);
+        // CacheCenter.sopCache.set(getSopId(), this);
         // addEquipmentIds();
         return saveFile();
     }
@@ -105,15 +105,14 @@ public class SopModel extends SopEntity {
         cleanFile();
         saveFile();
         super.updateById();
-        CacheCenter.sopCache.set(getSopId(), this);
+        // CacheCenter.sopCache.set(getSopId(), this);
         // cleanEquipmentIds();
         // addEquipmentIds();
         return true;
     }
 
     public boolean deleteById() {
-        CacheCenter.sopCache.delete(getSopId());
-        CacheCenter.sopFileCache.delete(getSopId());
+
         return super.deleteById();
     }
 }

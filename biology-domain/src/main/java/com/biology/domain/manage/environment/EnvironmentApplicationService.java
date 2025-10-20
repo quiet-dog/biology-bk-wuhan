@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.environment.command.AddEnvironmentCommand;
 import com.biology.domain.manage.environment.command.UpdateEnvironmentCommand;
 import com.biology.domain.manage.environment.db.EnvironmentEntity;
@@ -34,12 +35,16 @@ public class EnvironmentApplicationService {
         EnvironmentModel environmentModel = environmentFactory.create();
         environmentModel.loadAddEnvironmentCommand(command);
         environmentModel.insert();
+        CacheCenter.alarmlevelDetailCache.delete(environmentModel.getEnvironmentId());
+        CacheCenter.environmentEmergencyCache.delete(environmentModel.getEnvironmentId());
     }
 
     public void updateEnvironment(UpdateEnvironmentCommand command) {
         EnvironmentModel environmentModel = environmentFactory.loadById(command.getEnvironmentId());
         environmentModel.loadUpdateEnvironmentCommand(command);
         environmentModel.updateById();
+        CacheCenter.alarmlevelDetailCache.delete(environmentModel.getEnvironmentId());
+        CacheCenter.environmentEmergencyCache.delete(environmentModel.getEnvironmentId());
     }
 
     public void deleteEnvironments(List<Long> environmentIds) {

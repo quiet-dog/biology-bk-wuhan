@@ -48,19 +48,16 @@ public interface ReportMapper extends BaseMapper<ReportEntity> {
         @Select("SELECT r.report_type as name,SUM(r.report_num) as count FROM  manage_report as r"
                         + " JOIN manage_materials m on r.materials_id = m.materials_id"
                         + " WHERE m.materials_id = #{id}"
-                        // + " (SELECT name FROM manage_materials GROUP BY name HAVING COUNT(DISTINCT
-                        // unit) > 0)"
-                        + " AND YEAR(r.create_time) = YEAR(CURDATE())"
+                        // + " AND YEAR(r.create_time) = YEAR(CURDATE())"
+                        + " AND r.create_time >= DATE_SUB(CURDATE(), INTERVAL 29 DAY)"
                         + " GROUP BY r.report_type")
         public List<StockReportDTO> getMonthStock(Long id);
 
         @Select("SELECT r.report_type as name,SUM(r.report_num) as count FROM  manage_report as r"
                         + " JOIN manage_materials m on r.materials_id = m.materials_id"
-                        // + " WHERE m.name in"
                         + " WHERE m.materials_id = #{id}"
-                        // + " (SELECT name FROM manage_materials GROUP BY name HAVING COUNT(DISTINCT
-                        // unit) > 0)"
-                        + " AND YEAR(r.create_time) = YEAR(CURDATE())"
+                        // + " AND YEAR(r.create_time) = YEAR(CURDATE())"
+                        + " AND r.create_time >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 11 MONTH), '%Y-%m-01')"
                         + " GROUP BY r.report_type")
         public List<StockReportDTO> getYearStock(Long id);
 

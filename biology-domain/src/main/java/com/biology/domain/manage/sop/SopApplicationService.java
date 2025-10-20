@@ -1,5 +1,6 @@
 package com.biology.domain.manage.sop;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.sop.command.AddSopCommand;
 import com.biology.domain.manage.sop.command.UpdateSopCommand;
 import com.biology.domain.manage.sop.db.SopEntity;
@@ -35,18 +37,51 @@ public class SopApplicationService {
         SopModel sopModel = sopFactory.create();
         sopModel.loadAddSopCommand(command);
         sopModel.insert();
+        CacheCenter.sopCache.delete(sopModel.getSopId());
+        CacheCenter.sopFileCache.delete(sopModel.getSopId());
+        // CacheCenter.sopCache.set(sopModel.getSopId(), sopModel);
+        // if (sopModel.getPaths() != null && sopModel.getPaths().size() > 0) {
+        // List<SopFileEntity> kts = new ArrayList<>();
+        // for (String path : sopModel.getPaths()) {
+        // SopFileEntity kt = new SopFileEntity();
+        // kt.setPath(path);
+        // kt.setSopId(sopModel.getSopId());
+        // kts.add(kt);
+        // }
+        // CacheCenter.sopFileCache.set(sopModel.getSopId(), kts);
+        // } else {
+        // CacheCenter.sopFileCache.delete(sopModel.getSopId());
+        // }
     }
 
     public void updateSop(UpdateSopCommand command) {
         SopModel sopModel = sopFactory.loadById(command.getSopId());
         sopModel.loadAddSopCommand(command);
         sopModel.updateById();
+        CacheCenter.sopCache.delete(sopModel.getSopId());
+        CacheCenter.sopFileCache.delete(sopModel.getSopId());
+        // CacheCenter.sopCache.set(sopModel.getSopId(), sopModel);
+        // if (sopModel.getPaths() != null && sopModel.getPaths().size() > 0) {
+        // List<SopFileEntity> kts = new ArrayList<>();
+        // for (String path : sopModel.getPaths()) {
+        // SopFileEntity kt = new SopFileEntity();
+        // kt.setPath(path);
+        // kt.setSopId(sopModel.getSopId());
+        // kts.add(kt);
+        // }
+        // CacheCenter.sopFileCache.set(sopModel.getSopId(), kts);
+        // } else {
+        // CacheCenter.sopFileCache.delete(sopModel.getSopId());
+        // }
+
     }
 
     public void deleteSop(Long sopId) {
         SopModel sopModel = sopFactory.loadById(sopId);
         sopModel.cleanFile();
         sopModel.deleteById();
+        CacheCenter.sopCache.delete(sopModel.getSopId());
+        CacheCenter.sopFileCache.delete(sopModel.getSopId());
     }
 
     public void deleteSops(List<Long> sopIds) {

@@ -299,8 +299,9 @@ public class DetectionController extends BaseController {
     @Operation(summary = "统计能耗")
     @PostMapping("/getBuTong")
     public ResponseDTO<DareaResultDTO> getTemperatureDataByAreaAndTimeSlot(@RequestBody AllAreaDTO query) {
-        return ResponseDTO.ok(detectionApplicationService.getTemperatureDataByAreaAndTimeSlot(query.getUnitName(),
-                query.getBeginTime(), query.getEndTime()));
+        return ResponseDTO.ok(
+                detectionApplicationService.getTemperatureDataByAreaAndTimeSlot(query.getAreas(), query.getUnitName(),
+                        query.getBeginTime(), query.getEndTime()));
     }
 
     @GetMapping("/getHistoryDataByEnvironmentId")

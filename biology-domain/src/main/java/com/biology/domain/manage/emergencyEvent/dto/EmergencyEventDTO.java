@@ -79,9 +79,17 @@ public class EmergencyEventDTO {
             handlers.add(personnelDTO);
         }
         handlerNames = "";
+
         for (PersonnelDTO personnelDTO : handlers) {
-            handlerNames = handlerNames + personnelDTO.getName() + ",";
+            // handlerNames = handlerNames + personnelDTO.getName() + ",";
+            // 如果是最后一个，则不加逗号
+            if (personnelDTO == handlers.get(handlers.size() - 1)) {
+                handlerNames = handlerNames + personnelDTO.getName();
+            } else {
+                handlerNames = handlerNames + personnelDTO.getName() + ",";
+            }
         }
+
     }
 
     public void addAlarm() {

@@ -82,9 +82,18 @@ public class ReportApplicationService {
         if ("month".equals(query.getDayType())) {
             stockReportDTOs = reportService.getMonthStock(query.getMaterialsId());
         }
+
+        stockEchartDTO.getXData().add("丢失");
+        stockEchartDTO.getXData().add("损坏");
+        stockEchartDTO.getSeriesData().add(0);
+        stockEchartDTO.getSeriesData().add(0);
         for (StockReportDTO stockReportDTO : stockReportDTOs) {
-            stockEchartDTO.getXData().add(stockReportDTO.getName());
-            stockEchartDTO.getSeriesData().add(stockReportDTO.getCount());
+            for (Integer i = 0; i < stockEchartDTO.getXData().size(); i++) {
+                if (stockReportDTO.getName().equals(stockEchartDTO.getXData().get(i))) {
+                    stockEchartDTO.getSeriesData().set(i, stockReportDTO.getCount());
+                }
+            }
+
         }
 
         return stockEchartDTO;

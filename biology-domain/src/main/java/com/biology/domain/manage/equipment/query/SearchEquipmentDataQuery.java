@@ -1,11 +1,13 @@
 package com.biology.domain.manage.equipment.query;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.core.page.AbstractPageQuery;
 import com.biology.domain.manage.equipment.db.EquipmentDataEntity;
+import com.biology.infrastructure.config.MyBatisConfig;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
@@ -73,6 +75,14 @@ public class SearchEquipmentDataQuery extends AbstractPageQuery<EquipmentDataEnt
             queryWrapper.in("equipment_data_id", ids);
         }
 
+        if (getBeginTime() != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            MyBatisConfig.equipmentData.set(sdf.format(getBeginTime()));
+            setBeginTime(null);
+
+        } else {
+            MyBatisConfig.equipmentData.set(null);
+        }
         // if (startTime != null) {
         // queryWrapper.ge("create_time", startTime);
         // }

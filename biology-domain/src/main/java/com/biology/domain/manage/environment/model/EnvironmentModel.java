@@ -97,7 +97,7 @@ public class EnvironmentModel extends EnvironmentEntity {
                 alarmlevelDetails.add(alarmlevelDetailEntity);
             }
             alarmlevelDetailService.saveBatch(alarmlevelDetails);
-            CacheCenter.alarmlevelDetailCache.set(getEnvironmentId(), alarmlevelDetails);
+            // CacheCenter.alarmlevelDetailCache.set(getEnvironmentId(), alarmlevelDetails);
             SendEnvironmentDTO sDto = new SendEnvironmentDTO();
             sDto.setValues(alarmlevelDetails);
             sDto.setEnvironment(this);
@@ -141,7 +141,8 @@ public class EnvironmentModel extends EnvironmentEntity {
                 environmentEmergencyEntities.add(entity);
             }
             environmentEmergencyService.saveBatch(environmentEmergencyEntities);
-            CacheCenter.environmentEmergencyCache.set(getEnvironmentId(), environmentEmergencyEntities);
+            // CacheCenter.environmentEmergencyCache.set(getEnvironmentId(),
+            // environmentEmergencyEntities);
         }
     }
 

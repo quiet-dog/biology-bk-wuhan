@@ -1,8 +1,11 @@
 package com.biology.domain.manage.detection;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,6 +47,7 @@ import com.biology.domain.manage.environment.dto.EnvironmentStatisticsDTO;
 import com.biology.domain.manage.event.db.EventEntity;
 import com.biology.domain.manage.event.dto.EventDTO;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -67,9 +71,14 @@ public class DetectionApplicationService {
     }
 
     public PageDTO<DetectionDTO> list(DetectionQuery query) {
-        Page<DetectionEntity> page = detectionService.page(query.toPage(), query.toQueryWrapper());
-        List<DetectionDTO> records = page.getRecords().stream().map(DetectionDTO::new).collect(Collectors.toList());
-        return new PageDTO<>(records, page.getTotal());
+        try {
+            Page<DetectionEntity> page = detectionService.page(query.toPage(), query.toQueryWrapper());
+            List<DetectionDTO> records = page.getRecords().stream().map(DetectionDTO::new).collect(Collectors.toList());
+            return new PageDTO<>(records, page.getTotal());
+
+        } catch (Exception e) {
+            return new PageDTO<>(new ArrayList<>(), new Long(0));
+        }
     }
 
     public StatisticsDetailDTO getStatistics(Long environmentId) {
@@ -187,18 +196,45 @@ public class DetectionApplicationService {
             }
         }
 
+        if (query.getDayType().equals("week")) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            LocalDate today = LocalDate.now();
+
+            for (int i = 6; i >= 0; i--) { // 从6天前到今天
+                LocalDate date = today.minusDays(i);
+                // last7Days.add(date.format(formatter));
+                detectionCountEchartTypeDTO.getTime().add(date.format(formatter));
+                detectionCountEchartTypeDTO.getData().add(null);
+            }
+        }
+
         for (PowerDTO powerDTO : powerData) {
-            detectionCountEchartTypeDTO.getTime().add(powerDTO.getTime());
-            detectionCountEchartTypeDTO.getData().add(powerDTO.getData());
+            // detectionCountEchartTypeDTO.getTime().add(powerDTO.getTime());
+            // detectionCountEchartTypeDTO.getData().add(powerDTO.getData());
+            for (Integer i = 0; i < detectionCountEchartTypeDTO.getTime().size(); i++) {
+                if (detectionCountEchartTypeDTO.getTime().get(i).equals(powerDTO.getTime())) {
+                    detectionCountEchartTypeDTO.getData().set(i, powerDTO.getData());
+                }
+            }
+
         }
 
         return detectionCountEchartTypeDTO;
     }
 
-    public DareaResultDTO getTemperatureDataByAreaAndTimeSlot(String unitName, String beginTime, String endTime) {
+    public DareaResultDTO getTemperatureDataByAreaAndTimeSlot(List<String> areas, String unitName, String beginTime,
+            String endTime) {
 
         List<DareaDTO> temperatureData = detectionService.getTemperatureDataByAreaAndTimeSlot(unitName, beginTime,
                 endTime);
+
+        if (areas != null && areas.size() > 0) {
+            // 将不在areas中的数据去掉
+            temperatureData = temperatureData.stream()
+                    .filter(item -> areas.contains(item.getArea()))
+                    .collect(Collectors.toList());
+        }
 
         // 把大于当前的时间数据都去掉
         temperatureData = temperatureData.stream()
@@ -264,18 +300,31 @@ public class DetectionApplicationService {
 
         System.out.println("=====================================");
         System.out.println(beginTime);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String suffix = sdf.format(date);
+        if (StrUtil.isEmpty(beginTime)) {
+            suffix = beginTime.replace("-", "");
+        }
         Map<String, Object> result = new HashMap<>();
-        List<DareaDTO> list = detectionService.getHistoryDataByEnvironmentId(beginTime, environmentId);
+        List<DareaDTO> list = new ArrayList<>();
+        try {
+            list = detectionService.getHistoryDataByEnvironmentId(suffix, beginTime, environmentId);
+        } catch (Exception e) {
+            list = null;
+        }
         ArrayList<Double> yData = new ArrayList<>();
         ArrayList<String> xData = new ArrayList<>();
-        for (DareaDTO d : list) {
-            xData.add(d.getTimeSlot());
-            yData.add(d.getAvgValue());
-        }
+
         if (list == null || list.size() == 0) {
             for (int i = 1; i <= 24; i++) {
                 xData.add(i + ":00");
                 yData.add(null);
+            }
+        } else {
+            for (DareaDTO d : list) {
+                xData.add(d.getTimeSlot());
+                yData.add(d.getAvgValue());
             }
         }
         result.put("xData", xData);

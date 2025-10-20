@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -203,7 +204,13 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
                 boolean isExit = false;
                 for (PowerDTO p : data) {
                     if (p.getTime().contains(time)) {
-                        result.getData().add(p.getData());
+                        Double value = p.getData();
+                        if (value != null) {
+                            value = Math.round(value * 100.0) / 100.0; // 保留两位小数
+                        } else {
+                            value = 0.0;
+                        }
+                        result.getData().add(value);
                         isExit = true;
                         break;
                     }
@@ -245,7 +252,13 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
                 boolean isExit = false;
                 for (PowerDTO p : data) {
                     if (p.getTime().contains(time)) {
-                        result.getData().add(p.getData());
+                        Double value = p.getData();
+                        if (value != null) {
+                            value = Math.round(value * 100.0) / 100.0; // 保留两位小数
+                        } else {
+                            value = 0.0;
+                        }
+                        result.getData().add(value);
                         isExit = true;
                         break;
                     }
@@ -285,7 +298,13 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
                 boolean isExit = false;
                 for (PowerDTO p : data) {
                     if (time.contains(p.getTime())) {
-                        result.getData().add(p.getData());
+                        Double value = p.getData();
+                        if (value != null) {
+                            value = Math.round(value * 100.0) / 100.0; // 保留两位小数
+                        } else {
+                            value = 0.0;
+                        }
+                        result.getData().add(value);
                         isExit = true;
                         break;
                     }
@@ -609,8 +628,23 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
     }
 
     public List<DareaDTO> getHistoryDataByEnvironmentId(
+            String suffix,
             String beginTime,
             Long environmentId) {
-        return baseMapper.getHistoryDataByEnvironmentId(beginTime, environmentId);
+        return baseMapper.getHistoryDataByEnvironmentId(suffix, beginTime, environmentId);
+    }
+
+    public Double getAllWaterAndShui(String suffix, String type) {
+
+        Double value = null;
+        if (type.equals("水")) {
+            value = baseMapper.getAllWater(suffix);
+        } else {
+            value = baseMapper.getAllDian(suffix);
+        }
+        if (value == null) {
+            value = 0.0;
+        }
+        return value;
     }
 }

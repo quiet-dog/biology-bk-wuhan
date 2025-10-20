@@ -2,8 +2,11 @@ package com.biology.domain.manage.task;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,12 +14,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.biology.common.utils.time.DatePickUtil;
 import com.biology.domain.common.cache.CacheCenter;
+import com.biology.domain.manage.detection.command.AddDetectionCommand;
+import com.biology.domain.manage.detection.db.DetectionService;
+import com.biology.domain.manage.dianShui.db.DianShuiEntity;
+import com.biology.domain.manage.dianShui.db.DianShuiService;
+import com.biology.domain.manage.dianShui.model.DianShuiFactory;
+import com.biology.domain.manage.dianShui.model.DianShuiModel;
 import com.biology.domain.manage.door.command.AddDoorCommand;
 import com.biology.domain.manage.door.db.DoorEntity;
 import com.biology.domain.manage.door.db.DoorService;
 import com.biology.domain.manage.door.model.DoorFactory;
 import com.biology.domain.manage.door.model.DoorModel;
+import com.biology.domain.manage.equipment.db.EquipmentDataService;
 import com.biology.domain.manage.gosip.db.GosipClientService;
 import com.biology.domain.manage.gosip.dto.channels.ChannaelListDTO;
 import com.biology.domain.manage.gosip.dto.channels.ChannelQuery;
@@ -51,6 +62,8 @@ public class TaskApplicationService {
 
     private final MaterialsTaskService materialsTaskService;
 
+    private final DetectionService detectionService;
+
     private final MaterialsService materialsService;
 
     private final WebsocketService websocketService;
@@ -60,6 +73,10 @@ public class TaskApplicationService {
     private final PersonnelService personnelService;
 
     private final PersonnelFactory personnelFactory;
+
+    private final DianShuiFactory dianShuiFactory;
+
+    private final DianShuiService dianShuiService;
 
     private final KoalaService koalaService;
 
@@ -76,6 +93,8 @@ public class TaskApplicationService {
     private static Boolean isSubjectRunning = false;
 
     private final WebClient renTiClient;
+
+    private final EquipmentDataService equipmentDataService;
 
     // @Scheduled(cron = "30 0 0 1 * ?")
     // public void stock() {
@@ -445,5 +464,65 @@ public class TaskApplicationService {
             });
         }
 
+    }
+
+    @Scheduled(cron = "*/1 * * * * ?")
+    public void taskPerSecond() {
+        equipmentDataService.createNowTable();
+    }
+
+    @Scheduled(cron = "*/10 * * * * ?")
+    public void tongJiDianShui() {
+        LocalDate today = LocalDate.now();
+        String suffix = today.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+        System.out.println("水电统计任务开始");
+
+        Double shui = detectionService.getAllWaterAndShui(suffix, "水");
+        Double dian = detectionService.getAllWaterAndShui(suffix, "电");
+
+        // // === 处理“水” ===
+        QueryWrapper<DianShuiEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("type", "水")
+                .apply("DATE(create_time) = CURDATE()");
+
+        DianShuiEntity waterEntity = dianShuiService.getBaseMapper().selectOne(queryWrapper);
+
+        if (waterEntity == null) {
+            DianShuiModel model = dianShuiFactory.create();
+            AddDetectionCommand cmd = new AddDetectionCommand();
+            cmd.setWaterValue(shui);
+            model.loadAddDianShuiCommand(cmd);
+            model.setType("水");
+            model.insert();
+            System.out.println("插入水数据");
+        } else {
+            waterEntity.setWaterValue(shui);
+            dianShuiService.updateById(waterEntity);
+            System.out.println("更新水数据");
+        }
+
+        // === 处理“电” ===
+        QueryWrapper<DianShuiEntity> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("type", "电")
+                .apply("DATE(create_time) = CURDATE()");
+
+        DianShuiEntity electricEntity = dianShuiService.getBaseMapper().selectOne(queryWrapper2);
+
+        System.out.println("水电=====2");
+        System.out.println("水电=====1" + electricEntity);
+        if (electricEntity == null) {
+            DianShuiModel model2 = dianShuiFactory.create();
+            AddDetectionCommand cmd2 = new AddDetectionCommand();
+            cmd2.setElectricityValue(dian);
+            model2.loadAddDianShuiCommand(cmd2);
+            model2.setType("电");
+            model2.insert();
+            System.out.println("插入电数据");
+        } else {
+            electricEntity.setElectricityValue(dian);
+            dianShuiService.updateById(electricEntity);
+            System.out.println("更新电数据");
+        }
     }
 }

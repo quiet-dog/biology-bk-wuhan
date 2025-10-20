@@ -111,7 +111,7 @@ public class EquipmentDetailDTO {
                 for (ThresholdEntity thresholdEntity : thresholdEntities) {
                     SensorDTO sensorDTO = new SensorDTO();
                     sensorDTO.setThresholdId(thresholdEntity.getThresholdId());
-                    sensorDTO.setKey(thresholdEntity.getEquipmentIndex());
+                    sensorDTO.setKey(thresholdEntity.getSensorName());
 
                     String redisId = "threshold-" + thresholdEntity.getThresholdId();
                     OnlineDTO onlineDTO = CacheCenter.onlineCache.getObjectById(redisId);

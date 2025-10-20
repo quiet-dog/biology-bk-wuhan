@@ -18,10 +18,12 @@ import cn.hutool.core.collection.CollectionUtil;
 
 import com.biology.domain.manage.equipment.db.EquipmentDataEntity;
 import com.biology.domain.manage.equipment.db.EquipmentDataService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -65,15 +67,21 @@ public class EquipmentDataApplicationService {
             query.setPageNum(1);
             query.setPageSize(query.getIds().size());
         }
-        Page<EquipmentDataEntity> page = equipmentDataService.page(query.toPage(), query.toQueryWrapper());
-        List<EquipmentDataDTO> records = page.getRecords().stream().map(entity -> {
-            EquipmentDataDTO dto = new EquipmentDataDTO(entity);
-            // 通过equipmentId查询equipment表获取设备
-            EquipmentModel equipmentModel = equipmentFactory.loadById(entity.getEquipmentId());
-            dto.setEquipment(new EquipmentDTO(equipmentModel));
-            return dto;
-        }).collect(Collectors.toList());
-        return new PageDTO<>(records, page.getTotal());
+
+        try {
+            Page<EquipmentDataEntity> page = equipmentDataService.page(query.toPage(), query.toQueryWrapper());
+
+            List<EquipmentDataDTO> records = page.getRecords().stream().map(entity -> {
+                EquipmentDataDTO dto = new EquipmentDataDTO(entity);
+                // 通过equipmentId查询equipment表获取设备
+                EquipmentModel equipmentModel = equipmentFactory.loadById(entity.getEquipmentId());
+                dto.setEquipment(new EquipmentDTO(equipmentModel));
+                return dto;
+            }).collect(Collectors.toList());
+            return new PageDTO<>(records, page.getTotal());
+        } catch (Exception e) {
+            return new PageDTO<>(null, new Long(0));
+        }
     }
 
     public EquipmentDataDTO getEquipmentDataInfo(Long equipmentId) {
