@@ -110,7 +110,7 @@ public interface EventMapper extends BaseMapper<EventEntity> {
                         // a.detection_id"
                         + " LEFT JOIN manage_environment m on m.environment_id = a.environment_id"
                         + " WHERE e.create_time BETWEEN #{startTime} AND CONCAT(#{endTime}, ' 23:59:59')"
-                        + " AND e.type = '环境报警类'"
+                        + " AND e.type = '环境报警类' AND a.environment_id is not null"
                         + " GROUP BY m.e_area")
         public List<AreaStatisticsDTO> getAreaStatistics(@Param("startTime") String startTime,
                         @Param("endTime") String endTime);
