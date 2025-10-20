@@ -34,6 +34,8 @@ public class AddEmergencyAlarmCommand {
     @Schema(description = "环境数据Id")
     private Long detectionId;
 
+    private Long environmentId;
+
     @Schema(description = "应急预案Ids")
     private List<Long> emergencyIds;
 

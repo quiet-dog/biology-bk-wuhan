@@ -263,7 +263,9 @@ public class MoniApplicationService {
                                 .getSopIdsByEnvironmentId(deviceDTO.getEnvironmentAlarmInfo().getEnvironmentId()));
                 addEmergencyAlarmCommand.setEmergencyIds(environmentEmergencyService
                         .getEmergencyIdsByEnvironmentId(deviceDTO.getEnvironmentAlarmInfo().getEnvironmentId()));
-                addEmergencyAlarmCommand.setEquipmentDataId(environmentEntity.getEnvironmentId());
+                // addEmergencyAlarmCommand.setEquipmentDataId(environmentEntity.getEnvironmentId());
+                addEmergencyAlarmCommand.setDetectionId(null);
+                addEmergencyAlarmCommand.setEnvironmentId(environmentEntity.getEnvironmentId());
                 if (addEmergencyAlarmCommand.getSopIds() != null
                         || addEmergencyAlarmCommand.getEmergencyIds() != null) {
                     emergencyAlarmApplicationService.addEmergencyAlarm(addEmergencyAlarmCommand);
