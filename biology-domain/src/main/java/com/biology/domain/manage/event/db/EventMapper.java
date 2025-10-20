@@ -103,15 +103,14 @@ public interface EventMapper extends BaseMapper<EventEntity> {
         // + " JOIN manage_equipment q on e.equipment_id = q.equipment_id"
         // + " WHERE e.create_time BETWEEN #{startTime} AND #{endTime}"
         // + " GROUP BY q.installation_location")
-        @Select("SELECT m.e_area as manufacturer, COUNT(*) AS count from manage_emergency_event as e"
+        @Select("SELECT COALESCE(m.e_area, q.install_location) as manufacturer, COUNT(*) AS count from manage_emergency_event as e"
                         + " LEFT JOIN manage_emergency_event_alarm n on e.emergency_event_id = n.emergency_event_id"
                         + " LEFT JOIN manage_emergency_alarm a on a.emergency_alarm_id = n.emergency_alarm_id"
-                        // + " LEFT JOIN manage_environment_detection d on d.detection_id =
-                        // a.detection_id"
+                        + " LEFT JOIN manage_equipment q on q.equipment_id = a.equipment_id"
                         + " LEFT JOIN manage_environment m on m.environment_id = a.environment_id"
                         + " WHERE e.create_time BETWEEN #{startTime} AND CONCAT(#{endTime}, ' 23:59:59')"
-                        + " AND e.type = '环境报警类' AND a.environment_id is not null"
-                        + " GROUP BY m.e_area")
+                        + " AND e.type = '环境报警类'"
+                        + " GROUP BY COALESCE(m.e_area, q.installation_location)")
         public List<AreaStatisticsDTO> getAreaStatistics(@Param("startTime") String startTime,
                         @Param("endTime") String endTime);
 
