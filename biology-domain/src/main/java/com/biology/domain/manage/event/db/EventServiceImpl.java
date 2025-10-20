@@ -443,11 +443,19 @@ public class EventServiceImpl extends ServiceImpl<EventMapper, EventEntity> impl
             // areaToTimeValueMap
             // .computeIfAbsent(area, k -> new HashMap<>())
             // .put(timeSlot, value);
+            Boolean isExit = false;
+            for (SeriesDTO a : seriesList) {
+                if (a.getName().equals(area)) {
+                    isExit = true;
+                }
+            }
+            if (!isExit) {
+                SeriesDTO s = new SeriesDTO();
+                s.setName(area);
+                s.setData(new ArrayList<>());
+                seriesList.add(s);
+            }
 
-            SeriesDTO s = new SeriesDTO();
-            s.setName(area);
-            s.setData(new ArrayList<>());
-            seriesList.add(s);
         }
 
         for (SeriesDTO s : seriesList) {
