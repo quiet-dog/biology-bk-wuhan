@@ -15,4 +15,6 @@ public interface EnvironmentService extends IService<EnvironmentEntity> {
     public EnvironmentTypesDTO getAllGroup();
 
     public List<String> getAllAreas();
+
+    public List<Long> getAllIds();
 }

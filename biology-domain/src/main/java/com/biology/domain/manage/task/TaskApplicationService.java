@@ -27,7 +27,10 @@ import com.biology.domain.manage.door.db.DoorEntity;
 import com.biology.domain.manage.door.db.DoorService;
 import com.biology.domain.manage.door.model.DoorFactory;
 import com.biology.domain.manage.door.model.DoorModel;
+import com.biology.domain.manage.environment.db.EnvironmentService;
 import com.biology.domain.manage.equipment.db.EquipmentDataService;
+import com.biology.domain.manage.equipment.db.EquipmentEntity;
+import com.biology.domain.manage.equipment.db.EquipmentService;
 import com.biology.domain.manage.gosip.db.GosipClientService;
 import com.biology.domain.manage.gosip.dto.channels.ChannaelListDTO;
 import com.biology.domain.manage.gosip.dto.channels.ChannelQuery;
@@ -48,10 +51,16 @@ import com.biology.domain.manage.personnel.db.PersonnelEntity;
 import com.biology.domain.manage.personnel.db.PersonnelService;
 import com.biology.domain.manage.personnel.model.PersonnelFactory;
 import com.biology.domain.manage.personnel.model.PersonnelModel;
+import com.biology.domain.manage.runTime.command.AddRunTimeCommand;
+import com.biology.domain.manage.runTime.db.RunTimeEntity;
+import com.biology.domain.manage.runTime.db.RunTimeService;
+import com.biology.domain.manage.runTime.model.RunTimeFactory;
+import com.biology.domain.manage.runTime.model.RunTimeModel;
 import com.biology.domain.manage.task.db.MaterialsTaskEntity;
 import com.biology.domain.manage.task.db.MaterialsTaskService;
 import com.biology.domain.manage.task.dto.ShengOnelineResDTO;
 import com.biology.domain.manage.websocket.db.WebsocketService;
+import com.biology.domain.manage.websocket.dto.OnlineDTO;
 
 import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
@@ -83,6 +92,14 @@ public class TaskApplicationService {
     private final DoorFactory doorFactory;
 
     private final DoorService doorService;
+
+    private final RunTimeService runTimeService;
+
+    private final RunTimeFactory runTimeFactory;
+
+    private final EquipmentService equipmentService;
+
+    private final EnvironmentService environmentService;
 
     private static Boolean isDoorRunning = false;
 
@@ -525,4 +542,94 @@ public class TaskApplicationService {
             System.out.println("更新电数据");
         }
     }
+
+    // @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "*/10 * * * * ?")
+    public void tongJiEquipmentRunTime() {
+        List<Long> equipmentIds = equipmentService.getAllIds();
+
+        for (Long id : equipmentIds) {
+            String redisId = String.format("equipment-%d", id);
+
+            OnlineDTO onlineDTO = CacheCenter.onlineCache.getObjectById(redisId);
+            if (onlineDTO != null && onlineDTO.getIsOnline()) {
+                QueryWrapper<RunTimeEntity> queryWrapper = new QueryWrapper<>();
+                queryWrapper
+                        .eq("equipment_id", id)
+                        .eq("is_stop", false)
+                        .orderByDesc("run_time_id")
+                        .last("LIMIT 1");
+                RunTimeEntity runTimeEntity = runTimeService.getOne(queryWrapper);
+                // 已经停止或者没有开始的,重新开始计时
+                if (runTimeEntity == null) {
+                    RunTimeModel runTimeModel = runTimeFactory.create();
+                    AddRunTimeCommand addRunTimeCommand = new AddRunTimeCommand();
+                    addRunTimeCommand.setEquipmentId(id);
+                    addRunTimeCommand.setIsStop(false);
+                    runTimeModel.loadAddRunTimeCommand(addRunTimeCommand);
+                    runTimeModel.insert();
+                } else {
+                    runTimeEntity.updateById();
+                }
+            } else {
+                QueryWrapper<RunTimeEntity> queryWrapper = new QueryWrapper<>();
+                queryWrapper
+                        .eq("equipment_id", id)
+                        .eq("is_stop", false)
+                        .orderByDesc("run_time_id")
+                        .last("LIMIT 1");
+                RunTimeEntity runTimeEntity = runTimeService.getOne(queryWrapper);
+                if (runTimeEntity != null) {
+                    runTimeEntity.setIsStop(true);
+                    runTimeEntity.updateById();
+                }
+            }
+
+        }
+    }
+
+    @Scheduled(cron = "0 0/10 * * * ?")
+    public void tongJiEnvironmentRunTime() {
+        List<Long> environmentIds = environmentService.getAllIds();
+        for (Long id : environmentIds) {
+            String redisId = String.format("environment-%d", id);
+
+            OnlineDTO onlineDTO = CacheCenter.onlineCache.getObjectById(redisId);
+            if (onlineDTO != null && onlineDTO.getIsOnline()) {
+                QueryWrapper<RunTimeEntity> queryWrapper = new QueryWrapper<>();
+                queryWrapper
+                        .eq("environment_id", id)
+                        .eq("is_stop", false)
+                        .orderByDesc("run_time_id")
+                        .last("LIMIT 1");
+                RunTimeEntity runTimeEntity = runTimeService.getOne(queryWrapper);
+                // 已经停止或者没有开始的,重新开始计时
+                if (runTimeEntity == null) {
+                    RunTimeModel runTimeModel = runTimeFactory.create();
+                    AddRunTimeCommand addRunTimeCommand = new AddRunTimeCommand();
+                    addRunTimeCommand.setEnvironmentId(id);
+                    addRunTimeCommand.setIsStop(false);
+                    runTimeModel.loadAddRunTimeCommand(addRunTimeCommand);
+                    runTimeModel.insert();
+                } else {
+                    runTimeEntity.updateById();
+                }
+            } else {
+                QueryWrapper<RunTimeEntity> queryWrapper = new QueryWrapper<>();
+                queryWrapper
+                        .eq("environment_id", id)
+                        .eq("is_stop", false)
+                        .orderByDesc("run_time_id")
+                        .last("LIMIT 1");
+                RunTimeEntity runTimeEntity = runTimeService.getOne(queryWrapper);
+                if (runTimeEntity != null) {
+                    runTimeEntity.setEnvironmentId(id);
+                    runTimeEntity.setIsStop(true);
+                    runTimeEntity.updateById();
+                }
+            }
+
+        }
+    }
+
 }

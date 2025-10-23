@@ -53,4 +53,8 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
     public Long getAlarmCountByYear() {
         return baseMapper.getAlarmCountByYear();
     }
+
+    public List<Long> getAllIds() {
+        return baseMapper.getAllIds();
+    }
 }

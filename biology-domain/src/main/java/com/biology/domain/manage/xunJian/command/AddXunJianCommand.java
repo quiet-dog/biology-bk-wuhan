@@ -1,5 +1,7 @@
 package com.biology.domain.manage.xunJian.command;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -16,5 +18,7 @@ public class AddXunJianCommand {
     private Long endTime;
 
     private Boolean enable;
+
+    private List<Integer> timeRange;
 
 }

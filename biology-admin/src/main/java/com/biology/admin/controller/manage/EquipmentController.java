@@ -174,4 +174,10 @@ public class EquipmentController extends BaseController {
         Long alarmCount = equipmentApplicationService.getAlarmCount(dayType);
         return ResponseDTO.ok(alarmCount);
     }
+
+    @Operation(summary = "获取设备档案报警统计")
+    @GetMapping("/getRunTime/{equipmentId}")
+    public ResponseDTO<String> getRunTime(@PathVariable Long equipmentId) {
+        return ResponseDTO.ok(equipmentApplicationService.getRunTime(equipmentId));
+    }
 }

@@ -23,4 +23,5 @@ public interface EquipmentService extends IService<EquipmentEntity> {
 
     Long getAlarmCountByYear();
 
+    public List<Long> getAllIds();
 }

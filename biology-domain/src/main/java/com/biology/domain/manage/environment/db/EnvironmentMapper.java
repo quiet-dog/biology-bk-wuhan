@@ -31,4 +31,7 @@ public interface EnvironmentMapper extends BaseMapper<EnvironmentEntity> {
         @Select("SELECT e_area FROM manage_environment where deleted = 0"
                         + " GROUP BY e_area")
         public List<String> getAllAreas();
+
+        @Select("SELECT environment_id form manage_environment where deleted = 0")
+        public List<Long> getAllIds();
 }

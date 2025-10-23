@@ -1,5 +1,7 @@
 package com.biology.domain.manage.xunJian.dto;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 
 import com.biology.domain.manage.xunJian.db.XunJianEntity;
@@ -22,6 +24,8 @@ public class XunJianDTO {
     private Long endTime;
 
     private Boolean enable;
+
+    private List<Integer> timeRange;
 
     public XunJianDTO(XunJianEntity entity) {
         if (entity != null) {
