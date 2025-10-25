@@ -38,6 +38,7 @@ import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
 import com.biology.domain.manage.threshold.db.ThresholdValueService;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
 import com.biology.domain.manage.xsData.command.XsDataFun1DTO;
+import com.biology.domain.manage.xunJian.dto.XunJianDTO;
 import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
 import com.biology.domain.system.post.db.SysPostEntity;
 import com.biology.domain.system.role.db.SysRoleEntity;
@@ -108,6 +109,8 @@ public class RedisCacheService {
     public RedisCacheTemplate<List<SopFileEntity>> sopFileCache;
 
     public RedisCacheTemplate<List<EnvironmentSopEntity>> environmentSopCache;
+
+    public RedisCacheTemplate<List<XunJianDTO>> xunJianDeviceCache;
 
     // public RedisCacheTemplate<RoleInfo> roleModelInfoCache;
 
@@ -321,6 +324,10 @@ public class RedisCacheService {
                         .inSql("sop_id", "select sop_id from manage_sop where deleted = 0");
                 return environmentSopService.getBaseMapper().selectList(queryWrapper);
             }
+        };
+
+        xunJianDeviceCache = new RedisCacheTemplate<List<XunJianDTO>>(redisUtil, CacheKeyEnum.ENVIRONMENT_SOP_KEY) {
+
         };
 
         // thrsholdEmergencyCache = new

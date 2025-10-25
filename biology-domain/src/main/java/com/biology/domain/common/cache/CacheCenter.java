@@ -24,6 +24,7 @@ import com.biology.domain.manage.threshold.db.ThresholdSopEntity;
 import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
 import com.biology.domain.manage.xsData.command.XsDataFun1DTO;
+import com.biology.domain.manage.xunJian.dto.XunJianDTO;
 import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
 import com.biology.domain.system.dept.db.SysDeptEntity;
 import com.biology.domain.system.post.db.SysPostEntity;
@@ -85,6 +86,8 @@ public class CacheCenter {
 
     public static RedisCacheTemplate<List<EmergencyDTO>> thrsholdEmergencyCache;
 
+    public static RedisCacheTemplate<List<XunJianDTO>> xunJianDeviceCache;
+
     // public static RedisCacheTemplate<List<SopDTO>> thrsholdSopCache;
 
     public static RedisCacheTemplate<ThresholdEntity> thresholdCache;
@@ -130,6 +133,7 @@ public class CacheCenter {
         sopCache = redisCache.sopCache;
         sopFileCache = redisCache.sopFileCache;
         environmentSopCache = redisCache.environmentSopCache;
+        xunJianDeviceCache = redisCache.xunJianDeviceCache;
         // thrsholdEmergencyCache = redisCache.thrsholdEmergencyCache;
         // thrsholdSopCache = redisCache.thrsholdSopCache;
     }

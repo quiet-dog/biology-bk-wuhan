@@ -2,6 +2,7 @@ package com.biology.domain.manage.event;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +18,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
 import com.biology.common.utils.time.DatePickUtil;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailEntity;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailService;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelEntity;
@@ -50,6 +52,10 @@ import com.biology.domain.manage.materials.db.MaterialsValueEntity;
 import com.biology.domain.manage.materials.db.MaterialsValueService;
 import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
 import com.biology.domain.manage.threshold.db.ThresholdValueService;
+import com.biology.domain.manage.xunJian.db.XunJianEntity;
+import com.biology.domain.manage.xunJian.dto.XunJianDTO;
+import com.biology.domain.manage.xunJianHistory.db.XunJianEventEntity;
+import com.biology.domain.manage.xunJianHistory.db.XunJianHistoryEntity;
 import com.biology.domain.manage.event.model.EventFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -76,6 +82,8 @@ public class EventApplicationService {
         EventModel eventModel = eventFactory.create();
         eventModel.loadAddEventCommand(command);
         eventModel.insert();
+
+        checkXunJian(eventModel);
     }
 
     public void updateEvent(UpdateEventCommand command) {
@@ -521,4 +529,89 @@ public class EventApplicationService {
         return result;
     }
 
+    public void checkXunJian(EventModel event) {
+        if (event == null) {
+            return;
+        }
+
+        LocalTime now = LocalTime.now();
+        int hour = now.getHour();
+        int minute = now.getMinute();
+        int second = now.getSecond();
+        int day = LocalDate.now().getDayOfMonth();
+        int totalSeconds = hour * 3600 + minute * 60 + second;
+        int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
+
+        String redisId = "";
+        if (event.getEquipmentId() != null && event.getEquipmentId() > 0) {
+            redisId = "equipment-" + event.getEquipmentId().toString();
+        }
+
+        if (event.getEnvironmentId() != null && event.getEnvironmentId() > 0) {
+            redisId = "environment-" + event.getEnvironmentId().toString();
+        }
+
+        List<XunJianDTO> xunJianDTOs = CacheCenter.xunJianDeviceCache.getObjectById(redisId);
+        if (xunJianDTOs != null) {
+            for (XunJianDTO x : xunJianDTOs) {
+                Boolean isExit = false;
+                if (x.getXunJianLeiXing() != null && x.getXunJianPinLu() != null) {
+                    if (x.getXunJianLeiXing().equals("定点巡检")) {
+                        if (x.getXunJianPinLu().equals("每日")) {
+                            isExit = (x.getTimeRange().get(0) == totalSeconds);
+                        }
+                        if (x.getXunJianPinLu().equals("每周")) {
+                            isExit = (x.getTimeRange().get(0) == totalSeconds
+                                    && x.getDayRange().contains(dayOfWeek - 1));
+                        }
+                        if (x.getXunJianPinLu().equals("每月")) {
+                            isExit = (x.getTimeRange().get(0) == totalSeconds && x.getDayRange().contains(day - 1));
+                        }
+                    } else {
+                        Boolean timeIsExit = false;
+                        timeIsExit = (x.getTimeRange().get(0) < totalSeconds && totalSeconds < x.getTimeRange().get(1));
+                        if (!timeIsExit) {
+                            return;
+                        }
+                        if (x.getXunJianPinLu().equals("每日")) {
+                            isExit = true;
+                        }
+                        if (x.getXunJianPinLu().equals("每周")) {
+                            isExit = x.getDayRange().contains(dayOfWeek - 1);
+                        }
+                        if (x.getXunJianPinLu().equals("每月")) {
+                            isExit = x.getDayRange().contains(day - 1);
+                        }
+                    }
+                }
+
+                if (isExit) {
+                    QueryWrapper<XunJianHistoryEntity> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("xun_jian_id", x.getXunJianId())
+                            .eq("status", "巡检中");
+                    XunJianHistoryEntity xunJianHistoryEntity = new XunJianHistoryEntity().selectOne(queryWrapper);
+                    if (xunJianHistoryEntity == null) {
+                        xunJianHistoryEntity = new XunJianHistoryEntity();
+                        xunJianHistoryEntity.setDayRange(x.getDayRange());
+                        xunJianHistoryEntity.setFanWei(x.getFanWei());
+                        xunJianHistoryEntity.setStatus("巡检中");
+                        xunJianHistoryEntity.setTimeRange(x.getTimeRange());
+                        xunJianHistoryEntity.setXunJianId(x.getXunJianId());
+                        xunJianHistoryEntity.setXunJianLeiXing(x.getXunJianLeiXing());
+                        xunJianHistoryEntity.setXunJianPinLu(x.getXunJianPinLu());
+                        xunJianHistoryEntity.insert();
+                    }
+
+                    long timestamp13 = System.currentTimeMillis();
+
+                    XunJianEventEntity xunJianEventEntity = new XunJianEventEntity();
+                    xunJianEventEntity.setEventId(event.getEventId());
+                    xunJianEventEntity.setXunJianHistoryId(xunJianHistoryEntity.getXunJianHistoryId());
+                    xunJianEventEntity.setNowTime(timestamp13);
+                    xunJianEventEntity.insert();
+                }
+
+            }
+        }
+    }
 }

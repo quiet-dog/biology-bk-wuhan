@@ -1,11 +1,13 @@
 package com.biology.domain.manage.task;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.biology.common.utils.time.DatePickUtil;
 import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.detection.command.AddDetectionCommand;
@@ -61,6 +64,10 @@ import com.biology.domain.manage.task.db.MaterialsTaskService;
 import com.biology.domain.manage.task.dto.ShengOnelineResDTO;
 import com.biology.domain.manage.websocket.db.WebsocketService;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
+import com.biology.domain.manage.xunJian.db.XunJianEntity;
+import com.biology.domain.manage.xunJian.db.XunJianService;
+import com.biology.domain.manage.xunJian.model.XunJianFactory;
+import com.biology.domain.manage.xunJianHistory.db.XunJianHistoryEntity;
 
 import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
@@ -112,6 +119,10 @@ public class TaskApplicationService {
     private final WebClient renTiClient;
 
     private final EquipmentDataService equipmentDataService;
+
+    private final XunJianService xunJianService;
+
+    private final XunJianFactory xunJianFactory;
 
     // @Scheduled(cron = "30 0 0 1 * ?")
     // public void stock() {
@@ -629,6 +640,104 @@ public class TaskApplicationService {
                 }
             }
 
+        }
+    }
+
+    // 任务调用执行巡检是否创建表
+    @Scheduled(cron = "0 0/15 * * * ?")
+    public void createXunJianTable() {
+        QueryWrapper<XunJianEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("enable", true).eq("xun_jian_lei_xing", "持续巡检");
+        List<XunJianEntity> list = xunJianService.list(queryWrapper);
+
+        LocalDate today = LocalDate.now();
+        int currentDayOfWeek = today.getDayOfWeek().getValue() % 7; // Java 周一=1，周日=7，转成0-6
+        int currentDayOfMonth = today.getDayOfMonth() - 1; // 假设 dayRange 的每月天数从0开始
+
+        for (XunJianEntity x : list) {
+            Boolean isInsert = false;
+            Boolean isStop = false;
+            if (x.getXunJianPinLu().equals("每周")) {
+                // 本周周一
+                LocalDate weekStart = today.with(DayOfWeek.MONDAY);
+                // 本周周日
+                LocalDate weekEnd = today.with(DayOfWeek.SUNDAY);
+                if (x.getDayRange().contains(currentDayOfWeek - 1)) {
+
+                    // 判断今天是否已有记录
+                    QueryWrapper<XunJianHistoryEntity> queryWrapper2 = new QueryWrapper<>();
+                    queryWrapper2.eq("xun_jian_id", x.getXunJianId())
+                            .eq("status", "巡检中")
+                            .ge("create_time", weekStart.atStartOfDay()) // create_time >= 本周周一 00:00
+                            .lt("create_time", weekEnd.plusDays(1).atStartOfDay()); // create_time < 下周一 00:00;
+                    XunJianHistoryEntity xunJianHistoryEntity = new XunJianHistoryEntity().selectOne(queryWrapper2);
+                    if (xunJianHistoryEntity == null) {
+                        isInsert = true;
+                    }
+                } else {
+                    int max = x.getDayRange().stream().mapToInt(Integer::intValue).max().orElse(Integer.MIN_VALUE);
+                    if (currentDayOfWeek > max) {
+                        QueryWrapper<XunJianHistoryEntity> queryWrapper2 = new QueryWrapper<>();
+                        queryWrapper2.eq("xun_jian_id", x.getXunJianId())
+                                .eq("status", "巡检中")
+                                .ge("create_time", weekStart.atStartOfDay()) // create_time >= 本周周一 00:00
+                                .lt("create_time", weekEnd.plusDays(1).atStartOfDay()); // create_time < 下周一 00:00;
+                        XunJianHistoryEntity xunJianHistoryEntity = new XunJianHistoryEntity().selectOne(queryWrapper2);
+                        if (xunJianHistoryEntity != null) {
+                            isStop = true;
+                        }
+                    }
+                }
+
+            }
+
+            if (x.getXunJianPinLu().equals("每月")) {
+                // 本月第一天
+                LocalDate monthStart = today.withDayOfMonth(1);
+                // 下个月第一天（作为本月结束边界）
+                LocalDate nextMonthStart = monthStart.plusMonths(1);
+                if (x.getDayRange().contains(currentDayOfMonth - 1)) {
+                    // 判断今天是否已有记录
+                    QueryWrapper<XunJianHistoryEntity> queryWrapper2 = new QueryWrapper<>();
+                    queryWrapper2.eq("xun_jian_id", x.getXunJianId())
+                            .eq("status", "巡检中")
+                            .ge("create_time", monthStart.atStartOfDay()) // create_time >= 本周周一 00:00
+                            .lt("create_time", nextMonthStart.atStartOfDay()); // create_time < 下周一 00:00;
+                    XunJianHistoryEntity xunJianHistoryEntity = new XunJianHistoryEntity().selectOne(queryWrapper2);
+                    if (xunJianHistoryEntity == null) {
+                        isInsert = true;
+                    }
+                } else {
+                    // 判断今天是否已有记录
+                    QueryWrapper<XunJianHistoryEntity> queryWrapper2 = new QueryWrapper<>();
+                    queryWrapper2.eq("xun_jian_id", x.getXunJianId())
+                            .eq("status", "巡检中")
+                            .ge("create_time", monthStart.atStartOfDay()) // create_time >= 本周周一 00:00
+                            .lt("create_time", nextMonthStart.atStartOfDay()); // create_time < 下周一 00:00;
+                    XunJianHistoryEntity xunJianHistoryEntity = new XunJianHistoryEntity().selectOne(queryWrapper2);
+                    if (xunJianHistoryEntity != null) {
+                        isStop = true;
+                    }
+                }
+            }
+
+            if (isInsert) {
+                XunJianHistoryEntity xunJianHistoryEntity = new XunJianHistoryEntity();
+                xunJianHistoryEntity.setDayRange(x.getDayRange());
+                xunJianHistoryEntity.setFanWei(x.getFanWei());
+                xunJianHistoryEntity.setStatus("巡检中");
+                xunJianHistoryEntity.setTimeRange(x.getTimeRange());
+                xunJianHistoryEntity.setXunJianId(x.getXunJianId());
+                xunJianHistoryEntity.setXunJianLeiXing(x.getXunJianLeiXing());
+                xunJianHistoryEntity.setXunJianPinLu(x.getXunJianPinLu());
+                xunJianHistoryEntity.insert();
+            }
+
+            if (isStop) {
+                UpdateWrapper<XunJianHistoryEntity> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("status", "巡检中").eq("xun_jian_id", x.getXunJianId()).set("status", "已完成");
+                new XunJianHistoryEntity().update(updateWrapper);
+            }
         }
     }
 

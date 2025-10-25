@@ -19,13 +19,15 @@ public class XunJianDTO {
 
     private String xunJianLeiXing;
 
-    private Long startTime;
+    // private Long startTime;
 
-    private Long endTime;
+    // private Long endTime;
 
     private Boolean enable;
 
     private List<Integer> timeRange;
+
+    private List<Integer> dayRange;
 
     public XunJianDTO(XunJianEntity entity) {
         if (entity != null) {
