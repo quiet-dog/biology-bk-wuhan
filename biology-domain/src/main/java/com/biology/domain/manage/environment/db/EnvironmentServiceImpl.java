@@ -31,4 +31,8 @@ public class EnvironmentServiceImpl extends ServiceImpl<EnvironmentMapper, Envir
         public List<String> getAllAreas() {
                 return baseMapper.getAllAreas();
         }
+
+        public List<Long> getAllIds() {
+                return baseMapper.getAllIds();
+        }
 }

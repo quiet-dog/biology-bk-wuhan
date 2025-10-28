@@ -1,7 +1,10 @@
 package com.biology.admin.controller.manage;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.validation.annotation.Validated;
@@ -23,9 +26,12 @@ import com.biology.domain.manage.xunJian.command.AddXunJianCommand;
 import com.biology.domain.manage.xunJian.command.UpdateXunJianCommand;
 import com.biology.domain.manage.xunJian.dto.XunJianDTO;
 import com.biology.domain.manage.xunJian.query.XunJianQuery;
+import com.biology.domain.manage.xunJianHistory.XunJianHistoryApplicationService;
+import com.biology.domain.manage.xunJianHistory.dto.XunJianHistoryDTO;
+import com.biology.domain.manage.xunJianHistory.query.XunJianHistoryQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +42,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class XunJianController extends BaseController {
     private final XunJianApplicationService xunJianApplicationService;
+
+    private final XunJianHistoryApplicationService xunJianHistoryApplicationService;
 
     @Operation(summary = "添加巡检")
     @PostMapping
@@ -92,5 +100,12 @@ public class XunJianController extends BaseController {
     public ResponseDTO<Void> disable(@PathVariable Long xunJianId) {
         xunJianApplicationService.disable(xunJianId);
         return ResponseDTO.ok();
+    }
+
+    @Operation(summary = "获取巡检列表")
+    @GetMapping("/history")
+    public ResponseDTO<PageDTO<XunJianHistoryDTO>> getXunJianHistyory(XunJianHistoryQuery query) {
+        PageDTO<XunJianHistoryDTO> list = xunJianHistoryApplicationService.getXunJians(query);
+        return ResponseDTO.ok(list);
     }
 }

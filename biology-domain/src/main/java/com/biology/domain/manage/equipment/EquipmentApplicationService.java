@@ -1,6 +1,8 @@
 package com.biology.domain.manage.equipment;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ import com.biology.domain.manage.equipment.dto.EquipmentDetailDTO;
 import com.biology.domain.manage.equipment.model.EquipmentFactory;
 import com.biology.domain.manage.equipment.model.EquipmentModel;
 import com.biology.domain.manage.equipment.query.SearchEquipmentQuery;
+import com.biology.domain.manage.runTime.db.RunTimeEntity;
+import com.biology.domain.manage.runTime.db.RunTimeService;
 
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +35,8 @@ public class EquipmentApplicationService {
 
     private final EquipmentFactory equipmentFactory;
     private final EquipmentService equipmentService;
+
+    private final RunTimeService runTimeService;
 
     public void createEquipment(AddEquipmentCommand command) {
         EquipmentModel equipmentModel = equipmentFactory.create();
@@ -95,6 +101,28 @@ public class EquipmentApplicationService {
             return equipmentService.getAlarmCountByYear();
         }
         return 0L;
+    }
+
+    public String getRunTime(Long equipmentId) {
+        QueryWrapper<RunTimeEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("equipment_id", equipmentId).eq("is_stop", false).orderByDesc("run_time_id")
+                .last("LIMIT 1");
+        RunTimeEntity runTimeEntity = runTimeService.getOne(queryWrapper);
+        // runTimeEntity.getCreateTime()
+        if (runTimeEntity != null && runTimeEntity.getCreateTime() != null) {
+            runTimeEntity.setUpdateTime(new Date());
+
+            long diffMillis = runTimeEntity.getUpdateTime().getTime() - runTimeEntity.getCreateTime().getTime();
+            if (diffMillis < 0) {
+                return "0";
+            }
+
+            long hours = TimeUnit.MILLISECONDS.toHours(diffMillis);
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(diffMillis) % 60;
+            long seconds = TimeUnit.MILLISECONDS.toSeconds(diffMillis) % 60;
+            return String.format("%d小时%d分%d秒", hours, minutes, seconds);
+        }
+        return "0";
     }
 
     // public EquipmentDTO getOnlineDevice() {

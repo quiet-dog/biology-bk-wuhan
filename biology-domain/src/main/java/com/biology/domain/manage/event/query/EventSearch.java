@@ -33,6 +33,8 @@ public class EventSearch extends AbstractPageQuery<EventEntity> {
         @Schema(description = "导出类型")
         private String exportType;
 
+        private Long xunJianHistoryId;
+
         @Override
         public QueryWrapper<EventEntity> addQueryCondition() {
                 QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<EventEntity>();
@@ -45,7 +47,10 @@ public class EventSearch extends AbstractPageQuery<EventEntity> {
                                 .in(getEventIds() != null && getEventIds().size() > 0, "event_id", this.eventIds)
                                 .inSql(StrUtil.isNotEmpty((deviceName)), "equipment_id",
                                                 "select equipment_id from manage_equipment where equipment_name = '"
-                                                                + deviceName + "'");
+                                                                + deviceName + "'")
+                                .inSql(xunJianHistoryId != null && xunJianHistoryId > 0, "event_id", String.format(
+                                                "select event_id from manage_xun_jian_event where xun_jian_history_id = %d",
+                                                xunJianHistoryId));
                 if (StrUtil.isNotEmpty(area)) {
                         queryWrapper.inSql("(environment_id",
                                         "select environment_id from manage_environment where e_area = '" + area
