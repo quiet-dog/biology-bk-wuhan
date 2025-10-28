@@ -48,6 +48,7 @@ public class ThresholdApplicationService {
         CacheCenter.thresholdCache.delete(thresholdModel.getThresholdId());
         CacheCenter.thresholdEmergencyCache.delete(thresholdModel.getThresholdId());
         CacheCenter.thresholdSopCache.delete(thresholdModel.getThresholdId());
+        CacheCenter.thresholdValuesCache.delete(thresholdModel.getThresholdId());
 
     }
 
@@ -58,6 +59,7 @@ public class ThresholdApplicationService {
         CacheCenter.thresholdCache.delete(thresholdModel.getThresholdId());
         CacheCenter.thresholdEmergencyCache.delete(thresholdModel.getThresholdId());
         CacheCenter.thresholdSopCache.delete(thresholdModel.getThresholdId());
+        CacheCenter.thresholdValuesCache.delete(thresholdModel.getThresholdId());
     }
 
     public void deleteThreshold(Long thresholdId) {
