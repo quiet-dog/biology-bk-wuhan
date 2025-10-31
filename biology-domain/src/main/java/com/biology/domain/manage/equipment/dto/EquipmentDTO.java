@@ -6,6 +6,7 @@ import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.equipment.db.EquipmentEntity;
 import com.biology.domain.manage.threshold.db.ThresholdEntity;
 import com.biology.domain.manage.threshold.dto.ThresholdDTO;
+import com.biology.domain.manage.threshold.dto.ThresholdDataDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class EquipmentDTO {
@@ -30,7 +32,7 @@ public class EquipmentDTO {
     private String equipmentName;
 
     @Schema(description = "传感器列表")
-    private List<ThresholdEntity> thresholdList;
+    private List<ThresholdDataDTO> thresholdList;
 
     @Schema(description = "设备型号")
     @ExcelColumn(name = "设备型号")
@@ -76,8 +78,8 @@ public class EquipmentDTO {
             QueryWrapper<ThresholdEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("equipment_id", getEquipmentId());
             List<ThresholdEntity> thresholdEntities = new ThresholdEntity().selectList(queryWrapper);
-            thresholdList = thresholdEntities;
-
+            thresholdList = thresholdEntities.stream().map(ThresholdDataDTO::new)
+                    .collect(Collectors.toList());
         }
     }
 }

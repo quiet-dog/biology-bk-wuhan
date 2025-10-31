@@ -653,10 +653,17 @@ public class TaskApplicationService {
         LocalDate today = LocalDate.now();
         int currentDayOfWeek = today.getDayOfWeek().getValue() % 7; // Java 周一=1，周日=7，转成0-6
         int currentDayOfMonth = today.getDayOfMonth() - 1; // 假设 dayRange 的每月天数从0开始
+        int seconds = LocalTime.now().toSecondOfDay();
 
         for (XunJianEntity x : list) {
             Boolean isInsert = false;
             Boolean isStop = false;
+            if (x.getXunJianPinLu().equals("每日")) {
+                if (x.getTimeRange().get(0) < seconds && seconds < x.getTimeRange().get(1)) {
+
+                }
+            }
+
             if (x.getXunJianPinLu().equals("每周")) {
                 // 本周周一
                 LocalDate weekStart = today.with(DayOfWeek.MONDAY);
