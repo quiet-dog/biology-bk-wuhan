@@ -1,6 +1,7 @@
 package com.biology.domain.manage.threshold;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import com.biology.common.core.page.PageDTO;
 import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.environment.db.EnvironmentService;
 import com.biology.domain.manage.equipment.db.EquipmentEntity;
+import com.biology.domain.manage.event.db.EventEntity;
 import com.biology.domain.manage.threshold.command.AddThresholdCommand;
 import com.biology.domain.manage.threshold.command.UpdateThresholdCommand;
 import com.biology.domain.manage.threshold.db.ThresholdEntity;
@@ -29,6 +31,7 @@ import com.biology.domain.manage.websocket.dto.EquipmentInfoDTO;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
 import com.biology.infrastructure.cache.RedisUtil;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -101,6 +104,14 @@ public class ThresholdApplicationService {
             if (!Double.isNaN(thresholdValue.getMin()) && !Double.isNaN(thresholdValue.getMax())) {
                 if (thresholdValue.getMin() < equipmentInfo.getValue()
                         && equipmentInfo.getValue() < thresholdValue.getMax()) {
+
+                    QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("threshold_id", equipmentInfo.getEquipmentId());
+                    queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                    EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+                    if (eventEntity != null) {
+                        return null;
+                    }
                     return thresholdValue;
                 }
             }

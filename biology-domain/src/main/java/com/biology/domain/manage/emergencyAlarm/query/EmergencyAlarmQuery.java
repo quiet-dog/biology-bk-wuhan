@@ -1,5 +1,7 @@
 package com.biology.domain.manage.emergencyAlarm.query;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.core.page.AbstractPageQuery;
 import com.biology.domain.manage.emergencyAlarm.db.EmergencyAlarmEntity;
@@ -12,6 +14,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class EmergencyAlarmQuery extends AbstractPageQuery<EmergencyAlarmEntity> {
+
+    private List<Long> ids;
 
     @Schema(description = "报警类型")
     private String type;
@@ -33,7 +37,9 @@ public class EmergencyAlarmQuery extends AbstractPageQuery<EmergencyAlarmEntity>
     @Override
     public QueryWrapper<EmergencyAlarmEntity> addQueryCondition() {
         QueryWrapper<EmergencyAlarmEntity> queryWrapper = new QueryWrapper<EmergencyAlarmEntity>();
-        queryWrapper.like(StrUtil.isNotEmpty(type), "type", type)
+        queryWrapper
+                .in(ids != null && ids.size() > 0, "emergency_alarm_id", ids)
+                .like(StrUtil.isNotEmpty(type), "type", type)
                 .like(StrUtil.isNotEmpty(level), "level", level)
                 .like(StrUtil.isNotEmpty(eventName), "type", eventName)
                 .inSql(StrUtil.isNotEmpty(dStartTime) && StrUtil.isNotEmpty(dEndTime), "emergency_alarm_id",

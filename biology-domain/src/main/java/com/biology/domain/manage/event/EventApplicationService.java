@@ -56,6 +56,9 @@ import com.biology.domain.manage.xunJian.db.XunJianEntity;
 import com.biology.domain.manage.xunJian.dto.XunJianDTO;
 import com.biology.domain.manage.xunJianHistory.db.XunJianEventEntity;
 import com.biology.domain.manage.xunJianHistory.db.XunJianHistoryEntity;
+
+import cn.hutool.core.date.DateUtil;
+
 import com.biology.domain.manage.event.model.EventFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -180,17 +183,39 @@ public class EventApplicationService {
             if (!Double.isNaN(alarmlevelDetailEntity.getMax()) && !Double.isNaN(alarmlevelDetailEntity.getMin())) {
                 if (alarmlevelDetailEntity.getMin() < equAlarmInfoDTO.getValue()
                         && equAlarmInfoDTO.getValue() < alarmlevelDetailEntity.getMax()) {
+                    QueryWrapper<EventEntity> queryWrapper3 = new QueryWrapper<>();
+                    queryWrapper3.eq("environment_id", equAlarmInfoDTO.getEnvironmentId());
+                    queryWrapper3.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                    EventEntity eventEntity = new EventEntity().selectOne(queryWrapper3);
+                    if (eventEntity != null) {
+                        return null;
+                    }
                     return alarmlevelDetailEntity;
                 }
             }
 
             if (!Double.isNaN(alarmlevelDetailEntity.getMin()) && Double.isNaN(alarmlevelDetailEntity.getMax())
                     && alarmlevelDetailEntity.getMin() < equAlarmInfoDTO.getValue()) {
+
+                QueryWrapper<EventEntity> queryWrapper3 = new QueryWrapper<>();
+                queryWrapper3.eq("environment_id", equAlarmInfoDTO.getEnvironmentId());
+                queryWrapper3.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                EventEntity eventEntity = new EventEntity().selectOne(queryWrapper3);
+                if (eventEntity != null) {
+                    return null;
+                }
                 return alarmlevelDetailEntity;
             }
 
             if (!Double.isNaN(alarmlevelDetailEntity.getMax()) && Double.isNaN(alarmlevelDetailEntity.getMin())
                     && equAlarmInfoDTO.getValue() < alarmlevelDetailEntity.getMax()) {
+                QueryWrapper<EventEntity> queryWrapper3 = new QueryWrapper<>();
+                queryWrapper3.eq("environment_id", equAlarmInfoDTO.getEnvironmentId());
+                queryWrapper3.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                EventEntity eventEntity = new EventEntity().selectOne(queryWrapper3);
+                if (eventEntity != null) {
+                    return null;
+                }
                 return alarmlevelDetailEntity;
             }
         }
