@@ -1,7 +1,9 @@
 package com.biology.domain.manage.equipment.dto;
 
 import com.biology.domain.manage.equipment.db.EquipmentDataEntity;
+import com.biology.domain.manage.equipment.db.EquipmentEntity;
 import com.biology.domain.manage.threshold.db.ThresholdEntity;
+import com.biology.domain.manage.threshold.dto.DataThresholdDTO;
 import com.biology.domain.manage.threshold.dto.ThresholdDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +25,8 @@ public class EquipmentDataDTO {
     private Long thresholdId;
 
     @Schema(description = "阈值传感器信息")
-    private ThresholdDTO threshold;
+    // private ThresholdDTO threshold;DataThresholdDTO
+    private DataThresholdDTO threshold;
 
     @Schema(description = "设备")
     private EquipmentDTO equipment;
@@ -46,11 +49,26 @@ public class EquipmentDataDTO {
     @Schema(description = "是否删除")
     private Boolean deleted;
 
+    private String deviceName;
+
+    private String area;
+
     public EquipmentDataDTO(EquipmentDataEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
             if (getThresholdId() != null) {
-                this.threshold = new ThresholdDTO(new ThresholdEntity().selectById(entity.getThresholdId()));
+                this.threshold = new DataThresholdDTO(new ThresholdEntity().selectById(entity.getThresholdId()));
+            }
+            addDevice();
+        }
+    }
+
+    public void addDevice() {
+        if (getEquipmentId() != null) {
+            EquipmentEntity equipmentEntity = new EquipmentEntity().selectById(getEquipmentId());
+            if (equipmentEntity != null) {
+                setArea(equipmentEntity.getInstallationLocation());
+                setDeviceName(equipmentEntity.getEquipmentName());
             }
         }
     }

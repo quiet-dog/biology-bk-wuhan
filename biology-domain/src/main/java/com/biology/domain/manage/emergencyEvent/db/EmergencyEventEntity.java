@@ -41,6 +41,12 @@ public class EmergencyEventEntity extends BaseEntity<EmergencyEventEntity> {
     @TableField(value = "content")
     private String content;
 
+    @TableField(value = "status")
+    private Boolean status;
+
+    @TableField(value = "level")
+    private String level;
+
     @Override
     public Long pkVal() {
         return this.emergencyEventId;

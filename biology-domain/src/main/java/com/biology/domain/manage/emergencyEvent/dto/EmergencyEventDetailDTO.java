@@ -4,18 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.bouncycastle.asn1.x509.sigi.PersonalData;
 import org.springframework.beans.BeanUtils;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.annotation.ExcelColumn;
 import com.biology.domain.manage.emergencyAlarm.db.EmergencyAlarmEntity;
 import com.biology.domain.manage.emergencyAlarm.dto.EmergencyAlarmDTO;
 import com.biology.domain.manage.emergencyEvent.db.EmergencyEventEntity;
-import com.biology.domain.manage.emergencyEvent.db.EmergencyUserEntity;
 import com.biology.domain.manage.personnel.db.PersonnelEntity;
 import com.biology.domain.manage.personnel.dto.PersonnelDTO;
 
@@ -23,7 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class EmergencyEventDTO {
+public class EmergencyEventDetailDTO {
     @Schema(description = "id")
     @ExcelColumn(name = "事件编号")
     private Long emergencyEventId;
@@ -60,13 +55,11 @@ public class EmergencyEventDTO {
 
     private Boolean status;
 
-    private String level;
-
-    public EmergencyEventDTO(EmergencyEventEntity entity) {
+    public EmergencyEventDetailDTO(EmergencyEventEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
             addHandler();
-            // addAlarm();
+            addAlarm();
         }
     }
 

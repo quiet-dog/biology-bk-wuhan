@@ -67,4 +67,6 @@ public class AddEventCommand {
     @ApiModelProperty("推送类型")
     @ExcelColumn(name = "推送类型")
     private String pushType;
+
+    private String nodeName;
 }

@@ -12,6 +12,7 @@ import com.biology.domain.manage.emergencyEvent.command.UpdateEmergencyEventComm
 import com.biology.domain.manage.emergencyEvent.db.EmergencyEventEntity;
 import com.biology.domain.manage.emergencyEvent.db.EmergencyEventService;
 import com.biology.domain.manage.emergencyEvent.dto.EmergencyEventDTO;
+import com.biology.domain.manage.emergencyEvent.dto.EmergencyEventDetailDTO;
 import com.biology.domain.manage.emergencyEvent.dto.EmergencyEventStaticDTO;
 import com.biology.domain.manage.emergencyEvent.model.EmergencyEventFactory;
 import com.biology.domain.manage.emergencyEvent.model.EmergencyEventModel;
@@ -50,9 +51,9 @@ public class EmergencyEventApplicationService {
         emergencyEventModel.deleteById();
     }
 
-    public EmergencyEventDTO getEmergencyEvent(Long emergencyEventId) {
+    public EmergencyEventDetailDTO getEmergencyEvent(Long emergencyEventId) {
         EmergencyEventModel emergencyEventModel = emergencyEventFactory.loadById(emergencyEventId);
-        return new EmergencyEventDTO(emergencyEventModel);
+        return new EmergencyEventDetailDTO(emergencyEventModel);
     }
 
     public PageDTO<EmergencyEventDTO> searchEmergencyEvents(EmergencyEventQuery query) {
@@ -64,5 +65,9 @@ public class EmergencyEventApplicationService {
 
     public EventEchartDTO getStock(EmergencyEventStaticDTO query) {
         return emergencyEventService.getStock(query);
+    }
+
+    public Object getStockByHandle(EmergencyEventStaticDTO query) {
+        return emergencyEventService.getStockByHandle(query);
     }
 }

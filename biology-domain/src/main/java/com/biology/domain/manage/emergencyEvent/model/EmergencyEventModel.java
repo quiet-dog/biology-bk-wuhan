@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.biology.domain.manage.emergencyAlarm.db.EmergencyAlarmEntity;
 import com.biology.domain.manage.emergencyAlarm.db.EmergencyAlarmService;
 import com.biology.domain.manage.emergencyEvent.command.AddEmergencyEventCommand;
 import com.biology.domain.manage.emergencyEvent.command.UpdateEmergencyEventCommand;
@@ -92,6 +93,13 @@ public class EmergencyEventModel extends EmergencyEventEntity {
                 emergencyEventAlarmEntity.setEmergencyEventId(getEmergencyEventId());
                 emergencyEventAlarmEntity.setEmergencyAlarmId(id);
                 list.add(emergencyEventAlarmEntity);
+            }
+            if (getEmergencyAlarmIds().size() > 0) {
+                EmergencyAlarmEntity emergencyAlarmEntity = new EmergencyAlarmEntity()
+                        .selectById(getEmergencyAlarmIds().get(0));
+                if (emergencyAlarmEntity != null) {
+                    setLevel(emergencyAlarmEntity.getLevel());
+                }
             }
             emergencyEventAlarmService.saveBatch(list);
         }

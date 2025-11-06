@@ -31,6 +31,8 @@ public class SearchEquipmentDataQuery extends AbstractPageQuery<EquipmentDataEnt
     @ApiModelProperty("监测指标")
     private String monitoringIndicator;
 
+    private String highNode;
+
     // @ApiModelProperty("开始时间")
     // private Date startTime;
 
@@ -69,6 +71,11 @@ public class SearchEquipmentDataQuery extends AbstractPageQuery<EquipmentDataEnt
             queryWrapper.inSql("threshold_id",
                     "SELECT threshold_id FROM manage_threshold WHERE equipment_index LIKE '%"
                             + monitoringIndicator + "%'");
+        }
+
+        if (StrUtil.isNotEmpty(getHighNode()) && getHighNode().equals("high")) {
+            queryWrapper.inSql("equipment_id",
+                    "select equipment_id from manage_craft_node_equipment where craft_node_id in (select craft_node_id from manage_craft_node where is_high_risk = 1)");
         }
 
         if (CollectionUtil.isNotEmpty(ids)) {

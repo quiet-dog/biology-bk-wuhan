@@ -34,6 +34,8 @@ public class EmergencyAlarmQuery extends AbstractPageQuery<EmergencyAlarmEntity>
 
     private String dType;
 
+    private String handleType;
+
     @Override
     public QueryWrapper<EmergencyAlarmEntity> addQueryCondition() {
         QueryWrapper<EmergencyAlarmEntity> queryWrapper = new QueryWrapper<EmergencyAlarmEntity>();
@@ -48,7 +50,10 @@ public class EmergencyAlarmQuery extends AbstractPageQuery<EmergencyAlarmEntity>
                                 dStartTime, dEndTime))
                 .inSql(StrUtil.isNotEmpty(dType), "emergency_alarm_id", String.format(
                         "select emergency_alarm_id from manage_emergency_event_alarm where emergency_event_id in (select emergency_event_id from manage_emergency_event where type = '%s')",
-                        dType));
+                        dType))
+                .inSql(StrUtil.isNotEmpty(handleType), "emergency_alarm_id", String.format(
+                        "select emergency_alarm_id from manage_emergency_event_alarm where emergency_event_id in (select emergency_event_id from manage_emergency_event where status = %s)",
+                        handleType.equals("已处置") ? "1" : "0"));
 
         setTimeRangeColumn("create_time");
 

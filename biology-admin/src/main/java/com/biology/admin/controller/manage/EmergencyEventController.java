@@ -22,6 +22,7 @@ import com.biology.domain.manage.emergencyEvent.EmergencyEventApplicationService
 import com.biology.domain.manage.emergencyEvent.command.AddEmergencyEventCommand;
 import com.biology.domain.manage.emergencyEvent.command.UpdateEmergencyEventCommand;
 import com.biology.domain.manage.emergencyEvent.dto.EmergencyEventDTO;
+import com.biology.domain.manage.emergencyEvent.dto.EmergencyEventDetailDTO;
 import com.biology.domain.manage.emergencyEvent.dto.EmergencyEventStaticDTO;
 import com.biology.domain.manage.emergencyEvent.query.EmergencyEventQuery;
 import com.biology.domain.manage.event.dto.EventEchartDTO;
@@ -63,9 +64,9 @@ public class EmergencyEventController {
 
     @Operation(summary = "获取应急调度报警事件详情")
     @GetMapping("/{emergencyEventId}")
-    public ResponseDTO<EmergencyEventDTO> getEmergencyEventInfo(
+    public ResponseDTO<EmergencyEventDetailDTO> getEmergencyEventInfo(
             @PathVariable(value = "emergencyEventId", required = false) Long emergencyEventId) {
-        EmergencyEventDTO emergencyEventDetailDTO = emergencyEventApplicationService
+        EmergencyEventDetailDTO emergencyEventDetailDTO = emergencyEventApplicationService
                 .getEmergencyEvent(emergencyEventId);
         return ResponseDTO.ok(emergencyEventDetailDTO);
     }
@@ -88,5 +89,10 @@ public class EmergencyEventController {
     @GetMapping("/getStock")
     public ResponseDTO<EventEchartDTO> getStock(EmergencyEventStaticDTO query) {
         return ResponseDTO.ok(emergencyEventApplicationService.getStock(query));
+    }
+
+    @GetMapping("/getStockByHandle")
+    public ResponseDTO<Object> getStockByHandle(EmergencyEventStaticDTO query) {
+        return ResponseDTO.ok(emergencyEventApplicationService.getStockByHandle(query));
     }
 }

@@ -76,9 +76,9 @@ public class EquipmentApplicationService {
         return new PageDTO<>(records, page.getTotal());
     }
 
-    public EquipmentDTO getEquipmentInfo(Long equipmentId) {
+    public EquipmentDetailDTO getEquipmentInfo(Long equipmentId) {
         EquipmentModel equipmentModel = equipmentFactory.loadById(equipmentId);
-        return new EquipmentDTO(equipmentModel);
+        return new EquipmentDetailDTO(equipmentModel);
     }
 
     public PageDTO<EquipmentDetailDTO> getEquipmentDetailList(SearchEquipmentQuery query) {

@@ -97,6 +97,9 @@ public class EventEntity extends BaseEntity<EventEntity> {
     @TableField(value = "push_type")
     private String pushType;
 
+    @TableField(value = "node_name")
+    private String nodeName;
+
     @Override
     public Serializable pkVal() {
         return this.eventId;

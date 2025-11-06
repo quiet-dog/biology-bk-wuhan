@@ -13,6 +13,7 @@ import com.biology.common.core.page.PageDTO;
 import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.alarmlevel.db.AlarmlevelDetailEntity;
 import com.biology.domain.manage.alarmlevel.dto.EnvironmentAlarmInfoDTO;
+import com.biology.domain.manage.craftarchive.db.CraftArchiveEntity;
 import com.biology.domain.manage.craftnode.db.CraftNodeEntity;
 import com.biology.domain.manage.craftnode.db.CraftNodeService;
 import com.biology.domain.manage.detection.DetectionApplicationService;
@@ -390,6 +391,15 @@ public class MoniApplicationService {
                         command.setThresholdId(thresholdValueEntity.getThresholdId());
                         command.setEquipmentValue(deviceDTO.getEquipmentInfo().getValue());
                         command.setCraftNodeId(craftNodeEntity.getCraftNodeId());
+                        command.setNodeName(craftNodeEntity.getNodeName());
+                        CraftArchiveEntity craftArchiveEntity = new CraftArchiveEntity()
+                                .selectById(craftNodeEntity.getCraftArchiveId());
+                        if (craftArchiveEntity == null) {
+                            return;
+                        }
+
+                        command.setDescription(String.format("%s的%s工艺节点故障,触发报警", craftNodeEntity.getNodeName(),
+                                craftArchiveEntity.getCraftArchiveName()));
                         eventApplicationService.createEvent(command);
                     }
                 }

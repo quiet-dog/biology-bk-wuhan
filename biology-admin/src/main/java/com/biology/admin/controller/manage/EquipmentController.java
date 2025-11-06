@@ -68,8 +68,8 @@ public class EquipmentController extends BaseController {
 
     @Operation(summary = "获取设备档案信息")
     @GetMapping("/{equipmentId}")
-    public ResponseDTO<EquipmentDTO> info(@PathVariable Long equipmentId) {
-        EquipmentDTO equipmentDTO = equipmentApplicationService.getEquipmentInfo(equipmentId);
+    public ResponseDTO<EquipmentDetailDTO> info(@PathVariable Long equipmentId) {
+        EquipmentDetailDTO equipmentDTO = equipmentApplicationService.getEquipmentInfo(equipmentId);
         return ResponseDTO.ok(equipmentDTO);
     }
 

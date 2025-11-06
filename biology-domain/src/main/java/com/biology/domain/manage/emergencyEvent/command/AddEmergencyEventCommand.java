@@ -31,4 +31,8 @@ public class AddEmergencyEventCommand {
 
     @Schema(description = "报警信息Ids")
     private List<Long> emergencyAlarmIds;
+
+    private Boolean status;
+
+    private String level;
 }
