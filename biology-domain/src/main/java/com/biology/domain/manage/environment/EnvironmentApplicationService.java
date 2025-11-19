@@ -15,6 +15,7 @@ import com.biology.domain.manage.environment.db.EnvironmentEntity;
 import com.biology.domain.manage.environment.db.EnvironmentService;
 import com.biology.domain.manage.environment.dto.EnvironmentDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentEchartDTO;
+import com.biology.domain.manage.environment.dto.EnvironmentListDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentStatisticsDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentTypesDTO;
 import com.biology.domain.manage.environment.model.EnvironmentFactory;
@@ -65,7 +66,15 @@ public class EnvironmentApplicationService {
 
     public PageDTO<EnvironmentDTO> searchEnvironments(EnvironmentQuery query) {
         Page<EnvironmentEntity> page = environmentService.page(query.toPage(), query.toQueryWrapper());
-        List<EnvironmentDTO> records = page.getRecords().stream().map(EnvironmentDTO::new).collect(Collectors.toList());
+        List<EnvironmentDTO> records = page.getRecords().stream().map(EnvironmentDTO::new)
+                .collect(Collectors.toList());
+        return new PageDTO<>(records, page.getTotal());
+    }
+
+    public PageDTO<EnvironmentListDTO> searchEnvironmentsList(EnvironmentQuery query) {
+        Page<EnvironmentEntity> page = environmentService.page(query.toPage(), query.toQueryWrapper());
+        List<EnvironmentListDTO> records = page.getRecords().stream().map(EnvironmentListDTO::new)
+                .collect(Collectors.toList());
         return new PageDTO<>(records, page.getTotal());
     }
 

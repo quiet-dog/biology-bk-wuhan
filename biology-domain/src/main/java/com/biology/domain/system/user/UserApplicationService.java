@@ -212,7 +212,7 @@ public class UserApplicationService {
 
         model.loadUpdateUserCommand(command);
         // 判断角色是否变更
-        if (!originalRoleId.equals(model.getRoleId())) {
+        if (originalRoleId != null && !originalRoleId.equals(model.getRoleId())) {
             // 发送权限变更通知
             AddNotificationCommand roleChangeNotification = new AddNotificationCommand();
             roleChangeNotification.setNotificationTitle("用户权限变更");

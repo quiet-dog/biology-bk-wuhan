@@ -125,6 +125,11 @@ public class EquipmentApplicationService {
         return "0";
     }
 
+    public List<EquipmentEntity> getAllEquipment() {
+        List<EquipmentEntity> list = equipmentService.list();
+        return list;
+    }
+
     // public EquipmentDTO getOnlineDevice() {
     // QueryWrapper<EquipmentEntity> queryWrapper = new QueryWrapper<>();
     // long count = equipmentService.count(queryWrapper);

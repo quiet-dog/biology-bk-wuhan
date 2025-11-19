@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
 import com.biology.common.exception.ApiException;
 import com.biology.common.exception.error.ErrorCode.Business;
+import com.biology.domain.manage.event.db.EventEntity;
 import com.biology.domain.manage.materials.command.AddMaterialsCommand;
 import com.biology.domain.manage.materials.command.AddStockCommand;
 import com.biology.domain.manage.materials.command.AddWarehouseCommand;
@@ -33,6 +34,8 @@ import com.biology.domain.manage.materials.model.WarehouseFactory;
 import com.biology.domain.manage.materials.model.WarehouseModel;
 import com.biology.domain.manage.materials.query.SearchMaterialsQuery;
 import com.biology.domain.manage.materials.query.SearchWarehouseQuery;
+import com.biology.domain.manage.receive.db.ReceiveEntity;
+import com.biology.domain.manage.report.db.ReportEntity;
 import com.biology.domain.manage.task.db.MaterialsTaskEntity;
 import com.biology.domain.manage.task.db.MaterialsTaskService;
 
@@ -81,6 +84,17 @@ public class MaterialsApplicationService {
     public void deleteMaterials(Long materialsId) {
         MaterialsModel materialsModel = materialsFactory.loadById(materialsId);
         materialsModel.deleteById();
+        QueryWrapper<ReceiveEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("materials_id", materialsModel.getMaterialsId());
+        new ReceiveEntity().delete(queryWrapper);
+
+        QueryWrapper<ReportEntity> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("materials_id", materialsModel.getMaterialsId());
+        new ReportEntity().delete(queryWrapper2);
+
+        QueryWrapper<EventEntity> queryWrapper3 = new QueryWrapper<>();
+        queryWrapper3.eq("materials_id", materialsModel.getMaterialsId());
+        new EventEntity().delete(queryWrapper3);
     }
 
     public void deleteMaterialss(List<Long> materialsIds) {

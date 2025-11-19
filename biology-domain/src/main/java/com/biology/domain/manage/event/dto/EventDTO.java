@@ -120,54 +120,54 @@ public class EventDTO {
     public EventDTO(EventEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
-            // if (getHandlerId() != null) {
-            // PersonnelEntity personnelEntity = new PersonnelEntity();
-            // personnelEntity = personnelEntity.selectById(getHandlerId());
-            // if (personnelEntity != null) {
-            // setHandler(new PersonnelDTO(personnelEntity));
-            // }
-            // }
+            if (getHandlerId() != null) {
+                PersonnelEntity personnelEntity = new PersonnelEntity();
+                personnelEntity = personnelEntity.selectById(getHandlerId());
+                if (personnelEntity != null) {
+                    setHandler(new PersonnelDTO(personnelEntity));
+                }
+            }
 
-            // if (getEquipmentId() != null) {
-            // EquipmentEntity equipmentEntity = new EquipmentEntity();
-            // equipmentEntity = equipmentEntity.selectById(getEquipmentId());
-            // if (equipmentEntity != null) {
-            // setEquipment(new EquipmentDTO(equipmentEntity));
-            // }
-            // }
+            if (getEquipmentId() != null) {
+                EquipmentEntity equipmentEntity = new EquipmentEntity();
+                equipmentEntity = equipmentEntity.selectById(getEquipmentId());
+                if (equipmentEntity != null) {
+                    setEquipment(new EquipmentDTO(equipmentEntity));
+                }
+            }
 
-            // if (getMaterialsId() != null) {
-            // MaterialsEntity materialsEntity = new MaterialsEntity();
-            // materialsEntity = materialsEntity.selectById(getMaterialsId());
-            // if (materialsEntity != null) {
-            // setMaterials(new MaterialsDTO(materialsEntity));
-            // }
-            // }
-            // if (getEnvironmentId() != null) {
-            // EnvironmentEntity environmentEntity = new EnvironmentEntity();
-            // environmentEntity = environmentEntity.selectById(getEnvironmentId());
-            // if (environmentEntity != null) {
-            // setEnvironment(new EnvironmentDTO(environmentEntity));
-            // }
-            // }
+            if (getMaterialsId() != null) {
+                MaterialsEntity materialsEntity = new MaterialsEntity();
+                materialsEntity = materialsEntity.selectById(getMaterialsId());
+                if (materialsEntity != null) {
+                    setMaterials(new MaterialsDTO(materialsEntity));
+                }
+            }
+            if (getEnvironmentId() != null) {
+                EnvironmentEntity environmentEntity = new EnvironmentEntity();
+                environmentEntity = environmentEntity.selectById(getEnvironmentId());
+                if (environmentEntity != null) {
+                    setEnvironment(new EnvironmentDTO(environmentEntity));
+                }
+            }
 
-            // if (getThresholdId() != null) {
-            // ThresholdEntity thresholdEntity = new ThresholdEntity();
-            // thresholdEntity = thresholdEntity.selectById(getThresholdId());
-            // if (thresholdEntity != null) {
-            // setThreshold(new ThresholdDTO(thresholdEntity));
-            // }
-            // }
+            if (getThresholdId() != null) {
+                ThresholdEntity thresholdEntity = new ThresholdEntity();
+                thresholdEntity = thresholdEntity.selectById(getThresholdId());
+                if (thresholdEntity != null) {
+                    setThreshold(new ThresholdDTO(thresholdEntity));
+                }
+            }
 
-            // if (getCraftNodeId() != null) {
-            // CraftNodeEntity craftNodeEntity = new CraftNodeEntity();
-            // craftNodeEntity = craftNodeEntity.selectById(getCraftNodeId());
-            // if (craftNodeEntity != null) {
-            // setCraftNode(new CraftNodeDTO(craftNodeEntity));
-            // }
-            // }
+            if (getCraftNodeId() != null) {
+                CraftNodeEntity craftNodeEntity = new CraftNodeEntity();
+                craftNodeEntity = craftNodeEntity.selectById(getCraftNodeId());
+                if (craftNodeEntity != null) {
+                    setCraftNode(new CraftNodeDTO(craftNodeEntity));
+                }
+            }
 
-            // addDescription();
+            addDescription();
         }
     }
 

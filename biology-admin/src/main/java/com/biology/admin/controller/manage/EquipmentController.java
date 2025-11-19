@@ -17,6 +17,7 @@ import com.biology.domain.manage.equipment.command.AddEquipmentMaintenanceManual
 import com.biology.domain.manage.equipment.command.ExcelEquipmentCommand;
 import com.biology.domain.manage.equipment.command.ExcelEquipmentMaintenanceManualCommand;
 import com.biology.domain.manage.equipment.command.UpdateEquipmentCommand;
+import com.biology.domain.manage.equipment.db.EquipmentEntity;
 import com.biology.domain.manage.equipment.dto.EquipmentDTO;
 import com.biology.domain.manage.equipment.dto.EquipmentDetailDTO;
 import com.biology.domain.manage.equipment.model.EquipmentModel;
@@ -179,5 +180,11 @@ public class EquipmentController extends BaseController {
     @GetMapping("/getRunTime/{equipmentId}")
     public ResponseDTO<String> getRunTime(@PathVariable Long equipmentId) {
         return ResponseDTO.ok(equipmentApplicationService.getRunTime(equipmentId));
+    }
+
+    @Operation(summary = "获取设备档案报警统计")
+    @GetMapping("/all")
+    public ResponseDTO<List<EquipmentEntity>> getAllEquipment() {
+        return ResponseDTO.ok(equipmentApplicationService.getAllEquipment());
     }
 }

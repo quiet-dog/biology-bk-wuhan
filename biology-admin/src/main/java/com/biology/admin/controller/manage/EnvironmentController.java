@@ -36,6 +36,7 @@ import com.biology.domain.manage.environment.command.AddEnvironmentCommand;
 import com.biology.domain.manage.environment.command.UpdateEnvironmentCommand;
 import com.biology.domain.manage.environment.dto.EnvironmentDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentEchartDTO;
+import com.biology.domain.manage.environment.dto.EnvironmentListDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentStatisticsDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentTypesDTO;
 import com.biology.domain.manage.environment.query.EnvironmentQuery;
@@ -93,8 +94,8 @@ public class EnvironmentController extends BaseController {
 
     @Operation(summary = "获取环境档案列表")
     @GetMapping
-    public ResponseDTO<PageDTO<EnvironmentDTO>> list(EnvironmentQuery query) {
-        PageDTO<EnvironmentDTO> list = environmentApplicationService.searchEnvironments(query);
+    public ResponseDTO<PageDTO<EnvironmentListDTO>> list(EnvironmentQuery query) {
+        PageDTO<EnvironmentListDTO> list = environmentApplicationService.searchEnvironmentsList(query);
         return ResponseDTO.ok(list);
     }
 
