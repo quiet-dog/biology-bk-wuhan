@@ -184,8 +184,12 @@ public class EventApplicationService {
                 if (alarmlevelDetailEntity.getMin() < equAlarmInfoDTO.getValue()
                         && equAlarmInfoDTO.getValue() < alarmlevelDetailEntity.getMax()) {
                     QueryWrapper<EventEntity> queryWrapper3 = new QueryWrapper<>();
-                    queryWrapper3.eq("environment_id", equAlarmInfoDTO.getEnvironmentId());
-                    queryWrapper3.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                    queryWrapper3
+                            .eq("environment_id", equAlarmInfoDTO.getEnvironmentId())
+                            .eq("level", alarmlevelDetailEntity.getLevel())
+                            .ge("create_time", DateUtil.offsetMinute(new Date(), -1));
+                    // 一分钟内相同环境不重复报警
+                    // queryWrapper3;
                     EventEntity eventEntity = new EventEntity().selectOne(queryWrapper3);
                     if (eventEntity != null) {
                         return null;
@@ -198,8 +202,10 @@ public class EventApplicationService {
                     && alarmlevelDetailEntity.getMin() < equAlarmInfoDTO.getValue()) {
 
                 QueryWrapper<EventEntity> queryWrapper3 = new QueryWrapper<>();
-                queryWrapper3.eq("environment_id", equAlarmInfoDTO.getEnvironmentId());
-                queryWrapper3.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                queryWrapper3
+                        .eq("environment_id", equAlarmInfoDTO.getEnvironmentId())
+                        .eq("level", alarmlevelDetailEntity.getLevel())
+                        .ge("create_time", DateUtil.offsetMinute(new Date(), -10));
                 EventEntity eventEntity = new EventEntity().selectOne(queryWrapper3);
                 if (eventEntity != null) {
                     return null;
@@ -210,8 +216,10 @@ public class EventApplicationService {
             if (!Double.isNaN(alarmlevelDetailEntity.getMax()) && Double.isNaN(alarmlevelDetailEntity.getMin())
                     && equAlarmInfoDTO.getValue() < alarmlevelDetailEntity.getMax()) {
                 QueryWrapper<EventEntity> queryWrapper3 = new QueryWrapper<>();
-                queryWrapper3.eq("environment_id", equAlarmInfoDTO.getEnvironmentId());
-                queryWrapper3.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                queryWrapper3
+                        .eq("environment_id", equAlarmInfoDTO.getEnvironmentId())
+                        .eq("level", alarmlevelDetailEntity.getLevel())
+                        .ge("create_time", DateUtil.offsetMinute(new Date(), -10));
                 EventEntity eventEntity = new EventEntity().selectOne(queryWrapper3);
                 if (eventEntity != null) {
                     return null;

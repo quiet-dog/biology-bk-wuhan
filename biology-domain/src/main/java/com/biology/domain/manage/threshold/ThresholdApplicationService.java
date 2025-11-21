@@ -92,23 +92,36 @@ public class ThresholdApplicationService {
         // queryWrapper
         // .eq("equipment_id", equipmentInfo.getEquipmentId())
         // .eq("sensor_name", equipmentInfo.getSensorName());
+        System.out.println("查询重复报警1=================================：" + equipmentInfo);
         ThresholdEntity thresholdEntity = thresholdService.getById(equipmentInfo.getThresholdId());
         if (thresholdEntity == null) {
             return null;
         }
-        ThresholdDTO thresholdDTO = new ThresholdDTO(thresholdEntity);
-        if (thresholdDTO.getValues() == null || thresholdDTO.getValues().size() == 0) {
-            return null;
-        }
-        for (ThresholdValueEntity thresholdValue : thresholdDTO.getValues()) {
+        // ThresholdDTO thresholdDTO = new ThresholdDTO(thresholdEntity);
+        // if (thresholdDTO.getValues() == null || thresholdDTO.getValues().size() == 0)
+        // {
+        // return null;
+        // }
+        List<ThresholdValueEntity> list = new ArrayList<>();
+        // QueryWrapper<ThresholdValueEntity> queryWrapper2 = new QueryWrapper<>();
+        // queryWrapper2.eq("threshold_id", equipmentInfo.getThresholdId());
+        list = CacheCenter.thresholdValuesCache.getObjectById(equipmentInfo.getThresholdId());
+        // 打印sql
+        System.out.println("查询重复报警4=================================：" + list + equipmentInfo.getThresholdId());
+        for (ThresholdValueEntity thresholdValue : list) {
+            System.out.println("查询重复报警3=================================：" + thresholdValue);
             if (!Double.isNaN(thresholdValue.getMin()) && !Double.isNaN(thresholdValue.getMax())) {
                 if (thresholdValue.getMin() < equipmentInfo.getValue()
                         && equipmentInfo.getValue() < thresholdValue.getMax()) {
 
                     QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
-                    queryWrapper.eq("threshold_id", equipmentInfo.getEquipmentId());
-                    queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                    queryWrapper
+                            .eq("threshold_id", equipmentInfo.getThresholdId())
+                            .eq("level", thresholdValue.getLevel())
+                            .ge("create_time",
+                                    DateUtil.offsetMinute(new Date(), -1));
                     EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
+                    System.out.println("查询重复报警=================================：" + eventEntity);
                     if (eventEntity != null) {
                         return null;
                     }

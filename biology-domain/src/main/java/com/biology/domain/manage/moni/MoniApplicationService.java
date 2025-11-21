@@ -334,7 +334,7 @@ public class MoniApplicationService {
             EquipmentEntity equipmentEntity = new EquipmentEntity().selectOne(queryWrapper2);
 
             System.out.printf(
-                    "找到设备档案的阈值设置========================================================= \n");
+                    "查询重复报警0========================================================= \n");
             // 添加数据
             AddEquipmentDataCommand addCommand = new AddEquipmentDataCommand();
             addCommand.setEquipmentId((deviceDTO.getEquipmentInfo().getEquipmentId()));

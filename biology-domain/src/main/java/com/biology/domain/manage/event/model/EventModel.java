@@ -174,7 +174,7 @@ public class EventModel extends EventEntity {
             // 判断最近10分钟内是否存在相同的environmentId的事件
             QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("environment_id", this.getEnvironmentId());
-            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -2));
             EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
             if (eventEntity != null) {
                 isNotSend = true;
@@ -185,7 +185,7 @@ public class EventModel extends EventEntity {
             // 判断最近10分钟内是否存在相同的materialsId的事件
             QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("materials_id", this.getMaterialsId());
-            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+            queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -2));
             EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
             if (eventEntity != null) {
                 isNotSend = true;
