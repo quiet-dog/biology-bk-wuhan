@@ -119,7 +119,7 @@ public class ThresholdApplicationService {
                             .eq("threshold_id", equipmentInfo.getThresholdId())
                             .eq("level", thresholdValue.getLevel())
                             .ge("create_time",
-                                    DateUtil.offsetMinute(new Date(), -1));
+                                    DateUtil.offsetMinute(new Date(), -30));
                     EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
                     System.out.println("查询重复报警=================================：" + eventEntity);
                     if (eventEntity != null) {

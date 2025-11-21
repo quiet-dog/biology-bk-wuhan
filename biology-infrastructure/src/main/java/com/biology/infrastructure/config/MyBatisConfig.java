@@ -54,8 +54,12 @@ public class MyBatisConfig {
                 String dateSuffix = null;
                 dateSuffix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
                 if (sql.startsWith("SELECT") && environmentData.get() != null && environmentData.get() != null) {
+                    if (environmentData.get().equals("now")) {
+                        return "manage_environment_detection";
+                    }
                     dateSuffix = environmentData.get();
                 }
+
                 return "manage_environment_detection_" + dateSuffix;
             }
 

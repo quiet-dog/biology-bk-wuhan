@@ -21,6 +21,7 @@ import com.biology.domain.manage.detection.query.DetectionStockQuery;
 import com.biology.domain.manage.detection.query.HistoryQuery;
 import com.biology.domain.manage.detection.query.PowerQuery;
 import com.biology.domain.manage.environment.dto.EnvironmentStatisticsDTO;
+import com.biology.infrastructure.config.MyBatisConfig;
 
 @Service
 public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, DetectionEntity> implements DetectionService {
@@ -339,6 +340,7 @@ public class DetectionServiceImpl extends ServiceImpl<DetectionMapper, Detection
         // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
         LocalDate today = LocalDate.now();
         // List<PowerDTO> result = new ArrayList<>();
+        MyBatisConfig.environmentData.set(null);
         List<PowerDTO> data = new ArrayList<>();
         if (query.getDayType().equals("week")) {
             if (query.getType().equals("电")) {

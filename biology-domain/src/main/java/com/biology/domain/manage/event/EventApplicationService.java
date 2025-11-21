@@ -187,7 +187,7 @@ public class EventApplicationService {
                     queryWrapper3
                             .eq("environment_id", equAlarmInfoDTO.getEnvironmentId())
                             .eq("level", alarmlevelDetailEntity.getLevel())
-                            .ge("create_time", DateUtil.offsetMinute(new Date(), -1));
+                            .ge("create_time", DateUtil.offsetMinute(new Date(), -30));
                     // 一分钟内相同环境不重复报警
                     // queryWrapper3;
                     EventEntity eventEntity = new EventEntity().selectOne(queryWrapper3);
@@ -205,7 +205,7 @@ public class EventApplicationService {
                 queryWrapper3
                         .eq("environment_id", equAlarmInfoDTO.getEnvironmentId())
                         .eq("level", alarmlevelDetailEntity.getLevel())
-                        .ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                        .ge("create_time", DateUtil.offsetMinute(new Date(), -30));
                 EventEntity eventEntity = new EventEntity().selectOne(queryWrapper3);
                 if (eventEntity != null) {
                     return null;
@@ -219,7 +219,7 @@ public class EventApplicationService {
                 queryWrapper3
                         .eq("environment_id", equAlarmInfoDTO.getEnvironmentId())
                         .eq("level", alarmlevelDetailEntity.getLevel())
-                        .ge("create_time", DateUtil.offsetMinute(new Date(), -10));
+                        .ge("create_time", DateUtil.offsetMinute(new Date(), -30));
                 EventEntity eventEntity = new EventEntity().selectOne(queryWrapper3);
                 if (eventEntity != null) {
                     return null;

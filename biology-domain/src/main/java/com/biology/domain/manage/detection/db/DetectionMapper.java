@@ -171,43 +171,43 @@ public interface DetectionMapper extends BaseMapper<DetectionEntity> {
                         + " ORDER BY DATE_FORMAT(create_time, '%Y-%m')")
         public List<PowerDTO> getHistoryElectricityByTypeYear();
 
-        @Select("SELECT CONCAT(LPAD(HOUR(d.create_time), 2, '0'), ':00') AS time,SUM(water_value) as data FROM manage_environment_detection as d"
+        @Select("SELECT CONCAT(LPAD(HOUR(d.create_time), 2, '0'), ':00') AS time,SUM(water_value) as data FROM manage_dian_shui as d"
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE d.create_time >= CURDATE()"
                         + " GROUP BY CONCAT(LPAD(HOUR(d.create_time), 2, '0'), ':00'),e.e_area")
         public List<PowerDTO> getHistoryElectricityByArea();
 
-        @Select("SELECT e.e_area AS time,SUM(d.water_value) as data FROM manage_environment_detection as d"
+        @Select("SELECT e.e_area AS time,SUM(d.water_value) as data FROM manage_dian_shui as d"
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE d.create_time >= CURDATE() - INTERVAL 6 DAY AND d.create_time < CURDATE() + INTERVAL 1 DAY"
                         + " GROUP BY e.e_area")
         public List<PowerDTO> getHistoryWaterByAreaWeek();
 
-        @Select("SELECT e.e_area AS time,SUM(d.electricity_value) as data FROM manage_environment_detection as d"
+        @Select("SELECT e.e_area AS time,SUM(d.electricity_value) as data FROM manage_dian_shui as d"
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE d.create_time >= CURDATE() - INTERVAL 6 DAY AND d.create_time < CURDATE() + INTERVAL 1 DAY"
                         + " GROUP BY e.e_area")
         public List<PowerDTO> getHistoryElectricityByAreaWeek();
 
-        @Select("SELECT e.e_area AS time,SUM(d.water_value) as data FROM manage_environment_detection as d"
+        @Select("SELECT e.e_area AS time,SUM(d.water_value) as data FROM manage_dian_shui as d"
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE d.create_time >= CURDATE() - INTERVAL 1 MONTH AND d.create_time <= NOW()"
                         + " GROUP BY e.e_area")
         public List<PowerDTO> getHistoryWaterByAreaMonth();
 
-        @Select("SELECT e.e_area AS time,SUM(d.electricity_value) as data FROM manage_environment_detection as d"
+        @Select("SELECT e.e_area AS time,SUM(d.electricity_value) as data FROM manage_dian_shui as d"
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE d.create_time >= CURDATE() - INTERVAL 1 MONTH AND d.create_time <= NOW()"
                         + " GROUP BY e.e_area")
         public List<PowerDTO> getHistoryElectricityByAreaMonth();
 
-        @Select("SELECT e.e_area AS time,SUM(d.water_value) as data FROM manage_environment_detection as d"
+        @Select("SELECT e.e_area AS time,SUM(d.water_value) as data FROM manage_dian_shui as d"
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE d.create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
                         + " GROUP BY e.e_area")
         public List<PowerDTO> getHistoryWaterByAreaYear();
 
-        @Select("SELECT e.e_area AS time,SUM(d.electricity_value) as data FROM manage_environment_detection as d"
+        @Select("SELECT e.e_area AS time,SUM(d.electricity_value) as data FROM manage_dian_shui as d"
                         + " JOIN manage_environment as e ON e.environment_id = d.environment_id"
                         + " WHERE d.create_time >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)"
                         + " GROUP BY e.e_area")
