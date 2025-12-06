@@ -35,6 +35,30 @@ public class KongTiaoDataController extends BaseController {
     @Operation(summary = "添加空调设备数据")
     @PostMapping
     public ResponseDTO<Void> add(@RequestBody AddKongTiaoDataCommand command) {
+
+        System.out.println("空调设备数据：" + command.toString());
+        System.out.println("空调设备数据：" + command.getDeviceSn());
+        System.out.println("空调设备数据：" + command.getZhiBanGongKuanYaLiSheDing());
+        System.out.println("空调设备数据：" + command.getZhiBanGongKuanFengLiangSheDing());
+        System.out.println("空调设备数据：" + command.getFengFaWenDingZhuangTai());
+        System.out.println("空调设备数据：" + command.getFaWeiFanKuan());
+        System.out.println("空调设备数据：" + command.getQiangZhiFaWeiSheDing());
+        System.out.println("空调设备数据：" + command.getQiangZhiMoShiKaiGuan());
+        System.out.println("空调设备数据：" + command.getPidKongZhiJiFenXiShu());
+        System.out.println("空调设备数据：" + command.getFengLiangFanKuan());
+        System.out.println("空调设备数据：" + command.getFangJianShiJiYaLi());
+        System.out.println("空调设备数据：" + command.getGongKuangMoShi());
+        System.out.println("空调设备数据：" + command.getShuangGongKuangQieHuanShiJian());
+        System.out.println("空调设备数据：" + command.getFengLiangSheDing());
+        System.out.println("空调设备数据：" + command.getYaLiSheDing());
+        System.out.println("空调设备数据：" + command.getDeviceType());
+        System.out.println("空调设备数据：" + command.getHuiFengJiShouZiDong());
+        System.out.println("空调设备数据：" + command.getHuiFengJiGuZhang());
+        System.out.println("空调设备数据：" + command.getHuiFengJiYunXing());
+        System.out.println("空调设备数据：" + command.getHuiFengMiBiKaiGuanKongZhi());
+        System.out.println("空调设备数据：" + command.getHuiFengMiBiGuanDaoWei());
+        System.out.println("空调设备数据：" + command.getHuiFengMiBiKaiDaoWei());
+        System.out.println("空调设备数据：" + command.getHuiFengJiQiTing());
         kongTiaoDataApplicationService.create(command);
         return ResponseDTO.ok();
     }
