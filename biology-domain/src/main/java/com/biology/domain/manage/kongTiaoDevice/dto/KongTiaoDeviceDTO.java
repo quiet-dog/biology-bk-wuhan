@@ -33,6 +33,7 @@ public class KongTiaoDeviceDTO {
     public KongTiaoDeviceDTO(KongTiaoDeviceEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
+            addOther();
         }
     }
 
