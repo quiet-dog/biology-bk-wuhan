@@ -26,6 +26,9 @@ public class KongTiaoDeviceEntity extends BaseEntity<KongTiaoDeviceEntity> {
     @TableField(value = "device_sn")
     private String deviceSn;
 
+    @TableField(value = "device_type")
+    private String deviceType;
+
     @TableField(value = "name")
     private String name;
 

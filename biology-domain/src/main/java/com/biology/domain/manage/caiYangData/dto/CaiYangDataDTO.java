@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 @ExcelSheet(name = "采样历史数据")
 public class CaiYangDataDTO {
-    @ExcelColumn(name = "设备sn")
+    @ExcelColumn(name = "设备sn号")
     private String deviceSn;
 
     @ExcelColumn(name = "采样时间")

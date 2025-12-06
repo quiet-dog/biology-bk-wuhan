@@ -18,6 +18,8 @@ public class SmDataQuery extends AbstractPageQuery<SmDataEntity> {
 
     private List<Long> smDataIds;
 
+    private List<String> dianWeis;
+
     @Override
     public QueryWrapper<SmDataEntity> addQueryCondition() {
         QueryWrapper<SmDataEntity> queryWrapper = new QueryWrapper<SmDataEntity>();

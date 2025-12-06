@@ -23,6 +23,7 @@ import com.biology.domain.manage.nongDuData.command.AddNongDuDataCommand;
 import com.biology.domain.manage.nongDuData.command.NongDuDTO;
 import com.biology.domain.manage.nongDuData.command.UpdateNongDuDataCommand;
 import com.biology.domain.manage.nongDuData.dto.NongDuDataDTO;
+import com.biology.domain.manage.nongDuData.query.NongDuDataLuanShengQuery;
 import com.biology.domain.manage.nongDuData.query.NongDuDataQuery;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -85,6 +86,12 @@ public class NongDuDataController extends BaseController {
         System.out.println("/nongDuDateGet nDto = " + nDto);
         nongDuDataApplicationService.nongDuDateGet(nDto);
         return;
+    }
+
+    @PostMapping("/getNongDuDataOnlineHistory")
+    public ResponseDTO<Object> getNongDuDataOnlineHistory(@RequestBody NongDuDataLuanShengQuery query) {
+        Object result = nongDuDataApplicationService.getNongDuDataOnlineHistory(query);
+        return ResponseDTO.ok(result);
     }
 
 }

@@ -12,6 +12,7 @@ import com.biology.domain.manage.emergency.dto.EmergencyDTO;
 import com.biology.domain.manage.environment.db.EnvironmentEmergencyEntity;
 import com.biology.domain.manage.environment.db.EnvironmentSopEntity;
 import com.biology.domain.manage.knowledge.db.KnowledgeTypeEntity;
+import com.biology.domain.manage.kongTiaoData.dto.KongTiaoDataDTO;
 import com.biology.domain.manage.nongDuData.command.NongDuDTO;
 import com.biology.domain.manage.smData.dto.SmDataDTO;
 import com.biology.domain.manage.sop.db.SopEntity;
@@ -102,6 +103,8 @@ public class CacheCenter {
 
     public static RedisCacheTemplate<NongDuDTO> jianCeDataCache;
 
+    public static RedisCacheTemplate<KongTiaoDataDTO> kongTiaoDataCache;
+
     @PostConstruct
     public void init() {
         GuavaCacheService guavaCache = SpringUtil.getBean(GuavaCacheService.class);
@@ -134,6 +137,7 @@ public class CacheCenter {
         sopFileCache = redisCache.sopFileCache;
         environmentSopCache = redisCache.environmentSopCache;
         xunJianDeviceCache = redisCache.xunJianDeviceCache;
+        kongTiaoDataCache = redisCache.kongTiaoDataCache;
         // thrsholdEmergencyCache = redisCache.thrsholdEmergencyCache;
         // thrsholdSopCache = redisCache.thrsholdSopCache;
     }

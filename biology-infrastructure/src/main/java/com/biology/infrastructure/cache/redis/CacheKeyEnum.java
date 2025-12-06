@@ -35,6 +35,7 @@ public enum CacheKeyEnum {
     SOP_KEY("sop_entity:", 60, TimeUnit.MINUTES),
     SOP_FILE_KEY("sop_file:", 60, TimeUnit.MINUTES),
     ENVIRONMENT_SOP_KEY("environment_sop:", 60, TimeUnit.MINUTES),
+    KONG_TIAO_DATA_KEY("kong_tiao_data:", 60, TimeUnit.MINUTES),
     ;
 
     CacheKeyEnum(String key, int expiration, TimeUnit timeUnit) {

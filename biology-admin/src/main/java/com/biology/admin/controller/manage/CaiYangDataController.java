@@ -24,6 +24,7 @@ import com.biology.domain.manage.caiYangData.command.UpdateCaiYangDataCommand;
 import com.biology.domain.manage.caiYangData.dto.CaiYangDataDTO;
 import com.biology.domain.manage.caiYangData.dto.CaiYangFunDTO;
 import com.biology.domain.manage.caiYangData.query.CaiYangDataQuery;
+import com.biology.domain.manage.caiYangData.query.CayYangLuanSheng;
 import com.biology.domain.manage.nongDuData.dto.NongDuDataDTO;
 import com.biology.domain.manage.nongDuData.query.NongDuDataQuery;
 
@@ -89,6 +90,11 @@ public class CaiYangDataController extends BaseController {
     public void exportUserByExcel(HttpServletResponse response, CaiYangDataQuery query) {
         PageDTO<CaiYangDataDTO> list = caiYangDataApplicationService.getCaiYangDatas(query);
         CustomExcelUtil.writeToResponse(list.getRows(), CaiYangDataDTO.class, response);
+    }
+
+    @PostMapping("/getCaiYangDataOnlineHistory")
+    public Object getCaiYangDataOnlineHistory(CayYangLuanSheng query) {
+        return caiYangDataApplicationService.getCaiYangDataOnlineHistory(query);
     }
 
 }

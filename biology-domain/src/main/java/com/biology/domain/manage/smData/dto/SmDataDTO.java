@@ -29,8 +29,8 @@ public class SmDataDTO {
     @Schema(description = "设备ID")
     private Long smDeviceId;
 
-    @ExcelColumn(name = "设备sn")
-    @Schema(description = "设备sn")
+    @ExcelColumn(name = "设备sn号")
+    @Schema(description = "设备sn号")
     private String deviceSn;
 
     @ExcelColumn(name = "操作员")

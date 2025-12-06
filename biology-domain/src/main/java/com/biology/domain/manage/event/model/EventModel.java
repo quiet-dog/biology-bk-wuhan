@@ -181,17 +181,6 @@ public class EventModel extends EventEntity {
             }
         }
 
-        // if (this.getMaterialsId() != null && this.getMaterialsId() > 0) {
-        // // 判断最近10分钟内是否存在相同的materialsId的事件
-        // QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
-        // // queryWrapper.eq("materials_id", this.getMaterialsId());
-        // // queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -2));
-        // EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
-        // if (eventEntity != null) {
-        // isNotSend = true;
-        // }
-        // }
-
         if (this.getThresholdId() != null && this.getThresholdId() > 0) {
             // 判断最近10分钟内是否存在相同的thresholdId的事件
             QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
@@ -206,17 +195,6 @@ public class EventModel extends EventEntity {
                 isNotSend = true;
             }
         }
-
-        // if (this.getCraftNodeId() != null && this.getCraftNodeId() > 0) {
-        // // 判断最近10分钟内是否存在相同的craftNodeId的事件
-        // QueryWrapper<EventEntity> queryWrapper = new QueryWrapper<>();
-        // queryWrapper.eq("craft_node_id", this.getCraftNodeId());
-        // queryWrapper.ge("create_time", DateUtil.offsetMinute(new Date(), -10));
-        // EventEntity eventEntity = new EventEntity().selectOne(queryWrapper);
-        // if (eventEntity != null) {
-        // isNotSend = true;
-        // }
-        // }
 
         System.out.println("websocketService.sendTopicInfo(eventDTO)==================");
         super.insert();

@@ -21,6 +21,7 @@ import com.biology.domain.manage.nongDuData.db.NongDuDataService;
 import com.biology.domain.manage.nongDuData.dto.NongDuDataDTO;
 import com.biology.domain.manage.nongDuData.model.NongDuDataFactory;
 import com.biology.domain.manage.nongDuData.model.NongDuDataModel;
+import com.biology.domain.manage.nongDuData.query.NongDuDataLuanShengQuery;
 import com.biology.domain.manage.nongDuData.query.NongDuDataQuery;
 
 import cn.hutool.core.util.StrUtil;
@@ -102,5 +103,9 @@ public class NongDuDataApplicationService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .subscribe();
+    }
+
+    public Object getNongDuDataOnlineHistory(NongDuDataLuanShengQuery query) {
+        return nongDuDataService.selectIsOnlineHistory(query.getDeviceSn(), query.getStartTime(), query.getEndTime());
     }
 }

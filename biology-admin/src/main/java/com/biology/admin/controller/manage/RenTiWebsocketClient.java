@@ -165,12 +165,19 @@ public class RenTiWebsocketClient {
                                         value = command.getTemp();
                                     } else if (s.getType().equals("co2")) {
                                         value = command.getCo2();
+                                    } else if (s.getType().equals("心电") && command.getXinDian() != null
+                                            && command.getXinDian().size() > 0) {
+                                        value = command.getXinDian().stream().mapToDouble(Number::doubleValue).average()
+                                                .orElse(0);
+                                    } else if (s.getType().equals("呼吸") && command.getHuxi() != null
+                                            && command.getHuxi().size() > 0) {
+                                        value = command.getHuxi().stream().mapToDouble(Number::doubleValue).average()
+                                                .orElse(0);
                                     } else {
                                         continue;
                                     }
                                     for (SmThresholdEntity t : s.getData()) {
                                         if (t.getMin() < value && value < t.getMax()) {
-
                                             SendType sType = new SendType();
                                             sType.setType("sm_alarm");
                                             Map<String, Object> shuju = new HashMap<>();

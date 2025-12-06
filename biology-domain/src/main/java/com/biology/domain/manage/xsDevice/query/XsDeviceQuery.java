@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class XsDeviceQuery extends AbstractPageQuery<XsDeviceEntity> {
 
-    @Schema(description = "设备sn")
+    @Schema(description = "设备sn号")
     private String deviceSn;
 
     @Schema(description = "设备名称")

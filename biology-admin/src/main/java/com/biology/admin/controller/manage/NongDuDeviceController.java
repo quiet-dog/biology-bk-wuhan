@@ -20,6 +20,7 @@ import com.biology.common.core.base.BaseController;
 import com.biology.common.core.dto.ResponseDTO;
 import com.biology.common.core.page.PageDTO;
 import com.biology.common.utils.poi.CustomExcelUtil;
+import com.biology.domain.manage.nongDuData.query.NongDuDataLuanShengQuery;
 import com.biology.domain.manage.nongDuDevice.NongDuDeviceApplicationService;
 import com.biology.domain.manage.nongDuDevice.command.AddNongDuDeviceCommand;
 import com.biology.domain.manage.nongDuDevice.command.UpdateNongDuDeviceCommand;
@@ -86,4 +87,5 @@ public class NongDuDeviceController extends BaseController {
     public ResponseDTO<Map<String, Object>> getOnlineCount() {
         return ResponseDTO.ok(nongDuDeviceApplicationService.getOnlineCount());
     }
+
 }

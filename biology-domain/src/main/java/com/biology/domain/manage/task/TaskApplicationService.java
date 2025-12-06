@@ -644,7 +644,8 @@ public class TaskApplicationService {
     }
 
     // 任务调用执行巡检是否创建表
-    @Scheduled(cron = "0 0/15 * * * ?")
+    // @Scheduled(cron = "0 0/15 * * * ?")
+    @Scheduled(fixedRate = 5000)
     public void createXunJianTable() {
         QueryWrapper<XunJianEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("enable", true).eq("xun_jian_lei_xing", "持续巡检");
@@ -659,8 +660,19 @@ public class TaskApplicationService {
             Boolean isInsert = false;
             Boolean isStop = false;
             if (x.getXunJianPinLu().equals("每日")) {
+                QueryWrapper<XunJianHistoryEntity> queryWrapper2 = new QueryWrapper<>();
+                queryWrapper2.eq("xun_jian_id", x.getXunJianId())
+                        .eq("status", "巡检中");
+                XunJianHistoryEntity xunJianHistoryEntity = new XunJianHistoryEntity().selectOne(queryWrapper2);
                 if (x.getTimeRange().get(0) < seconds && seconds < x.getTimeRange().get(1)) {
-
+                    // 判断是否存在巡检中记录
+                    if (xunJianHistoryEntity == null) {
+                        isInsert = true;
+                    }
+                } else {
+                    if (xunJianHistoryEntity != null) {
+                        isStop = true;
+                    }
                 }
             }
 

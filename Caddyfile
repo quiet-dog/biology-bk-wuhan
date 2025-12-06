@@ -54,6 +54,12 @@
 		header Upgrade websocket
 	}
 
+	@luansheng {
+		path /luanshengws/*
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+
 	handle @videows {
 		uri strip_prefix /videows
 		# 重写路径，去掉 /videows 前缀
@@ -67,6 +73,14 @@
 		# 重写路径，去掉 /ws-api 前缀，只保留 /ws
 		uri strip_prefix /ws-api
 		reverse_proxy http://127.0.0.1:9020 {
+			header_up Host {upstream_hostport}
+			header_up X-Forwarded-Host {host}
+		}
+	}
+
+	handle @luansheng {
+		uri strip_prefix /luanshengws
+		reverse_proxy http://127.0.0.1:8020 {
 			header_up Host {upstream_hostport}
 			header_up X-Forwarded-Host {host}
 		}

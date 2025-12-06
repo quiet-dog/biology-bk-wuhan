@@ -25,8 +25,8 @@ public class NongDuDeviceDTO {
     @Schema(description = "采样设备ID")
     private Long nongDuDeviceId;
 
-    @Schema(description = "设备sn")
-    @ExcelColumn(name = "设备sn")
+    @Schema(description = "设备sn号")
+    @ExcelColumn(name = "设备sn号")
     private String deviceSn;
 
     @Schema(description = "名称")

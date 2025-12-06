@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
+import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.kongTiaoData.command.AddKongTiaoDataCommand;
 import com.biology.domain.manage.kongTiaoData.command.UpdateKongTiaoDataCommand;
 import com.biology.domain.manage.kongTiaoData.db.KongTiaoDataEntity;
@@ -29,6 +30,9 @@ public class KongTiaoDataApplicationService {
         KongTiaoDataModel kongTiaoDataModel = kongTiaoDataFactory.create();
         kongTiaoDataModel.loadAddKongTiaoDataCommand(command);
         kongTiaoDataModel.insert();
+
+        KongTiaoDataDTO kongTiaoDataDTO = new KongTiaoDataDTO(kongTiaoDataModel);
+        CacheCenter.kongTiaoDataCache.set(kongTiaoDataDTO.getDeviceSn(), kongTiaoDataDTO);
         return;
     }
 

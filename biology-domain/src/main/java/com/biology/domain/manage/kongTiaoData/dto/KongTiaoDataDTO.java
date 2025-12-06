@@ -1,5 +1,7 @@
 package com.biology.domain.manage.kongTiaoData.dto;
 
+import java.util.Date;
+
 import com.biology.domain.manage.kongTiaoData.db.KongTiaoDataEntity;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -8,51 +10,77 @@ import lombok.Data;
 @Data
 public class KongTiaoDataDTO {
 
+    private Boolean isOnline;
+
     private Long kongTiaoDataId;
 
     private String deviceSn;
 
-    // 值班工况压力设定值
-    private Double dutyPressureSetValue;
+    private Double zhiBanGongKuanYaLiSheDing;
 
-    // 值班工况风量设定值
-    private Double dutyAirVolumeSetValue;
+    private Double zhiBanGongKuanFengLiangSheDing;
 
-    // 风阀稳定状态标志位
-    private Integer windValveStableStatus;
+    private Integer fengFaWenDingZhuangTai;
 
-    // 阀位反馈
-    private Integer valveFeedback;
+    private Integer faWeiFanKuan;
 
-    // 强制阀位的设定值
-    private Integer forceValveSetValue;
+    private Integer qiangZhiFaWeiSheDing;
 
-    // 强制模式开关
-    private Integer forceModeSwitch;
+    private Integer qiangZhiMoShiKaiGuan;
 
-    // PID控制积分系数
-    private Double pidIntegralCoefficient;
+    private Integer pidKongZhiJiFenXiShu;
 
-    // PID控制比例系数
-    private Double pidProportionalCoefficient;
+    private Integer fengLiangFanKuan;
 
-    // 风量反馈
-    private Double airVolumeFeedback;
+    private Double fangJianShiJiYaLi;
 
-    // 房间实际压力
-    private Double roomActualPressure;
+    private String gongKuangMoShi;
 
-    // 工况模式
-    private Integer workMode;
+    private Integer shuangGongKuangQieHuanShiJian;
 
-    // 双工况切换时间
-    private Long dualWorkModeSwitchTime;
+    private Integer fengLiangSheDing;
 
-    // 风量的设定值
-    private Double airVolumeSetValue;
+    private Double yaLiSheDing;
 
-    // 压力的设定值
-    private Double pressureFeedback;
+    private String deviceType;
+
+    private String huiFengJiShouZiDong;
+
+    private String huiFengJiGuZhang;
+
+    private String huiFengJiYunXing;
+
+    private String huiFengMiBiKaiGuanKongZhi;
+
+    private String huiFengMiBiGuanDaoWei;
+
+    private String huiFengMiBiKaiDaoWei;
+
+    private String huiFengJiQiTing;
+
+    private String yuanXinFengKouZengJiaXinFengFaKaiGuanKongZhi;
+
+    private String zengJiaXinFengKouXinFengFaKaiGuanKongZhi;
+
+    private String yuanXinFengKouZengJiaXinFengFaGuanDaoWei;
+
+    private String zengJiaXinFengKouXinFengFaGuanDaoWei;
+
+    private String yuanXinFengKouZengJiaXinFengFaKaiDaoWei;
+
+    private String zengJiaXinFengKouXinFengFaKaiDaoWei;
+
+    private String moShiQieHuan;
+
+    private String gongKuangQieHuan;
+
+    private String huiFengJiPinLvFanKuan;
+
+    private Integer pidKongZhiBiLiXiShu;
+
+    private String paiFengFaZhiGuanFengFaFanKuan;
+
+    private Date createTime;
 
     public KongTiaoDataDTO(KongTiaoDataEntity entity) {
         if (entity != null) {

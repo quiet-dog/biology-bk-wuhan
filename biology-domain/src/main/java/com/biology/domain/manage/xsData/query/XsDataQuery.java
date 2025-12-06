@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class XsDataQuery extends AbstractPageQuery<XsDataEntity> {
 
-    @Schema(name = "设备SN")
+    @Schema(name = "设备sn号")
     private String deviceSn;
 
     @Schema(name = "区域")

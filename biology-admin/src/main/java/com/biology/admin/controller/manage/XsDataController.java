@@ -23,6 +23,7 @@ import com.biology.domain.manage.xsData.command.AddXsDataCommand;
 import com.biology.domain.manage.xsData.command.UpdateXsDataCommand;
 import com.biology.domain.manage.xsData.command.XsDataFun1DTO;
 import com.biology.domain.manage.xsData.dto.XsDataDTO;
+import com.biology.domain.manage.xsData.query.XsDataLuanShengQuery;
 import com.biology.domain.manage.xsData.query.XsDataQuery;
 import com.biology.domain.manage.xsDevice.dto.XsDeviceDTO;
 import com.biology.domain.manage.xsDevice.query.XsDeviceQuery;
@@ -86,5 +87,11 @@ public class XsDataController extends BaseController {
         System.out.println("/xiaoSha data = " + data);
         xsDataApplicationService.xiaoSha(data);
         return ResponseDTO.ok();
+    }
+
+    @PostMapping("/getXsDataOnlineHistory")
+    public ResponseDTO<Object> getXsDataOnlineHistory(@RequestBody XsDataLuanShengQuery query) {
+        Object result = xsDataApplicationService.getXsDataOnlineHistory(query);
+        return ResponseDTO.ok(result);
     }
 }

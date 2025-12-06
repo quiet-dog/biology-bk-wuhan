@@ -22,6 +22,7 @@ import com.biology.domain.manage.smData.SmDataApplicationService;
 import com.biology.domain.manage.smData.command.AddSmDataCommand;
 import com.biology.domain.manage.smData.command.UpdateSmDataCommand;
 import com.biology.domain.manage.smData.dto.SmDataDTO;
+import com.biology.domain.manage.smData.query.SmDataLuanShengQuiery;
 import com.biology.domain.manage.smData.query.SmDataQuery;
 import com.biology.domain.manage.smDevice.dto.SmDeviceDTO;
 import com.biology.domain.manage.smDevice.query.SmDeviceQuery;
@@ -78,5 +79,17 @@ public class SmDataController extends BaseController {
     public void exportUserByExcel(HttpServletResponse response, SmDataQuery query) {
         PageDTO<SmDataDTO> list = smDataApplicationService.getSmDatas(query);
         CustomExcelUtil.writeToResponse(list.getRows(), SmDataDTO.class, response);
+    }
+
+    @PostMapping("/getSmDataHistory")
+    public ResponseDTO<Object> getSmDataHistory(@RequestBody SmDataLuanShengQuiery query) {
+        Object result = smDataApplicationService.getSmDataHistory(query);
+        return ResponseDTO.ok(result);
+    }
+
+    @PostMapping("/getSmDataOnlineHistory")
+    public ResponseDTO<Object> getSmDataOnlineHistory(@RequestBody SmDataLuanShengQuiery query) {
+        Object result = smDataApplicationService.getSmDataOnlineHistory(query);
+        return ResponseDTO.ok(result);
     }
 }

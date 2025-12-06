@@ -13,6 +13,8 @@ public class AddKongTiaoDeviceCommand {
 
     private String area;
 
-    private KongTiaoDeviceLabel extend;
+    private String deviceType;
+
+    // private KongTiaoDeviceLabel extend;
 
 }

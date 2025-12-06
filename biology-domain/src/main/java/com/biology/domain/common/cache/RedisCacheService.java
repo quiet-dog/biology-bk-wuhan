@@ -20,6 +20,7 @@ import com.biology.domain.manage.environment.db.EnvironmentSopEntity;
 import com.biology.domain.manage.environment.db.EnvironmentSopService;
 import com.biology.domain.manage.knowledge.db.KnowledgeTypeEntity;
 import com.biology.domain.manage.knowledge.db.KnowledgeTypeService;
+import com.biology.domain.manage.kongTiaoData.dto.KongTiaoDataDTO;
 import com.biology.domain.manage.nongDuData.command.NongDuDTO;
 import com.biology.domain.manage.smData.dto.SmDataDTO;
 import com.biology.domain.manage.sop.db.SopEntity;
@@ -111,6 +112,8 @@ public class RedisCacheService {
     public RedisCacheTemplate<List<EnvironmentSopEntity>> environmentSopCache;
 
     public RedisCacheTemplate<List<XunJianDTO>> xunJianDeviceCache;
+
+    public RedisCacheTemplate<KongTiaoDataDTO> kongTiaoDataCache;
 
     // public RedisCacheTemplate<RoleInfo> roleModelInfoCache;
 
@@ -327,6 +330,10 @@ public class RedisCacheService {
         };
 
         xunJianDeviceCache = new RedisCacheTemplate<List<XunJianDTO>>(redisUtil, CacheKeyEnum.ENVIRONMENT_SOP_KEY) {
+
+        };
+
+        kongTiaoDataCache = new RedisCacheTemplate<KongTiaoDataDTO>(redisUtil, CacheKeyEnum.KONG_TIAO_DATA_KEY) {
 
         };
 

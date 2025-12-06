@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class NongDuDeviceQuery extends AbstractPageQuery<NongDuDeviceEntity> {
 
-    @Schema(description = "设备sn")
+    @Schema(description = "设备sn号")
     private String deviceSn;
 
     @Schema(description = "区域")

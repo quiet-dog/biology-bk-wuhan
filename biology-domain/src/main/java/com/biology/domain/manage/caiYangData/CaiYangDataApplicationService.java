@@ -19,6 +19,7 @@ import com.biology.domain.manage.caiYangData.dto.CaiYangFunDTO;
 import com.biology.domain.manage.caiYangData.model.CaiYangDataFactory;
 import com.biology.domain.manage.caiYangData.model.CaiYangDataModel;
 import com.biology.domain.manage.caiYangData.query.CaiYangDataQuery;
+import com.biology.domain.manage.caiYangData.query.CayYangLuanSheng;
 import com.biology.domain.manage.moni.dto.SendType;
 import com.biology.domain.manage.nongDuDevice.db.NongDuDeviceEntity;
 
@@ -114,4 +115,9 @@ public class CaiYangDataApplicationService {
                 .bodyToMono(String.class)
                 .subscribe();
     }
+
+    public Object getCaiYangDataOnlineHistory(CayYangLuanSheng query) {
+        return caiYangDataService.getCaiYangDataOnlineHistory(query);
+    }
+
 }

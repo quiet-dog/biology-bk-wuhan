@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class SmDeviceQuery extends AbstractPageQuery<SmDeviceEntity> {
-    @Schema(description = "设备sn")
+    @Schema(description = "设备sn号")
     private String deviceSn;
 
     @Schema(description = "设备名称")

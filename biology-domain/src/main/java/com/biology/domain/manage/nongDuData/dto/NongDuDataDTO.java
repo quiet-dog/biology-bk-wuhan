@@ -19,7 +19,7 @@ public class NongDuDataDTO {
     @ExcelColumn(name = "浓度数据ID")
     private Long nongDuDataId;
 
-    @Schema(name = "设备sn")
+    @Schema(name = "设备sn号")
     // @ExcelColumn(name = "设备sn")
     private String deviceSn;
 

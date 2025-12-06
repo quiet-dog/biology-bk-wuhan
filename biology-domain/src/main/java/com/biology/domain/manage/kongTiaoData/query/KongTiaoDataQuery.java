@@ -16,6 +16,9 @@ public class KongTiaoDataQuery extends AbstractPageQuery<KongTiaoDataEntity> {
     @Override
     public QueryWrapper<KongTiaoDataEntity> addQueryCondition() {
         QueryWrapper<KongTiaoDataEntity> queryWrapper = new QueryWrapper<>();
+
+        setTimeRangeColumn("create_time");
+        setOrderColumn("create_time");
         return queryWrapper;
     }
 }

@@ -24,8 +24,8 @@ public class SmDeviceDTO {
     @Schema(description = "设备Id")
     private Long smDeviceId;
 
-    @ExcelColumn(name = "设备SN")
-    @Schema(description = "设备sn")
+    @ExcelColumn(name = "设备sn号")
+    @Schema(description = "设备sn号")
     private String deviceSn;
 
     @ExcelColumn(name = "设备名称")
@@ -98,7 +98,9 @@ public class SmDeviceDTO {
                             .orderByDesc("create_time")
                             .last("LIMIT 1"));
             if (data != null) {
-                setLastTime(data.getCreateTime().getTime());
+                if (data.getCreateTime() != null) {
+                    setLastTime(data.getCreateTime().getTime());
+                }
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 setLastTimeStr(sdf.format(getLastTime()));

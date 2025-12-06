@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.biology.common.core.page.PageDTO;
 import com.biology.domain.common.cache.CacheCenter;
 import com.biology.domain.manage.moni.dto.SendType;
+import com.biology.domain.manage.smData.query.SmDataLuanShengQuiery;
 import com.biology.domain.manage.xsData.command.AddXsDataCommand;
 import com.biology.domain.manage.xsData.command.UpdateXsDataCommand;
 import com.biology.domain.manage.xsData.command.XsDataFun1DTO;
@@ -20,6 +21,7 @@ import com.biology.domain.manage.xsData.db.XsDataService;
 import com.biology.domain.manage.xsData.dto.XsDataDTO;
 import com.biology.domain.manage.xsData.model.XsDataFactory;
 import com.biology.domain.manage.xsData.model.XsDataModel;
+import com.biology.domain.manage.xsData.query.XsDataLuanShengQuery;
 import com.biology.domain.manage.xsData.query.XsDataQuery;
 import com.biology.domain.manage.xsDevice.db.XsDeviceEntity;
 
@@ -115,4 +117,9 @@ public class XsDataApplicationService {
                 .bodyToMono(String.class)
                 .subscribe();
     }
+
+    public Object getXsDataOnlineHistory(XsDataLuanShengQuery query) {
+        return xsDataService.selectIsOnlineHistory(query.getXsDeviceId(), query.getStartTime(), query.getEndTime());
+    }
+
 }
