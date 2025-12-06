@@ -19,6 +19,7 @@ public class KongTiaoDataQuery extends AbstractPageQuery<KongTiaoDataEntity> {
 
         setTimeRangeColumn("create_time");
         setOrderColumn("create_time");
+        setOrderDirection("descending");
         return queryWrapper;
     }
 }
