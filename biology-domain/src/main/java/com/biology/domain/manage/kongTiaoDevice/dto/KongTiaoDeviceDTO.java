@@ -30,6 +30,8 @@ public class KongTiaoDeviceDTO {
 
     private String isOnlineStr;
 
+    private String lastTime;
+
     public KongTiaoDeviceDTO(KongTiaoDeviceEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);

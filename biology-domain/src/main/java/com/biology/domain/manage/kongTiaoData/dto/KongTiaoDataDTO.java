@@ -2,6 +2,7 @@ package com.biology.domain.manage.kongTiaoData.dto;
 
 import java.util.Date;
 
+import com.biology.domain.manage.kongTiaoData.command.AddKongTiaoDataCommand;
 import com.biology.domain.manage.kongTiaoData.db.KongTiaoDataEntity;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -85,6 +86,12 @@ public class KongTiaoDataDTO {
     public KongTiaoDataDTO(KongTiaoDataEntity entity) {
         if (entity != null) {
             BeanUtil.copyProperties(entity, this);
+        }
+    }
+
+    public KongTiaoDataDTO(AddKongTiaoDataCommand command) {
+        if (command != null) {
+            BeanUtil.copyProperties(command, this);
         }
     }
 }

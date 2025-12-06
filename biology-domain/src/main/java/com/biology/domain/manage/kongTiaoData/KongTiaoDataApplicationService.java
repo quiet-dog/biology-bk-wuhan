@@ -1,5 +1,6 @@
 package com.biology.domain.manage.kongTiaoData;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,12 +28,20 @@ public class KongTiaoDataApplicationService {
     private final KongTiaoDataService kongTiaoDataService;
 
     public void create(AddKongTiaoDataCommand command) {
+        KongTiaoDataDTO kongTiaoDataDTO = new KongTiaoDataDTO(command);
+        kongTiaoDataDTO.setCreateTime(new Date());
+        CacheCenter.kongTiaoDataCache.set(kongTiaoDataDTO.getDeviceSn(), kongTiaoDataDTO);
+
+        if (!command.getIsOnline()) {
+            return;
+        }
+
         KongTiaoDataModel kongTiaoDataModel = kongTiaoDataFactory.create();
         kongTiaoDataModel.loadAddKongTiaoDataCommand(command);
         kongTiaoDataModel.insert();
 
-        KongTiaoDataDTO kongTiaoDataDTO = new KongTiaoDataDTO(kongTiaoDataModel);
-        CacheCenter.kongTiaoDataCache.set(kongTiaoDataDTO.getDeviceSn(), kongTiaoDataDTO);
+        // 将command赋值给
+
         return;
     }
 

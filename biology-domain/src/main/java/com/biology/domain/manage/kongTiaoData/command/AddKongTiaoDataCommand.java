@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class AddKongTiaoDataCommand {
 
+    private Boolean isOnline;
+
     private Long kongTiaoDataId;
 
     private String deviceSn;
