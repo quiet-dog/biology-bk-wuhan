@@ -1,6 +1,8 @@
 package com.biology.domain.manage.nongDuData;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -109,7 +111,12 @@ public class NongDuDataApplicationService {
         return nongDuDataService.selectIsOnlineHistory(query.getDeviceSn(), query.getStartTime(), query.getEndTime());
     }
 
-    public Integer getNongDuDataAlarmCount(String startTime, String endTime, String deviceSn) {
-        return nongDuDataService.getAlarmCount(startTime, endTime, deviceSn);
+    public Object getNongDuDataAlarmCount(String startTime, String endTime, List<String> deviceSn) {
+        Map<String, Object> result = new HashMap<>();
+        for (String sn : deviceSn) {
+            Integer alarmCount = nongDuDataService.getAlarmCount(startTime, endTime, sn);
+            result.put(sn, alarmCount);
+        }
+        return result;
     }
 }
