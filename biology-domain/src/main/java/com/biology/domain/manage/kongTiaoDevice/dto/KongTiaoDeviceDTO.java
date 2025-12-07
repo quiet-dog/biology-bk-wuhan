@@ -43,6 +43,7 @@ public class KongTiaoDeviceDTO {
         KongTiaoDataDTO kongTiaoDataDTO = CacheCenter.kongTiaoDataCache.getObjectById(getDeviceSn());
         if (kongTiaoDataDTO != null) {
             setIsOnlineStr(kongTiaoDataDTO.getIsOnline() ? "在线" : "离线");
+            setLastTime(lastTime);
         } else {
             setIsOnlineStr("离线");
         }

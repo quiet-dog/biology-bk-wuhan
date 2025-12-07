@@ -7,8 +7,10 @@ import com.biology.domain.manage.kongTiaoData.db.KongTiaoDataEntity;
 
 import cn.hutool.core.bean.BeanUtil;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class KongTiaoDataDTO {
 
     private Boolean isOnline;
