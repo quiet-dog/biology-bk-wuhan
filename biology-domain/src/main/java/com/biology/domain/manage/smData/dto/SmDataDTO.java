@@ -29,8 +29,8 @@ public class SmDataDTO {
     @Schema(description = "设备ID")
     private Long smDeviceId;
 
-    @ExcelColumn(name = "设备sn号")
-    @Schema(description = "设备sn号")
+    @ExcelColumn(name = "设备SN号")
+    @Schema(description = "设备SN号")
     private String deviceSn;
 
     @ExcelColumn(name = "操作员")
@@ -42,23 +42,32 @@ public class SmDataDTO {
 
     private String code;
 
-    @ExcelColumn(name = "电量")
-    @Schema(description = "电量")
-    private Double battery;
+    @Schema(description = "心率")
+    @ExcelColumn(name = "心率")
+    private Double xinlv;
+
+    @Schema(description = "血氧")
+    @ExcelColumn(name = "血氧")
+    private Double xueYang;
+
+    @ExcelColumn(name = "体温")
+    @Schema(description = "温度")
+    private Double humility;
 
     @ExcelColumn(name = "co2浓度")
     @Schema(description = "co2浓度")
     private Double co2;
 
-    @ExcelColumn(name = "温度")
-    @Schema(description = "温度")
-    private Double humility;
+    // @ExcelColumn(name = "电量")
+    @Schema(description = "电量")
+    private Double battery;
 
     @ExcelColumn(name = "湿度")
     @Schema(description = "湿度")
     private Double temp;
 
     @Schema(description = "呼吸")
+    // @ExcelColumn(name = "呼吸")
     private List<Number> huxi;
 
     @Schema(description = "采样时间")
@@ -67,18 +76,14 @@ public class SmDataDTO {
     private String caiYangTime;
 
     @Schema(description = "心电")
+    @ExcelColumn(name = "心电")
     private List<Number> xinDian;
 
-    @Schema(description = "心率")
-    private Double xinlv;
-
-    @Schema(description = "血氧")
-    private Double xueYang;
-
     @Schema(description = "体态")
+    @ExcelColumn(name = "体态")
     private String tiTai;
 
-    @ExcelColumn(name = "采样时间")
+    @ExcelColumn(name = "时间")
     @Schema(description = "创建时间")
     private Date createTime;
 

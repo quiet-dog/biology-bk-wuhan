@@ -74,16 +74,17 @@ public class XsDeviceApplicationService {
 
         List<XsDataFun1DTO> list = CacheCenter.xsDataFun1Cache.getAllCache();
         for (XsDataFun1DTO r : list) {
-            if (r.getOnline() != null && r.getOnline().equals(1)) {
+            if (r.getOnline() != null && r.getOnline().equals(1) && r.getWorkStatus() != null
+                    && r.getWorkStatus().equals(1)) {
                 online++;
             }
         }
         notOnline = count - online;
         onlineMap.put("value", online);
-        onlineMap.put("name", "在线");
+        onlineMap.put("name", "启动");
 
         notOnlineMap.put("value", notOnline);
-        notOnlineMap.put("name", "离线");
+        notOnlineMap.put("name", "空闲");
 
         series.add(notOnlineMap);
         series.add(onlineMap);

@@ -4,9 +4,11 @@ import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.annotation.ExcelColumn;
 import com.biology.common.annotation.ExcelSheet;
 import com.biology.domain.manage.nongDuData.db.NongDuDataEntity;
+import com.biology.domain.manage.nongDuDevice.db.NongDuDeviceEntity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -16,11 +18,11 @@ import lombok.Data;
 public class NongDuDataDTO {
 
     @Schema(name = "浓度数据ID")
-    @ExcelColumn(name = "浓度数据ID")
+    // @ExcelColumn(name = "浓度数据ID")
     private Long nongDuDataId;
 
     @Schema(name = "设备sn号")
-    // @ExcelColumn(name = "设备sn")
+    @ExcelColumn(name = "设备编号")
     private String deviceSn;
 
     @Schema(name = "粒子浓度")
@@ -31,6 +33,8 @@ public class NongDuDataDTO {
     @Schema(name = "生物浓度")
     private Double biologicalConcentration;
 
+    private String area;
+
     private Integer alarm;
 
     @ExcelColumn(name = "报警状态")
@@ -38,7 +42,7 @@ public class NongDuDataDTO {
 
     private Integer workingStatus;
 
-    @ExcelColumn(name = "工作状态")
+    @ExcelColumn(name = "设备工作状态")
     private String workingStatusStr;
 
     @ExcelColumn(name = "采样时间")
@@ -65,6 +69,15 @@ public class NongDuDataDTO {
                 setWorkingStatusStr("停止");
             } else {
                 setWorkingStatusStr("启动");
+            }
+        }
+
+        if (getDeviceSn() != null) {
+            QueryWrapper<NongDuDeviceEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("device_sn", getDeviceSn());
+            NongDuDeviceEntity nongDuDeviceEntity = new NongDuDeviceEntity().selectOne(queryWrapper);
+            if (nongDuDeviceEntity != null) {
+                setArea(nongDuDeviceEntity.getArea());
             }
         }
     }

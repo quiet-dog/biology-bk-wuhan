@@ -69,27 +69,39 @@ public class NongDuDeviceApplicationService {
         long count = nongDuDeviceService.count();
 
         List<CaiYangFunDTO> list = CacheCenter.caiYangFunCache.getAllCache();
-        long online = 0;
+        long caiYangIng = 0;
         long notOnline = 0;
+        long cayYangComplete = 0;
 
         for (CaiYangFunDTO r : list) {
-            if (r.getOnline() != null && r.getOnline().equals(1)) {
-                online++;
+            // if (r.getOnline() != null && r.getOnline().equals(1)) {
+            // online++;
+            // }
+            if (r.getWorkStatus() != null && r.getWorkStatus().equals(1)) {
+                caiYangIng++;
+            }
+            if (r.getWorkStatus() != null && r.getWorkStatus().equals(2)) {
+                cayYangComplete++;
             }
         }
-        notOnline = count - online;
+        notOnline = count - caiYangIng - cayYangComplete;
 
         List<Map<String, Object>> series = new ArrayList<>();
         Map<String, Object> onlineMap = new HashMap<>();
         Map<String, Object> notOnlineMap = new HashMap<>();
-        onlineMap.put("value", online);
-        onlineMap.put("name", "在线");
+        Map<String, Object> cayYangCompleteMap = new HashMap<>();
+        onlineMap.put("value", caiYangIng);
+        onlineMap.put("name", "采样中");
+
+        cayYangCompleteMap.put("value", cayYangComplete);
+        cayYangCompleteMap.put("name", "采样完成");
 
         notOnlineMap.put("value", notOnline);
-        notOnlineMap.put("name", "离线");
+        notOnlineMap.put("name", "空闲");
 
         series.add(notOnlineMap);
         series.add(onlineMap);
+        series.add(cayYangCompleteMap);
 
         result.put("series", series);
 

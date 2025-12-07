@@ -33,6 +33,7 @@ public class CaiYangDataDTO {
     @ExcelColumn(name = "开始时间")
     private Date createTime;
 
+    @ExcelColumn
     private String runTime;
 
     public CaiYangDataDTO(CaiYangDataEntity entity) {

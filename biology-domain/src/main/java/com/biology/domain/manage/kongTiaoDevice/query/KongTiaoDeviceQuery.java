@@ -48,7 +48,14 @@ public class KongTiaoDeviceQuery extends AbstractPageQuery<KongTiaoDeviceEntity>
                     }
                 }
             }
-            queryWrapper = queryWrapper.in("device_sn", deviceSns);
+            // queryWrapper = queryWrapper.in("device_sn", deviceSns);
+            // ✅ 关键修复：只有有数据才拼接 in
+            if (!deviceSns.isEmpty() && deviceSns.size() > 0) {
+                queryWrapper.in("device_sn", deviceSns);
+            } else {
+                // 如果需要：当没数据时强制查不到
+                queryWrapper.eq("device_sn", ""); // 永远匹配不到
+            }
         }
         return queryWrapper;
     }

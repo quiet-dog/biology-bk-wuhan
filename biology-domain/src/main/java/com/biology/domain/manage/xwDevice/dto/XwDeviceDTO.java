@@ -37,7 +37,7 @@ public class XwDeviceDTO {
     private String content;
 
     @Schema(description = "在线状态")
-    @ExcelColumn(name = "设备状态")
+    @ExcelColumn(name = "状态")
     private String isOnlineStr;
 
     private Date createTime;

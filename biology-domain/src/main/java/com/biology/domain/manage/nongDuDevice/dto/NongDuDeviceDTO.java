@@ -26,7 +26,7 @@ public class NongDuDeviceDTO {
     private Long nongDuDeviceId;
 
     @Schema(description = "设备sn号")
-    @ExcelColumn(name = "设备sn号")
+    @ExcelColumn(name = "设备编号")
     private String deviceSn;
 
     @Schema(description = "名称")
@@ -44,11 +44,14 @@ public class NongDuDeviceDTO {
 
     private Long lastTime;
 
-    @ExcelColumn(name = "最后通讯时间")
+    @ExcelColumn(name = "末次通讯时间")
     private String lastTimeStr;
 
     @ExcelColumn(name = "工作状态")
     private String workStatus;
+
+    @ExcelColumn(name = "累计工作时长")
+    private String workTimeStr;
 
     public NongDuDeviceDTO(NongDuDeviceEntity entity) {
         if (entity != null) {
@@ -71,6 +74,7 @@ public class NongDuDeviceDTO {
                 setIsOnline(false);
             } else {
                 if (cDto.getOnline() != null) {
+                    addWorkTimeStr(cDto.getWorkTime());
                     if (cDto.getOnline().equals(1)) {
                         setIsOnline(true);
                         if (cDto.getWorkStatus() != null && cDto.getWorkStatus().equals(1)) {
@@ -92,6 +96,21 @@ public class NongDuDeviceDTO {
             setIsOnlineStr("在线");
         } else {
             setIsOnlineStr("离线");
+        }
+    }
+
+    public void addWorkTimeStr(Integer workTime) {
+        if (workTime != null) {
+            long hours = workTime / 3600;
+            long minutes = (workTime % 3600) / 60;
+            long seconds = workTime % 60;
+            if (hours > 0) {
+                setWorkTimeStr(String.format("%d小时%d分%d秒", hours, minutes, seconds));
+            } else if (minutes > 0) {
+                setWorkTimeStr(String.format("%d分%d秒", minutes, seconds));
+            } else {
+                setWorkTimeStr(String.format("%d秒", seconds));
+            }
         }
     }
 }

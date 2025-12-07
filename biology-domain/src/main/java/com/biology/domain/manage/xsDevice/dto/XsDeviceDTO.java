@@ -21,12 +21,12 @@ import lombok.Data;
 @Data
 @ExcelSheet(name = "消杀设备列表")
 public class XsDeviceDTO {
-    @ExcelColumn(name = "设备ID")
+    // @ExcelColumn(name = "设备ID")
     @Schema(description = "设备ID")
     private Long xsDeviceId;
 
-    @ExcelColumn(name = "设备sn号")
-    @Schema(description = "设备sn号")
+    @ExcelColumn(name = "设备SN号")
+    @Schema(description = "设备SN号")
     private String deviceSn;
 
     @ExcelColumn(name = "设备名称")
@@ -41,12 +41,13 @@ public class XsDeviceDTO {
     private Long lastTime;
 
     @ExcelColumn(name = "最后通讯时间")
+    @Schema(description = "末次通讯时间")
     private String lastTimeStr;
 
     @Schema(description = "在线状态")
     private Boolean isOnline;
 
-    @ExcelColumn(name = "在线状态")
+    @ExcelColumn(name = "设备状态")
     private String isOnlineStr;
 
     @ExcelColumn(name = "工作状态")

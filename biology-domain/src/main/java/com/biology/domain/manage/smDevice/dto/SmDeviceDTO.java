@@ -24,8 +24,8 @@ public class SmDeviceDTO {
     @Schema(description = "设备Id")
     private Long smDeviceId;
 
-    @ExcelColumn(name = "设备sn号")
-    @Schema(description = "设备sn号")
+    @ExcelColumn(name = "设备SN号")
+    @Schema(description = "设备SN号")
     private String deviceSn;
 
     @ExcelColumn(name = "设备名称")
@@ -58,7 +58,7 @@ public class SmDeviceDTO {
 
     private Boolean isOnline;
 
-    @ExcelColumn(name = "设备状态")
+    @ExcelColumn(name = "设备在线状态")
     private String isOnlineStr;
 
     // @ExcelColumn(name = "末次通讯时间", showInImportTemplate = false)

@@ -27,7 +27,9 @@ public class XsDataQuery extends AbstractPageQuery<XsDataEntity> {
     public QueryWrapper<XsDataEntity> addQueryCondition() {
         QueryWrapper<XsDataEntity> queryWrapper = new QueryWrapper<XsDataEntity>();
         queryWrapper.like(!StrUtil.isEmpty(deviceSn), "device_sn", deviceSn)
-                .in(xsDataIds != null && xsDataIds.size() > 0, "xs_data_id", xsDataIds);
+                .in(xsDataIds != null && xsDataIds.size() > 0, "xs_data_id", xsDataIds)
+                .inSql(!StrUtil.isEmpty(area), "device_sn",
+                        String.format("select device_sn from manage_xs_device where area like '%s'", area));
         return queryWrapper;
     }
 

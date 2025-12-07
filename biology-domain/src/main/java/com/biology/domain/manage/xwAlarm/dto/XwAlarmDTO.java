@@ -39,7 +39,7 @@ public class XwAlarmDTO {
     @Schema(description = "报警标志0未审核 1报警 2误报")
     private Long flag;
 
-    @ExcelColumn(name = "报警标志")
+    // @ExcelColumn(name = "报警标志")
     private String flagStr;
 
     @Schema(description = "过滤标志")
@@ -56,6 +56,7 @@ public class XwAlarmDTO {
 
     private String content;
 
+    @ExcelColumn(name = "报警时间")
     private Date createTime;
 
     private Date updateTime;

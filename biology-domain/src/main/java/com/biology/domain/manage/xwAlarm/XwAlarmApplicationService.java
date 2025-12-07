@@ -154,7 +154,7 @@ public class XwAlarmApplicationService {
 
         PingGuJieGuoSeriesDTO r : list) {
             if (!StrUtil.isEmpty(dayType) && dayType.equals("month")) {
-                xData.add(r.getName() + "月");
+                xData.add(r.getName() + "号");
             } else {
                 xData.add(r.getName());
             }
