@@ -1,5 +1,7 @@
 package com.biology.domain.manage.nongDuData.query;
 
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -13,4 +15,6 @@ public class NongDuDataLuanShengQuery {
 
     @Schema(description = "设备ID")
     private String deviceSn;
+
+    private List<String> deviceSnList;
 }

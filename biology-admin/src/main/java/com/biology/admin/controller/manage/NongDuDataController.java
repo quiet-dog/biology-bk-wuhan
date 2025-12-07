@@ -95,10 +95,10 @@ public class NongDuDataController extends BaseController {
     }
 
     @Operation(summary = "获取监测数据报警数量")
-    @GetMapping("/getNongDuDataAlarmCount")
-    public ResponseDTO<Object> getNongDuDataAlarmCount(@RequestParam String startTime, @RequestParam String endTime,
-            @RequestParam List<String> deviceSn) {
-        Object result = nongDuDataApplicationService.getNongDuDataAlarmCount(startTime, endTime, deviceSn);
+    @PostMapping("/getNongDuDataAlarmCount")
+    public ResponseDTO<Object> getNongDuDataAlarmCount(@RequestBody NongDuDataLuanShengQuery query) {
+        Object result = nongDuDataApplicationService.getNongDuDataAlarmCount(query.getStartTime(), query.getEndTime(),
+                query.getDeviceSnList());
         return ResponseDTO.ok(result);
     }
 
