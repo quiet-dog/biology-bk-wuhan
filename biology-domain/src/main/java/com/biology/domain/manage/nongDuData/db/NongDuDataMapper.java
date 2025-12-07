@@ -34,6 +34,7 @@ public interface NongDuDataMapper extends BaseMapper<NongDuDataEntity> {
                         @Param("startTime") String startTime, @Param("endTime") String endTime);
 
         // 统计时间内的报警数量
-        @Select("SELECT COUNT(*) FROM manage_nong_du_data WHERE create_time BETWEEN #{startTime} AND #{endTime} AND alarm = 1")
-        public Integer getAlarmCount(@Param("startTime") String startTime, @Param("endTime") String endTime);
+        @Select("SELECT COUNT(*) FROM manage_nong_du_data WHERE create_time BETWEEN #{startTime} AND #{endTime} AND alarm = 1 AND device_sn = #{deviceSn}")
+        public Integer getAlarmCount(@Param("startTime") String startTime, @Param("endTime") String endTime,
+                        @Param("deviceSn") String deviceSn);
 }

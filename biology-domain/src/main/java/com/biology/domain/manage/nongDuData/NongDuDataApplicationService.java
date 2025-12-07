@@ -109,7 +109,7 @@ public class NongDuDataApplicationService {
         return nongDuDataService.selectIsOnlineHistory(query.getDeviceSn(), query.getStartTime(), query.getEndTime());
     }
 
-    public Integer getNongDuDataAlarmCount(String startTime, String endTime) {
-        return nongDuDataService.getAlarmCount(startTime, endTime);
+    public Integer getNongDuDataAlarmCount(String startTime, String endTime, String deviceSn) {
+        return nongDuDataService.getAlarmCount(startTime, endTime, deviceSn);
     }
 }
