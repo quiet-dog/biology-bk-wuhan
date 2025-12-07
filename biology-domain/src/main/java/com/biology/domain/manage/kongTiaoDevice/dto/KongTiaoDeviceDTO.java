@@ -1,5 +1,6 @@
 package com.biology.domain.manage.kongTiaoDevice.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
@@ -43,7 +44,15 @@ public class KongTiaoDeviceDTO {
         KongTiaoDataDTO kongTiaoDataDTO = CacheCenter.kongTiaoDataCache.getObjectById(getDeviceSn());
         if (kongTiaoDataDTO != null) {
             setIsOnlineStr(kongTiaoDataDTO.getIsOnline() ? "在线" : "离线");
-            setLastTime(lastTime);
+            // setLastTime();
+            if (kongTiaoDataDTO.getYaLiSheDing() != null) {
+
+                // 时间转为YYYY-MM-DD HH:mm:ss
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String formatted = sdf.format(kongTiaoDataDTO.getYaLiSheDing());
+                setLastTime(formatted);
+
+            }
         } else {
             setIsOnlineStr("离线");
         }
