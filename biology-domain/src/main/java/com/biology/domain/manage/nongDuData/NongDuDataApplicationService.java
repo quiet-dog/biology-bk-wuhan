@@ -108,4 +108,8 @@ public class NongDuDataApplicationService {
     public Object getNongDuDataOnlineHistory(NongDuDataLuanShengQuery query) {
         return nongDuDataService.selectIsOnlineHistory(query.getDeviceSn(), query.getStartTime(), query.getEndTime());
     }
+
+    public Integer getNongDuDataAlarmCount(String startTime, String endTime) {
+        return nongDuDataService.getAlarmCount(startTime, endTime);
+    }
 }

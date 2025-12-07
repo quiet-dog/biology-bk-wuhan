@@ -94,4 +94,11 @@ public class NongDuDataController extends BaseController {
         return ResponseDTO.ok(result);
     }
 
+    @Operation(summary = "获取监测数据报警数量")
+    @GetMapping("/getNongDuDataAlarmCount")
+    public ResponseDTO<Integer> getNongDuDataAlarmCount(@RequestParam String startTime, @RequestParam String endTime) {
+        Integer result = nongDuDataApplicationService.getNongDuDataAlarmCount(startTime, endTime);
+        return ResponseDTO.ok(result);
+    }
+
 }

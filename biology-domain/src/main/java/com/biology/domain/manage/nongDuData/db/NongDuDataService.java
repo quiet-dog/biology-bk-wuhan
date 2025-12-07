@@ -8,4 +8,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface NongDuDataService extends IService<NongDuDataEntity> {
 
     public List<Map<String, Object>> selectIsOnlineHistory(String deviceSn, String startTime, String endTime);
+
+    public Integer getAlarmCount(String startTime, String endTime);
 }

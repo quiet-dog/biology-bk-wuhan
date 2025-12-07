@@ -108,4 +108,11 @@ public class XunJianController extends BaseController {
         PageDTO<XunJianHistoryDTO> list = xunJianHistoryApplicationService.getXunJians(query);
         return ResponseDTO.ok(list);
     }
+
+    @Operation(summary = "获取巡检历史报警数量")
+    @GetMapping("/history/alarmCount")
+    public ResponseDTO<Object> getXunJianHistoryAlarmCount(@RequestParam String dayType) {
+        Object list = xunJianHistoryApplicationService.getXunJianHistory(dayType);
+        return ResponseDTO.ok(list);
+    }
 }

@@ -7,4 +7,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface XunJianHistoryService extends IService<XunJianHistoryEntity> {
 
     public Integer getTotalByHistoryId(Long xunJianHistoryId);
+
+    // 统计巡检历史报警数量
 }

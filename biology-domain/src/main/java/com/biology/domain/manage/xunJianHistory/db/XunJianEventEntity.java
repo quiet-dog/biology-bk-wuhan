@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.biology.common.core.base.BaseEntity;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Setter
 @TableName(value = "manage_xun_jian_event", autoResultMap = true)
 @ApiModel(value = "XunJianEntity对象", description = "巡检表")
-public class XunJianEventEntity extends Model<XunJianEventEntity> {
+public class XunJianEventEntity extends BaseEntity<XunJianEventEntity> {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "xun_jian_history_id", type = IdType.AUTO)

@@ -1,6 +1,7 @@
 package com.biology.domain.manage.xunJianHistory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.biology.domain.manage.xunJian.db.XunJianService;
 import com.biology.domain.manage.xunJian.query.XunJianQuery;
 import com.biology.domain.manage.xunJianHistory.command.AddXunJianHistoryCommand;
 import com.biology.domain.manage.xunJianHistory.command.UpdateXunJianHistoryCommand;
+import com.biology.domain.manage.xunJianHistory.db.XunJianEventService;
 import com.biology.domain.manage.xunJianHistory.db.XunJianHistoryEntity;
 import com.biology.domain.manage.xunJianHistory.db.XunJianHistoryService;
 import com.biology.domain.manage.xunJianHistory.dto.XunJianHistoryDTO;
@@ -29,6 +31,8 @@ public class XunJianHistoryApplicationService {
     private final XunJianHistoryFactory xunJianHistoryFactory;
 
     private final XunJianHistoryService xunJianHistoryService;
+
+    private final XunJianEventService xunJianEventService;
 
     public void create(AddXunJianHistoryCommand command) {
         XunJianHistoryModel xunJianHistoryModel = xunJianHistoryFactory.create();
@@ -65,4 +69,17 @@ public class XunJianHistoryApplicationService {
         return new XunJianHistoryDTO(byId);
     }
 
+    public Object getXunJianHistory(String dayType) {
+        //
+        if (dayType.equals("month")) {
+            List<Map<String, Object>> list = xunJianEventService.getAlarmCountByRecent30Days();
+            return list;
+        } else if (dayType.equals("year")) {
+            List<Map<String, Object>> list = xunJianEventService.getAlarmCountByRecent1Year();
+            return list;
+        } else {
+            List<Map<String, Object>> list = xunJianEventService.getAlarmCountByRecent7Days();
+            return list;
+        }
+    }
 }
