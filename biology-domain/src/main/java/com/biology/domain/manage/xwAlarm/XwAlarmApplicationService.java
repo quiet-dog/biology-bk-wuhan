@@ -153,11 +153,11 @@ public class XwAlarmApplicationService {
         for (
 
         PingGuJieGuoSeriesDTO r : list) {
-            if (!StrUtil.isEmpty(dayType) && dayType.equals("month")) {
-                xData.add(r.getName() + "号");
-            } else {
-                xData.add(r.getName());
-            }
+            // if (!StrUtil.isEmpty(dayType) && dayType.equals("month")) {
+            // xData.add(r.getName() + "号");
+            // } else {
+            xData.add(r.getName());
+            // }
             sData.add(r.getValue());
         }
 

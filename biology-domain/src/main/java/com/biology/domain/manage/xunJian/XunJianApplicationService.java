@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -75,8 +76,10 @@ public class XunJianApplicationService {
 
     public void enable(Long xunJianId) {
         XunJianModel xunJianModel = xunJianFactory.loadById(xunJianId);
+        UpdateXunJianCommand updateXunJianCommand = new UpdateXunJianCommand();
+        BeanUtils.copyProperties(xunJianModel, updateXunJianCommand);
         xunJianModel.setEnable(true);
-        xunJianModel.updateById();
+        update(updateXunJianCommand);
     }
 
     public void disable(Long xunJianId) {
@@ -86,118 +89,138 @@ public class XunJianApplicationService {
     }
 
     public void checkXunJian(XunJianModel model) {
+        System.out.println("==============================巡检任务22");
         if (model == null) {
             return;
         }
-        List<Long> envionmentIds = xunJianService.getAllEnvironmentByArea(model.getFanWei());
-        List<Long> equipmentIds = xunJianService.getAllEquipmentByArea(model.getFanWei());
+        List<String> areas = Arrays.asList(model.getFanWei().split(","));
 
-        QueryWrapper<XunJianHistoryEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("xun_jian_id", model.getXunJianId())
-                .eq("status", "巡检中");
-        XunJianHistoryEntity xunJianHistoryEntity = xunJianHistoryService.getOne(queryWrapper);
+        if (areas != null && areas.size() > 0) {
+            List<Long> envionmentIds = xunJianService.getAllEnvironmentByArea(areas);
+            List<Long> equipmentIds = xunJianService.getAllEquipmentByArea(areas);
 
-        LocalTime now = LocalTime.now();
+            QueryWrapper<XunJianHistoryEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("xun_jian_id", model.getXunJianId())
+                    .eq("status", "巡检中");
+            XunJianHistoryEntity xunJianHistoryEntity = xunJianHistoryService.getOne(queryWrapper);
 
-        int hour = now.getHour();
-        int minute = now.getMinute();
-        int second = now.getSecond();
-        int day = LocalDate.now().getDayOfMonth();
-        int totalSeconds = hour * 3600 + minute * 60 + second;
-        int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
-        if (model.getEnable()) {
-            XunJianDTO xDto = new XunJianDTO(model);
-            for (Long id : envionmentIds) {
-                String redisId = "environment-" + id.toString();
-                List<XunJianDTO> xDtos = CacheCenter.xunJianDeviceCache.getObjectById(redisId);
+            LocalTime now = LocalTime.now();
+
+            int hour = now.getHour();
+            int minute = now.getMinute();
+            int second = now.getSecond();
+            int day = LocalDate.now().getDayOfMonth();
+            int totalSeconds = hour * 3600 + minute * 60 + second;
+            int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
+            if (model.getEnable()) {
+                System.out.println("==============================巡检任务11");
+                XunJianDTO xDto = new XunJianDTO(model);
+                for (Long id : envionmentIds) {
+                    String redisId = "environment-" + id.toString();
+                    List<XunJianDTO> xDtos = CacheCenter.xunJianDeviceCache.getObjectById(redisId);
+                    Boolean isExit = false;
+                    if (xDtos != null) {
+                        isExit = xDtos.stream().anyMatch(i -> i.getXunJianId().equals(model.getXunJianId()));
+                    } else {
+                        xDtos = new ArrayList<>();
+                    }
+                    if (!isExit) {
+                        xDtos.add(xDto);
+                    }
+                    CacheCenter.xunJianDeviceCache.set(redisId, xDtos);
+                }
+                for (Long id : equipmentIds) {
+                    String redisId = "equipment-" + id.toString();
+                    List<XunJianDTO> xDtos = CacheCenter.xunJianDeviceCache.getObjectById(redisId);
+                    Boolean isExit = false;
+                    if (xDtos != null) {
+                        isExit = xDtos.stream().anyMatch(i -> i.getXunJianId().equals(model.getXunJianId()));
+                    } else {
+                        xDtos = new ArrayList<>();
+                    }
+                    if (!isExit) {
+                        xDtos.add(xDto);
+                    }
+                    CacheCenter.xunJianDeviceCache.set(redisId, xDtos);
+                }
+
                 Boolean isExit = false;
-                if (xDtos != null) {
-                    isExit = xDtos.stream().anyMatch(i -> i.getXunJianId().equals(model.getXunJianId()));
-                } else {
-                    xDtos = new ArrayList<>();
-                }
-                if (!isExit) {
-                    xDtos.add(xDto);
-                }
-                CacheCenter.xunJianDeviceCache.set(redisId, xDtos);
-            }
-            for (Long id : equipmentIds) {
-                String redisId = "equipment-" + id.toString();
-                List<XunJianDTO> xDtos = CacheCenter.xunJianDeviceCache.getObjectById(redisId);
-                Boolean isExit = false;
-                if (xDtos != null) {
-                    isExit = xDtos.stream().anyMatch(i -> i.getXunJianId().equals(model.getXunJianId()));
-                } else {
-                    xDtos = new ArrayList<>();
-                }
-                if (!isExit) {
-                    xDtos.add(xDto);
-                }
-                CacheCenter.xunJianDeviceCache.set(redisId, xDtos);
-            }
+                Boolean timeExit = false;
 
-            Boolean isExit = false;
-            Boolean timeExit = false;
+                if (model.getXunJianLeiXing() != null && model.getXunJianLeiXing().equals("持续巡检")) {
+                    if (model.getXunJianPinLu() != null && model.getTimeRange() != null
+                            && model.getTimeRange().size() == 2) {
+                        if (model.getTimeRange().get(0) < totalSeconds
+                                && totalSeconds < model.getTimeRange().get(1)) {
+                            isExit = true;
+                        }
 
-            if (model.getXunJianLeiXing() != null && model.getXunJianLeiXing().equals("持续巡检")) {
-                if (model.getXunJianPinLu() != null && model.getTimeRange() != null
-                        && model.getTimeRange().size() == 2) {
-                    if (model.getTimeRange().get(0) < totalSeconds
-                            && totalSeconds < model.getTimeRange().get(1)) {
-                        isExit = true;
-                    }
-
-                    if (model.getXunJianPinLu().equals("每日")) {
-                        timeExit = true;
-                    }
-                    if (model.getXunJianPinLu().equals("每周") && model.getDayRange() != null
-                            && model.getDayRange().size() > 0) {
-                        timeExit = model.getDayRange().contains(dayOfWeek - 1);
-                    }
-                    if (model.getXunJianPinLu().equals("每月") && model.getDayRange() != null
-                            && model.getDayRange().size() > 0) {
-                        timeExit = model.getDayRange().contains(day - 1);
+                        if (model.getXunJianPinLu().equals("每日")) {
+                            timeExit = true;
+                        }
+                        if (model.getXunJianPinLu().equals("每周") && model.getDayRange() != null
+                                && model.getDayRange().size() > 0) {
+                            timeExit = model.getDayRange().contains(dayOfWeek - 1);
+                        }
+                        if (model.getXunJianPinLu().equals("每月") && model.getDayRange() != null
+                                && model.getDayRange().size() > 0) {
+                            timeExit = model.getDayRange().contains(day - 1);
+                        }
                     }
                 }
-            }
 
-            System.out.println("==============================");
-            System.out.println(dayOfWeek);
-            System.out.println(isExit);
-            System.out.println(timeExit);
+                System.out.println("==============================巡检任务" + equipmentIds.size());
+                System.out.println("==============================巡检任务" + envionmentIds.size());
+                System.out.println("==============================巡检任务" + dayOfWeek);
+                System.out.println("==============================巡检任务" + isExit);
+                System.out.println("==============================巡检任务" + timeExit);
+                System.out.println("==============================巡检任务频率" + model.getXunJianPinLu());
+                System.out.println("==============================巡检任务频率2" + model.getDayRange());
+                System.out.println("==============================巡检任务频率3" + model.getTimeRange());
 
-            if (isExit && timeExit && xunJianHistoryEntity == null) {
-                XunJianHistoryModel xunJianHistoryModel = xunJianHistoryFactory.create();
-                xunJianHistoryModel.setXunJianId(model.getXunJianId());
-                xunJianHistoryModel.setStatus("巡检中");
-                xunJianHistoryModel.setXunJianLeiXing(model.getXunJianLeiXing());
-                xunJianHistoryModel.setXunJianPinLu(model.getXunJianPinLu());
-                xunJianHistoryModel.setDayRange(model.getDayRange());
-                xunJianHistoryModel.setTimeRange(model.getTimeRange());
-                xunJianHistoryModel.setFanWei(model.getFanWei());
-                xunJianHistoryModel.insert();
-            }
-
-        } else {
-            for (Long id : envionmentIds) {
-                String redisId = "environment-" + id.toString();
-                List<XunJianDTO> xDtos = CacheCenter.xunJianDeviceCache.getObjectById(redisId);
-                if (xDtos != null) {
-                    xDtos.removeIf(i -> i.getXunJianId().equals(model.getXunJianId()));
+                if (isExit && timeExit && xunJianHistoryEntity == null) {
+                    XunJianHistoryModel xunJianHistoryModel = xunJianHistoryFactory.create();
+                    xunJianHistoryModel.setXunJianId(model.getXunJianId());
+                    xunJianHistoryModel.setStatus("巡检中");
+                    xunJianHistoryModel.setXunJianLeiXing(model.getXunJianLeiXing());
+                    xunJianHistoryModel.setXunJianPinLu(model.getXunJianPinLu());
+                    xunJianHistoryModel.setDayRange(model.getDayRange());
+                    xunJianHistoryModel.setTimeRange(model.getTimeRange());
+                    xunJianHistoryModel.setFanWei(model.getFanWei());
+                    xunJianHistoryModel.insert();
                 }
-                CacheCenter.xunJianDeviceCache.set(redisId, xDtos);
-            }
-            for (Long id : equipmentIds) {
-                String redisId = "equipment-" + id.toString();
-                List<XunJianDTO> xDtos = CacheCenter.xunJianDeviceCache.getObjectById(redisId);
-                if (xDtos != null) {
-                    xDtos.removeIf(i -> i.getXunJianId().equals(model.getXunJianId()));
-                }
-                CacheCenter.xunJianDeviceCache.set(redisId, xDtos);
-            }
 
+            } else {
+                System.out.println("==============================没有进入到巡检任务");
+                for (Long id : envionmentIds) {
+                    String redisId = "environment-" + id.toString();
+                    List<XunJianDTO> xDtos = CacheCenter.xunJianDeviceCache.getObjectById(redisId);
+                    if (xDtos != null) {
+                        xDtos.removeIf(i -> i.getXunJianId().equals(model.getXunJianId()));
+                    }
+                    CacheCenter.xunJianDeviceCache.set(redisId, xDtos);
+                }
+                for (Long id : equipmentIds) {
+                    String redisId = "equipment-" + id.toString();
+                    List<XunJianDTO> xDtos = CacheCenter.xunJianDeviceCache.getObjectById(redisId);
+                    if (xDtos != null) {
+                        xDtos.removeIf(i -> i.getXunJianId().equals(model.getXunJianId()));
+                    }
+                    CacheCenter.xunJianDeviceCache.set(redisId, xDtos);
+                }
+
+                if (xunJianHistoryEntity != null) {
+                    xunJianHistoryEntity.setStatus("已完成");
+                    xunJianHistoryEntity.updateById();
+                }
+            }
         }
-
     }
 
+    public List<String> getAreas() {
+        List<String> equipmentAreas = xunJianService.getAllEquipmentAreas();
+        List<String> environmentAreas = xunJianService.getAllEnvironmentAreas();
+        equipmentAreas.addAll(environmentAreas);
+        return equipmentAreas;
+    }
 }

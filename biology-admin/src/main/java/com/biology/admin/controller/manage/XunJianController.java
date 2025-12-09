@@ -115,4 +115,11 @@ public class XunJianController extends BaseController {
         Object list = xunJianHistoryApplicationService.getXunJianHistory(dayType);
         return ResponseDTO.ok(list);
     }
+
+    @Operation(summary = "获取巡检区域")
+    @GetMapping("/areas")
+    public ResponseDTO<List<String>> getAreas() {
+        List<String> areas = xunJianApplicationService.getAreas();
+        return ResponseDTO.ok(areas);
+    }
 }

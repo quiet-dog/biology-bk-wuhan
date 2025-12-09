@@ -6,8 +6,12 @@ import org.springframework.beans.BeanUtils;
 
 import com.biology.domain.manage.xunJian.db.XunJianEntity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class XunJianDTO {
 

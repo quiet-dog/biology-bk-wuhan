@@ -8,11 +8,21 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 @Service
 public class XunJianServiceImpl extends ServiceImpl<XunJianMapper, XunJianEntity> implements XunJianService {
-    public List<Long> getAllEquipmentByArea(String area) {
-        return baseMapper.getAllEquipmentByArea(area);
+    public List<Long> getAllEquipmentByArea(List<String> areas) {
+        String areaStr = String.join(",", areas);
+        return baseMapper.getAllEquipmentByArea(areaStr);
     }
 
-    public List<Long> getAllEnvironmentByArea(String area) {
-        return baseMapper.getAllEquipmentByArea(area);
+    public List<Long> getAllEnvironmentByArea(List<String> areas) {
+        String areaStr = String.join(",", areas);
+        return baseMapper.getAllEnvironmentByArea(areaStr);
+    }
+
+    public List<String> getAllEquipmentAreas() {
+        return baseMapper.getAllEquipmentAreas();
+    }
+
+    public List<String> getAllEnvironmentAreas() {
+        return baseMapper.getAllEnvironmentAreas();
     }
 }

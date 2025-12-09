@@ -49,6 +49,7 @@ public class XwDeviceDTO {
     public XwDeviceDTO(XwDeviceEntity entity) {
         if (entity != null) {
             BeanUtils.copyProperties(entity, this);
+            addOther();
         }
     }
 

@@ -245,6 +245,13 @@ public class ResultShiJuanApplicationService {
                     .set("status", "重点关注"); // 设置更新字段
             new XlArchiveEntity().update(updateWrapper);
         }
+
+        // else {
+        // UpdateWrapper<XlArchiveEntity> updateWrapper = new UpdateWrapper<>();
+        // updateWrapper.eq("user_id", rModel.getUserId()) // WHERE 条件
+        // .set("status", "正常"); // 设置更新字段
+        // new XlArchiveEntity().update(updateWrapper);
+        // }
     }
 
     public void setGanYu(ResultGanYuDTO req) {

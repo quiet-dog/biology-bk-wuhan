@@ -329,7 +329,7 @@ public class RedisCacheService {
             }
         };
 
-        xunJianDeviceCache = new RedisCacheTemplate<List<XunJianDTO>>(redisUtil, CacheKeyEnum.ENVIRONMENT_SOP_KEY) {
+        xunJianDeviceCache = new RedisCacheTemplate<List<XunJianDTO>>(redisUtil, CacheKeyEnum.XUN_JIAN_DEVICE_KEY) {
 
         };
 

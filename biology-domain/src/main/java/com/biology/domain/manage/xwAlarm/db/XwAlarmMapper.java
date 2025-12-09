@@ -75,100 +75,186 @@ public interface XwAlarmMapper extends BaseMapper<XwAlarmEntity> {
         // @Select("select COUNT(*) as value,seat_number as name from manage_xw_alarm
         // where YEARWEEK(create_time, 1) = YEARWEEK(CURDATE(), 1)"
         // + " group by seat_number")
-        @Select("WITH RECURSIVE week_days AS ( " +
-                        "SELECT DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS day_date " +
-                        "UNION ALL " +
-                        "SELECT day_date + INTERVAL 1 DAY FROM week_days " +
-                        "WHERE day_date + INTERVAL 1 DAY <= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 6 DAY "
-                        +
+        // @Select("WITH RECURSIVE week_days AS ( " +
+        // "SELECT DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS day_date " +
+        // "UNION ALL " +
+        // "SELECT day_date + INTERVAL 1 DAY FROM week_days " +
+        // "WHERE day_date + INTERVAL 1 DAY <= DATE_SUB(CURDATE(), INTERVAL
+        // WEEKDAY(CURDATE()) DAY) + INTERVAL 6 DAY "
+        // +
+        // ") " +
+        // "SELECT wd.day_date as name, COUNT(a.create_time) AS value " +
+        // "FROM week_days wd " +
+        // "LEFT JOIN manage_xw_alarm a " +
+        // "ON DATE(a.create_time) = wd.day_date " +
+        // "AND a.seat_number LIKE concat('%', #{seatNumber}, '%') " +
+        // "GROUP BY wd.day_date " +
+        // "ORDER BY wd.day_date;")
+        @Select("WITH RECURSIVE day_list AS ( " +
+                        "   SELECT CURDATE() - INTERVAL 6 DAY AS day_date " + // ✅ 7天前开始（含今天刚好7天）
+                        "   UNION ALL " +
+                        "   SELECT day_date + INTERVAL 1 DAY FROM day_list " +
+                        "   WHERE day_date + INTERVAL 1 DAY <= CURDATE() " + // ✅ 截止到今天
                         ") " +
-                        "SELECT wd.day_date as name, COUNT(a.create_time) AS value " +
-                        "FROM week_days wd " +
+                        "SELECT DATE_FORMAT(d.day_date, '%Y-%m-%d') AS name, " +
+                        "       IFNULL(COUNT(a.create_time), 0) AS value " +
+                        "FROM day_list d " +
                         "LEFT JOIN manage_xw_alarm a " +
-                        "ON DATE(a.create_time) = wd.day_date " +
-                        "AND a.seat_number LIKE concat('%', #{seatNumber}, '%') " +
-                        "GROUP BY wd.day_date " +
-                        "ORDER BY wd.day_date;")
+                        "  ON DATE(a.create_time) = d.day_date " +
+                        " AND a.seat_number LIKE CONCAT('%', #{seatNumber}, '%') " +
+                        "GROUP BY d.day_date " +
+                        "ORDER BY d.day_date")
         List<PingGuJieGuoSeriesDTO> jiWeiQuShiBianHuaByWeek(@Param("seatNumber") String seatNumber);
 
-        @Select("WITH RECURSIVE week_days AS ( " +
-                        "SELECT DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS day_date " +
-                        "UNION ALL " +
-                        "SELECT day_date + INTERVAL 1 DAY FROM week_days " +
-                        "WHERE day_date + INTERVAL 1 DAY <= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) + INTERVAL 6 DAY "
-                        +
+        // @Select("WITH RECURSIVE week_days AS ( " +
+        // "SELECT DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS day_date " +
+        // "UNION ALL " +
+        // "SELECT day_date + INTERVAL 1 DAY FROM week_days " +
+        // "WHERE day_date + INTERVAL 1 DAY <= DATE_SUB(CURDATE(), INTERVAL
+        // WEEKDAY(CURDATE()) DAY) + INTERVAL 6 DAY "
+        // +
+        // ") " +
+        // "SELECT wd.day_date as name, COUNT(a.create_time) AS value " +
+        // "FROM week_days wd " +
+        // "LEFT JOIN manage_xw_alarm a " +
+        // "ON DATE(a.create_time) = wd.day_date " +
+        // "GROUP BY wd.day_date " +
+        // "ORDER BY wd.day_date;")
+        @Select("WITH RECURSIVE day_list AS ( " +
+                        "   SELECT CURDATE() - INTERVAL 6 DAY AS day_date " + // 最近7天起点
+                        "   UNION ALL " +
+                        "   SELECT day_date + INTERVAL 1 DAY FROM day_list " +
+                        "   WHERE day_date + INTERVAL 1 DAY <= CURDATE() " + // 截止今天
                         ") " +
-                        "SELECT wd.day_date as name, COUNT(a.create_time) AS value " +
-                        "FROM week_days wd " +
+                        "SELECT DATE_FORMAT(d.day_date, '%Y-%m-%d') AS name, " +
+                        "       IFNULL(COUNT(a.create_time), 0) AS value " +
+                        "FROM day_list d " +
                         "LEFT JOIN manage_xw_alarm a " +
-                        "ON DATE(a.create_time) = wd.day_date " +
-                        "GROUP BY wd.day_date " +
-                        "ORDER BY wd.day_date;")
+                        "  ON DATE(a.create_time) = d.day_date " +
+                        "GROUP BY d.day_date " +
+                        "ORDER BY d.day_date")
         List<PingGuJieGuoSeriesDTO> jiWeiQuShiBianHuaByWeekAll();
 
         // @Select("select COUNT(*) as value,seat_number as name from manage_xw_alarm
         // where YEAR(create_time) = YEAR(CURDATE()) AND MONTH(create_time) =
         // MONTH(CURDATE())"
         // + " group by seat_number")
-        @Select("WITH RECURSIVE month_days AS ( " +
-                        "SELECT DATE_FORMAT(CURDATE(), '%Y-%m-01') AS day_date " + // 本月第一天
-                        "UNION ALL " +
-                        "SELECT day_date + INTERVAL 1 DAY FROM month_days " +
-                        "WHERE day_date + INTERVAL 1 DAY <= LAST_DAY(CURDATE()) " + // 本月最后一天
+        // @Select("WITH RECURSIVE month_days AS ( " +
+        // "SELECT DATE_FORMAT(CURDATE(), '%Y-%m-01') AS day_date " + // 本月第一天
+        // "UNION ALL " +
+        // "SELECT day_date + INTERVAL 1 DAY FROM month_days " +
+        // "WHERE day_date + INTERVAL 1 DAY <= LAST_DAY(CURDATE()) " + // 本月最后一天
+        // ") " +
+        // "SELECT DAY(md.day_date) AS name, COUNT(a.create_time) AS value " +
+        // "FROM month_days md " +
+        // "LEFT JOIN manage_xw_alarm a " +
+        // "ON DATE(a.create_time) = md.day_date " +
+        // "AND a.seat_number LIKE concat('%', #{seatNumber}, '%') " + // ✅ 条件放在 JOIN 中
+        // "GROUP BY md.day_date " +
+        // "ORDER BY md.day_date;")
+
+        @Select("WITH RECURSIVE days AS ( " +
+                        "    SELECT CURDATE() - INTERVAL 29 DAY AS d " +
+                        "    UNION ALL " +
+                        "    SELECT DATE_ADD(d, INTERVAL 1 DAY) FROM days " +
+                        "    WHERE d < CURDATE() " +
                         ") " +
-                        "SELECT DAY(md.day_date) AS name, COUNT(a.create_time) AS value " +
-                        "FROM month_days md " +
-                        "LEFT JOIN manage_xw_alarm a " +
-                        "ON DATE(a.create_time) = md.day_date " +
-                        "AND a.seat_number LIKE concat('%', #{seatNumber}, '%') " + // ✅ 条件放在 JOIN 中
-                        "GROUP BY md.day_date " +
-                        "ORDER BY md.day_date;")
+                        "SELECT DATE_FORMAT(d, '%Y-%m-%d') AS name, " +
+                        "       IFNULL(COUNT(a.create_time), 0) AS value " +
+                        "FROM days " +
+                        "LEFT JOIN manage_xw_alarm a ON DATE(a.create_time) = d " +
+                        " AND a.seat_number LIKE CONCAT('%', #{seatNumber}, '%') " +
+                        "GROUP BY d " +
+                        "ORDER BY d")
         List<PingGuJieGuoSeriesDTO> jiWeiQuShiBianHuaByMonth(@Param("seatNumber") String seatNumber);
 
-        @Select("WITH RECURSIVE month_days AS ( " +
-                        "SELECT DATE_FORMAT(CURDATE(), '%Y-%m-01') AS day_date " + // 本月第一天
-                        "UNION ALL " +
-                        "SELECT day_date + INTERVAL 1 DAY FROM month_days " +
-                        "WHERE day_date + INTERVAL 1 DAY <= LAST_DAY(CURDATE()) " + // 本月最后一天
+        // @Select("WITH RECURSIVE month_days AS ( " +
+        // "SELECT DATE_FORMAT(CURDATE(), '%Y-%m-01') AS day_date " + // 本月第一天
+        // "UNION ALL " +
+        // "SELECT day_date + INTERVAL 1 DAY FROM month_days " +
+        // "WHERE day_date + INTERVAL 1 DAY <= LAST_DAY(CURDATE()) " + // 本月最后一天
+        // ") " +
+        // "SELECT DAY(md.day_date) AS name, COUNT(a.create_time) AS value " +
+        // "FROM month_days md " +
+        // "LEFT JOIN manage_xw_alarm a " +
+        // "ON DATE(a.create_time) = md.day_date " +
+        // "GROUP BY md.day_date " +
+        // "ORDER BY md.day_date;")
+
+        @Select("WITH RECURSIVE days AS ( " +
+                        "    SELECT CURDATE() - INTERVAL 29 DAY AS d " +
+                        "    UNION ALL " +
+                        "    SELECT DATE_ADD(d, INTERVAL 1 DAY) FROM days " +
+                        "    WHERE d < CURDATE() " +
                         ") " +
-                        "SELECT DAY(md.day_date) AS name, COUNT(a.create_time) AS value " +
-                        "FROM month_days md " +
-                        "LEFT JOIN manage_xw_alarm a " +
-                        "ON DATE(a.create_time) = md.day_date " +
-                        "GROUP BY md.day_date " +
-                        "ORDER BY md.day_date;")
+                        "SELECT DATE_FORMAT(d, '%Y-%m-%d') AS name, " +
+                        "       IFNULL(COUNT(a.create_time), 0) AS value " +
+                        "FROM days " +
+                        "LEFT JOIN manage_xw_alarm a ON DATE(a.create_time) = d " +
+                        "GROUP BY d " +
+                        "ORDER BY d")
         List<PingGuJieGuoSeriesDTO> jiWeiQuShiBianHuaByMonthAll();
 
         // @Select("select COUNT(*) as value,seat_number as name from manage_xw_alarm
         // where YEAR(create_time) = YEAR(CURDATE())"
         // + " group by seat_number")
+        // @Select("WITH RECURSIVE months AS ( " +
+        // "SELECT 1 AS month_num " +
+        // "UNION ALL " +
+        // "SELECT month_num + 1 FROM months " +
+        // "WHERE month_num < 12 " +
+        // ") " +
+        // "SELECT m.month_num as name, COUNT(a.create_time) AS value " +
+        // "FROM months m " +
+        // "LEFT JOIN manage_xw_alarm a " +
+        // "ON MONTH(a.create_time) = m.month_num AND YEAR(a.create_time) =
+        // YEAR(CURDATE()) " +
+        // "AND a.seat_number LIKE concat('%', #{seatNumber}, '%') " + // ✅ 条件放在 JOIN 中
+        // "GROUP BY m.month_num " +
+        // "ORDER BY m.month_num;")
         @Select("WITH RECURSIVE months AS ( " +
-                        "SELECT 1 AS month_num " +
+                        "SELECT STR_TO_DATE(DATE_FORMAT(CURDATE() - INTERVAL 11 MONTH, '%Y-%m-01'), '%Y-%m-%d') AS ym "
+                        +
                         "UNION ALL " +
-                        "SELECT month_num + 1 FROM months " +
-                        "WHERE month_num < 12 " +
+                        "SELECT DATE_ADD(ym, INTERVAL 1 MONTH) FROM months " +
+                        "WHERE ym < STR_TO_DATE(DATE_FORMAT(CURDATE(), '%Y-%m-01'), '%Y-%m-%d') " +
                         ") " +
-                        "SELECT m.month_num as name, COUNT(a.create_time) AS value " +
+                        "SELECT DATE_FORMAT(m.ym, '%Y-%m') AS name, IFNULL(COUNT(a.create_time), 0) AS value " +
                         "FROM months m " +
                         "LEFT JOIN manage_xw_alarm a " +
-                        "ON MONTH(a.create_time) = m.month_num AND YEAR(a.create_time) = YEAR(CURDATE()) " +
-                        "AND a.seat_number LIKE concat('%', #{seatNumber}, '%') " + // ✅ 条件放在 JOIN 中
-                        "GROUP BY m.month_num " +
-                        "ORDER BY m.month_num;")
+                        "ON DATE_FORMAT(a.create_time, '%Y-%m') = DATE_FORMAT(m.ym, '%Y-%m') " +
+                        " AND a.seat_number LIKE CONCAT('%', #{seatNumber}, '%') " +
+                        "GROUP BY m.ym " +
+                        "ORDER BY m.ym")
         List<PingGuJieGuoSeriesDTO> jiWeiQuShiBianHuaByYear(@Param("seatNumber") String seatNumber);
 
+        // @Select("WITH RECURSIVE months AS ( " +
+        // "SELECT 1 AS month_num " +
+        // "UNION ALL " +
+        // "SELECT month_num + 1 FROM months " +
+        // "WHERE month_num < 12 " +
+        // ") " +
+        // "SELECT m.month_num as name, COUNT(a.create_time) AS value " +
+        // "FROM months m " +
+        // "LEFT JOIN manage_xw_alarm a " +
+        // "ON MONTH(a.create_time) = m.month_num AND YEAR(a.create_time) =
+        // YEAR(CURDATE()) " +
+        // "GROUP BY m.month_num " +
+        // "ORDER BY m.month_num;")
+
         @Select("WITH RECURSIVE months AS ( " +
-                        "SELECT 1 AS month_num " +
+                        "SELECT STR_TO_DATE(DATE_FORMAT(CURDATE() - INTERVAL 11 MONTH, '%Y-%m-01'), '%Y-%m-%d') AS ym "
+                        +
                         "UNION ALL " +
-                        "SELECT month_num + 1 FROM months " +
-                        "WHERE month_num < 12 " +
+                        "SELECT DATE_ADD(ym, INTERVAL 1 MONTH) FROM months " +
+                        "WHERE ym < STR_TO_DATE(DATE_FORMAT(CURDATE(), '%Y-%m-01'), '%Y-%m-%d') " +
                         ") " +
-                        "SELECT m.month_num as name, COUNT(a.create_time) AS value " +
+                        "SELECT DATE_FORMAT(m.ym, '%Y-%m') AS name, IFNULL(COUNT(a.create_time), 0) AS value " +
                         "FROM months m " +
                         "LEFT JOIN manage_xw_alarm a " +
-                        "ON MONTH(a.create_time) = m.month_num AND YEAR(a.create_time) = YEAR(CURDATE()) " +
-                        "GROUP BY m.month_num " +
-                        "ORDER BY m.month_num;")
+                        "ON DATE_FORMAT(a.create_time, '%Y-%m') = DATE_FORMAT(m.ym, '%Y-%m') " +
+                        "GROUP BY m.ym " +
+                        "ORDER BY m.ym")
         List<PingGuJieGuoSeriesDTO> jiWeiQuShiBianHuaByYearAll();
 
         @Select({
