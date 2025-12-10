@@ -68,6 +68,8 @@ public class XwAlarmApplicationService {
     }
 
     public void getXingWeiAlarm(XingWeiDTO xingWeiDTO) {
+
+        System.out.println("接收行为数据================ xingWeiDTO: " + xingWeiDTO);
         AddXwAlarmCommand command = new AddXwAlarmCommand();
         command.setCameraId(xingWeiDTO.getCameraId());
         command.setAlarmId(xingWeiDTO.getAlarmId());
@@ -80,6 +82,7 @@ public class XwAlarmApplicationService {
         command.setSeatNumber(xingWeiDTO.getSeatNumber());
         command.setTimeStamp(xingWeiDTO.getTimeStampAsMillis());
         create(command);
+        System.out.println("接收行为数据成功================ xingWeiDTO: " + xingWeiDTO);
     }
 
     public PingGuJieGuoEchart JiWeiBaoJingZhanBi(String dayType) {

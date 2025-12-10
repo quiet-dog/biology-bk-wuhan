@@ -482,6 +482,7 @@ public class TaskApplicationService {
                 .bodyToMono(ShengOnelineResDTO.class)
                 .block(); // 阻塞直到返回结果
 
+        System.out.println("人体设备 restful   结果: " + result);
         if (result != null && result.getCode() == 0) {
             result.getData().forEach(device -> {
                 if (device.getOnline()) {

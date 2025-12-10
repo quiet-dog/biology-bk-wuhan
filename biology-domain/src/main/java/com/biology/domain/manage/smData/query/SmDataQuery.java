@@ -29,6 +29,10 @@ public class SmDataQuery extends AbstractPageQuery<SmDataEntity> {
                         String.format("select sm_device_id from manage_sm_device where device_sn like '%s'",
                                 getSmDeviceSn()));
 
+        // 创建时间倒序
+        setOrderColumn("create_time");
+        setOrderDirection("descending");
+
         return queryWrapper;
     }
 

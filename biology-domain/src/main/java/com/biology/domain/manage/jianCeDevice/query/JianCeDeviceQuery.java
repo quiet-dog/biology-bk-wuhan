@@ -24,12 +24,15 @@ public class JianCeDeviceQuery extends AbstractPageQuery<JianCeDeviceEntity> {
 
     private String online;
 
+    private List<Long> jianCeDeviceIds;
+
     @Override
     public QueryWrapper<JianCeDeviceEntity> addQueryCondition() {
 
         QueryWrapper<JianCeDeviceEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(!StrUtil.isEmpty(deviceSn), "device_sn", deviceSn)
-                .like(!StrUtil.isEmpty(area), "area", area);
+                .like(!StrUtil.isEmpty(area), "area", area)
+                .in(jianCeDeviceIds != null && jianCeDeviceIds.size() > 0, "jian_ce_device_id", jianCeDeviceIds);
 
         if (!StrUtil.isEmpty(online)) {
             List<NongDuDTO> l = CacheCenter.jianCeDataCache.getAllCache();

@@ -32,12 +32,15 @@ public class XsDeviceQuery extends AbstractPageQuery<XsDeviceEntity> {
 
     private String workStatus;
 
+    private List<Long> xsDeviceIds;
+
     @Override
     public QueryWrapper<XsDeviceEntity> addQueryCondition() {
         QueryWrapper<XsDeviceEntity> queryWrapper = new QueryWrapper<XsDeviceEntity>();
         queryWrapper
                 .eq(!StrUtil.isEmpty(getDeviceSn()), "device_sn", getDeviceSn())
-                .eq(!StrUtil.isEmpty(getArea()), "area", getArea());
+                .eq(!StrUtil.isEmpty(getArea()), "area", getArea())
+                .in(xsDeviceIds != null && xsDeviceIds.size() > 0, "xs_device_id", xsDeviceIds);
         if (!StrUtil.isEmpty(online)) {
             List<XsDataFun1DTO> l = CacheCenter.xsDataFun1Cache.getAllCache();
             List<String> deviceSns = new ArrayList<>();

@@ -37,6 +37,7 @@ public enum CacheKeyEnum {
     ENVIRONMENT_SOP_KEY("environment_sop:", 60, TimeUnit.MINUTES),
     KONG_TIAO_DATA_KEY("kong_tiao_data:", 60, TimeUnit.MINUTES),
     XUN_JIAN_DEVICE_KEY("xun_jian_device:", 365, TimeUnit.DAYS),
+    SM_DATA_KEY("sm_data:", 60, TimeUnit.MINUTES),
     ;
 
     CacheKeyEnum(String key, int expiration, TimeUnit timeUnit) {

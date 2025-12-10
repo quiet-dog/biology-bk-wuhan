@@ -22,6 +22,7 @@ import com.biology.domain.manage.knowledge.db.KnowledgeTypeEntity;
 import com.biology.domain.manage.knowledge.db.KnowledgeTypeService;
 import com.biology.domain.manage.kongTiaoData.dto.KongTiaoDataDTO;
 import com.biology.domain.manage.nongDuData.command.NongDuDTO;
+import com.biology.domain.manage.smData.dto.SmDataCacheDTO;
 import com.biology.domain.manage.smData.dto.SmDataDTO;
 import com.biology.domain.manage.sop.db.SopEntity;
 import com.biology.domain.manage.sop.db.SopFileEntity;
@@ -114,6 +115,8 @@ public class RedisCacheService {
     public RedisCacheTemplate<List<XunJianDTO>> xunJianDeviceCache;
 
     public RedisCacheTemplate<KongTiaoDataDTO> kongTiaoDataCache;
+
+    public RedisCacheTemplate<SmDataCacheDTO> smDataCache;
 
     // public RedisCacheTemplate<RoleInfo> roleModelInfoCache;
 
@@ -337,6 +340,9 @@ public class RedisCacheService {
 
         };
 
+        smDataCache = new RedisCacheTemplate<SmDataCacheDTO>(redisUtil, CacheKeyEnum.SM_DATA_KEY) {
+
+        };
         // thrsholdEmergencyCache = new
         // RedisCacheTemplate<List<EmergencyDTO>>(redisUtil,
         // CacheKeyEnum.THRESHOLD_EMERGENCY_DEVICE_KEY) {
