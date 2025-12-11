@@ -25,7 +25,7 @@ public class XsDeviceDTO {
     @Schema(description = "设备ID")
     private Long xsDeviceId;
 
-    @ExcelColumn(name = "设备SN号")
+    @ExcelColumn(name = "设备编号")
     @Schema(description = "设备SN号")
     private String deviceSn;
 
