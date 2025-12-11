@@ -65,7 +65,8 @@ public class RenTiWebsocketClient {
     @PostConstruct
     public void init() {
         initClient();
-        tryConnect();
+        executor.submit(this::tryConnect);
+
     }
 
     @PreDestroy

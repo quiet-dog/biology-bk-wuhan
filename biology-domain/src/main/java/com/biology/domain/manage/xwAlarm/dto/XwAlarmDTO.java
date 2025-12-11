@@ -83,9 +83,9 @@ public class XwAlarmDTO {
             }
         }
 
-        if (getCameraId() != null) {
+        if (getSeatNumber() != null) {
             QueryWrapper<XwDeviceEntity> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("camera_id", getCameraId());
+            queryWrapper.eq("seat_number", getSeatNumber());
             XwDeviceEntity xwDeviceEntity = new XwDeviceEntity().selectOne(queryWrapper);
             if (xwDeviceEntity != null) {
                 setContent(xwDeviceEntity.getContent());

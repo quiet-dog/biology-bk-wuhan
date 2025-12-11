@@ -136,48 +136,49 @@ public class ResultShiJuanApplicationService {
             Integer num = i + 1;
             if (item.getResult().equals("A")) {
                 if (rModel.getType().equals("SDS量表") && sds.contains(num)) {
-                    score -= 1;
+                    score += 4;
                     continue;
                 }
                 if (rModel.getType().equals("SAS量表") && sas.contains(num)) {
-                    score -= 1;
+                    score += 4;
                     continue;
                 }
                 score += 1;
             }
             if (item.getResult().equals("B")) {
                 if (rModel.getType().equals("SDS量表") && sds.contains(num)) {
-                    score -= 2;
+                    score += 3;
                     continue;
                 }
                 if (rModel.getType().equals("SAS量表") && sas.contains(num)) {
-                    score -= 2;
+                    score += 3;
                     continue;
                 }
                 score += 2;
             }
             if (item.getResult().equals("C")) {
                 if (rModel.getType().equals("SDS量表") && sds.contains(num)) {
-                    score -= 3;
+                    score += 2;
                     continue;
                 }
                 if (rModel.getType().equals("SAS量表") && sas.contains(num)) {
-                    score -= 3;
+                    score += 2;
                     continue;
                 }
                 score += 3;
             }
             if (item.getResult().equals("D")) {
                 if (rModel.getType().equals("SDS量表") && sds.contains(num)) {
-                    score -= 4;
+                    score += 1;
                     continue;
                 }
                 if (rModel.getType().equals("SAS量表") && sas.contains(num)) {
-                    score -= 4;
+                    score += 1;
                     continue;
                 }
                 score += 4;
             }
+
             if (item.getResult().equals("E")) {
                 score += 5;
             }
