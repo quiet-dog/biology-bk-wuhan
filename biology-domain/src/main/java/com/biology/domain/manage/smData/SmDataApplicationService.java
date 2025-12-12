@@ -46,13 +46,14 @@ public class SmDataApplicationService {
         smDataModel.loadAddSmDataCommand(command);
         smDataModel.insert();
 
-        QueryWrapper<SmDeviceEntity> smDeviceQueryWrapper = new QueryWrapper<>();
-        smDeviceQueryWrapper.eq("sm_device_id", command.getSmDeviceId());
-        SmDeviceEntity smDeviceEntity = smDeviceService.getOne(smDeviceQueryWrapper);
+        // QueryWrapper<SmDeviceEntity> smDeviceQueryWrapper = new QueryWrapper<>();
+        // smDeviceQueryWrapper.eq("sm_device_id", command.getSmDeviceId());
+        // SmDeviceEntity smDeviceEntity = smDeviceService.getOne(smDeviceQueryWrapper);
 
-        QueryWrapper<SmThresholdEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("sm_device_id", command.getSmDeviceId());
-        List<SmThresholdEntity> smThresholdEntity = smThresholdService.list(queryWrapper);
+        // QueryWrapper<SmThresholdEntity> queryWrapper = new QueryWrapper<>();
+        // queryWrapper.eq("sm_device_id", command.getSmDeviceId());
+        // List<SmThresholdEntity> smThresholdEntity =
+        // smThresholdService.list(queryWrapper);
         /**
          * xData.add("心率");
          * xData.add("血氧");

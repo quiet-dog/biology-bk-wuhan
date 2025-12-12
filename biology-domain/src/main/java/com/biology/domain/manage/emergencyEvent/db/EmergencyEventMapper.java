@@ -8,7 +8,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.biology.domain.manage.emergencyEvent.dto.EmergenctHandleDTO;
 import com.biology.domain.manage.event.dto.EnvironmentStock;
 
-import io.lettuce.core.dynamic.annotation.Param;
+// import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Param;
 
 public interface EmergencyEventMapper extends BaseMapper<EmergencyEventEntity> {
 

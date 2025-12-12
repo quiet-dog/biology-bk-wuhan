@@ -7,7 +7,8 @@ import org.apache.ibatis.annotations.Select;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.biology.domain.manage.shiJuan.dto.PingGuJieGuoSeriesDTO;
 
-import io.lettuce.core.dynamic.annotation.Param;
+// import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Param;
 
 public interface XwAlarmMapper extends BaseMapper<XwAlarmEntity> {
 

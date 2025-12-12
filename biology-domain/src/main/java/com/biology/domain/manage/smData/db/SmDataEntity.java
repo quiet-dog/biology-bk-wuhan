@@ -61,8 +61,6 @@ public class SmDataEntity extends BaseEntity<SmDataEntity> {
     @TableField(value = "ti_tai")
     private String tiTai;
 
-    private Date createTime;
-
     @Override
     public Serializable pkVal() {
         return this.smDataId;

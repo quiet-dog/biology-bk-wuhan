@@ -41,7 +41,9 @@ import com.biology.domain.manage.threshold.db.ThresholdValueService;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
 import com.biology.domain.manage.xsData.command.XsDataFun1DTO;
 import com.biology.domain.manage.xunJian.dto.XunJianDTO;
+import com.biology.domain.manage.xwAlarm.dto.XingWeiCacheDTO;
 import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
+import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
 import com.biology.domain.system.post.db.SysPostEntity;
 import com.biology.domain.system.role.db.SysRoleEntity;
 import com.biology.domain.system.user.db.SysUserEntity;
@@ -117,6 +119,10 @@ public class RedisCacheService {
     public RedisCacheTemplate<KongTiaoDataDTO> kongTiaoDataCache;
 
     public RedisCacheTemplate<SmDataCacheDTO> smDataCache;
+
+    public RedisCacheTemplate<XingWeiCacheDTO> xwXingWeiCache;
+
+    // public RedisCacheTemplate<XwAlarmDTO> xwAlarmCache;
 
     // public RedisCacheTemplate<RoleInfo> roleModelInfoCache;
 
@@ -342,6 +348,9 @@ public class RedisCacheService {
 
         smDataCache = new RedisCacheTemplate<SmDataCacheDTO>(redisUtil, CacheKeyEnum.SM_DATA_KEY) {
 
+        };
+
+        xwXingWeiCache = new RedisCacheTemplate<XingWeiCacheDTO>(redisUtil, CacheKeyEnum.XW_ALARM_KEY) {
         };
         // thrsholdEmergencyCache = new
         // RedisCacheTemplate<List<EmergencyDTO>>(redisUtil,

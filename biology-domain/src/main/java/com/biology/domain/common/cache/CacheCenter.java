@@ -27,7 +27,9 @@ import com.biology.domain.manage.threshold.db.ThresholdValueEntity;
 import com.biology.domain.manage.websocket.dto.OnlineDTO;
 import com.biology.domain.manage.xsData.command.XsDataFun1DTO;
 import com.biology.domain.manage.xunJian.dto.XunJianDTO;
+import com.biology.domain.manage.xwAlarm.dto.XingWeiCacheDTO;
 import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
+import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
 import com.biology.domain.system.dept.db.SysDeptEntity;
 import com.biology.domain.system.post.db.SysPostEntity;
 import com.biology.domain.system.role.db.SysRoleEntity;
@@ -108,6 +110,8 @@ public class CacheCenter {
 
     public static RedisCacheTemplate<SmDataCacheDTO> smDataCache;
 
+    public static RedisCacheTemplate<XingWeiCacheDTO> xwXingWeiCache;
+
     @PostConstruct
     public void init() {
         GuavaCacheService guavaCache = SpringUtil.getBean(GuavaCacheService.class);
@@ -142,6 +146,7 @@ public class CacheCenter {
         xunJianDeviceCache = redisCache.xunJianDeviceCache;
         kongTiaoDataCache = redisCache.kongTiaoDataCache;
         smDataCache = redisCache.smDataCache;
+        xwXingWeiCache = redisCache.xwXingWeiCache;
         // thrsholdEmergencyCache = redisCache.thrsholdEmergencyCache;
         // thrsholdSopCache = redisCache.thrsholdSopCache;
     }

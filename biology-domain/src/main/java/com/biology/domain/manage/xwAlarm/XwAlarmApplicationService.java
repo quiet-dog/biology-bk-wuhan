@@ -1,6 +1,7 @@
 package com.biology.domain.manage.xwAlarm;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.biology.domain.manage.xwAlarm.command.AddXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.command.UpdateXwAlarmCommand;
 import com.biology.domain.manage.xwAlarm.db.XwAlarmEntity;
 import com.biology.domain.manage.xwAlarm.db.XwAlarmService;
+import com.biology.domain.manage.xwAlarm.dto.XingWeiCacheDTO;
 import com.biology.domain.manage.xwAlarm.dto.XingWeiDTO;
 import com.biology.domain.manage.xwAlarm.dto.XwAlarmDTO;
 import com.biology.domain.manage.xwAlarm.model.XwAlarmFactory;
@@ -70,6 +72,17 @@ public class XwAlarmApplicationService {
     public void getXingWeiAlarm(XingWeiDTO xingWeiDTO) {
 
         System.out.println("接收行为数据================ xingWeiDTO: " + xingWeiDTO);
+
+        XingWeiCacheDTO xingWeiCacheDTO = CacheCenter.xwXingWeiCache.getObjectById(xingWeiDTO.getSeatNumber());
+        Date now = new Date();
+        if (xingWeiCacheDTO != null && xingWeiCacheDTO.getCreateTime() != null) {
+            // 判断当前时间是否超过2分钟,如果超过2分钟,则继续往下进行,如果还在2分钟内,直接return
+            if (now.getTime() - xingWeiCacheDTO.getCreateTime().getTime() > 2 * 60 * 1000) {
+                return;
+            }
+
+        }
+        // CacheCenter.xingWeiOnlineCache
         AddXwAlarmCommand command = new AddXwAlarmCommand();
         command.setCameraId(xingWeiDTO.getCameraId());
         command.setAlarmId(xingWeiDTO.getAlarmId());
@@ -82,6 +95,10 @@ public class XwAlarmApplicationService {
         command.setSeatNumber(xingWeiDTO.getSeatNumber());
         command.setTimeStamp(xingWeiDTO.getTimeStampAsMillis());
         create(command);
+
+        XingWeiCacheDTO xDto = new XingWeiCacheDTO(xingWeiDTO);
+        xDto.setCreateTime(now);
+        CacheCenter.xwXingWeiCache.set(xingWeiDTO.getSeatNumber(), xDto);
         System.out.println("接收行为数据成功================ xingWeiDTO: " + xingWeiDTO);
     }
 

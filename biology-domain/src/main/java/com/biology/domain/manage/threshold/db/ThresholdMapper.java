@@ -6,8 +6,6 @@ import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import io.lettuce.core.dynamic.annotation.Param;
-
 public interface ThresholdMapper extends BaseMapper<ThresholdEntity> {
 
     @Select({
