@@ -88,4 +88,9 @@ public class SmAlarmController extends BaseController {
     public ResponseDTO<Map<String, Object>> getJinRiAlarmNum() {
         return ResponseDTO.ok(smAlarmApplicationService.getJinRiAlarmNum());
     }
+
+    @GetMapping("/getTodayAlarmNum")
+    public ResponseDTO<Integer> getTodayAlarmNum() {
+        return ResponseDTO.ok(smAlarmApplicationService.getTodayAlarmNum());
+    }
 }

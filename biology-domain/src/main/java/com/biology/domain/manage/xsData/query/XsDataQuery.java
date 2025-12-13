@@ -30,6 +30,8 @@ public class XsDataQuery extends AbstractPageQuery<XsDataEntity> {
                 .in(xsDataIds != null && xsDataIds.size() > 0, "xs_data_id", xsDataIds)
                 .inSql(!StrUtil.isEmpty(area), "device_sn",
                         String.format("select device_sn from manage_xs_device where area like '%s'", area));
+        setOrderColumn("create_time");
+        setOrderDirection("descending");
         return queryWrapper;
     }
 

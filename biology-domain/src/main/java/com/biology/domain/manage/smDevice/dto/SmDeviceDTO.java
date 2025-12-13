@@ -80,7 +80,7 @@ public class SmDeviceDTO {
             PersonnelEntity pEntity = new PersonnelEntity().selectById(getPersonnelId());
             setPersonnelName(pEntity.getName());
             setCode(pEntity.getCode());
-            setPost(pEntity.getPost());
+            setPost(pEntity.getDepartment());
         }
     }
 

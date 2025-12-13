@@ -126,4 +126,8 @@ public class SmAlarmApplicationService {
         result.put("num", num);
         return result;
     }
+
+    public Integer getTodayAlarmNum() {
+        return smAlarmService.getTodayAlarmNum();
+    }
 }

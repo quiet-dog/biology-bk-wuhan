@@ -62,7 +62,7 @@ public class XwAlarmModel extends XwAlarmEntity {
 
     public boolean insert() {
         super.insert();
-
+        sendLuanSheng();
         return true;
     }
 

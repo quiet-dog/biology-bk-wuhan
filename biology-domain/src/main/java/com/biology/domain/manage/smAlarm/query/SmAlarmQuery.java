@@ -19,6 +19,8 @@ public class SmAlarmQuery extends AbstractPageQuery<SmAlarmEntity> {
     public QueryWrapper<SmAlarmEntity> addQueryCondition() {
         QueryWrapper<SmAlarmEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(!StrUtil.isEmpty(deviceSn), "device_sn", deviceSn);
+        setOrderColumn("create_time");
+        setOrderDirection("descending");
         return queryWrapper;
     }
 

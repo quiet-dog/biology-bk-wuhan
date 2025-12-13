@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 public class XwAlarmQuery extends AbstractPageQuery<XwAlarmEntity> {
 
     @Schema(description = "位号")
-    private String seatNumer;
+    private String seatNumber;
 
     @Schema(description = "摄像头ID")
     private String cameraId;
@@ -26,7 +26,7 @@ public class XwAlarmQuery extends AbstractPageQuery<XwAlarmEntity> {
     @Override
     public QueryWrapper<XwAlarmEntity> addQueryCondition() {
         QueryWrapper<XwAlarmEntity> queryWrapper = new QueryWrapper<XwAlarmEntity>();
-        queryWrapper.like(!StrUtil.isEmpty(getSeatNumer()), "seat_number", getSeatNumer())
+        queryWrapper.like(!StrUtil.isEmpty(getSeatNumber()), "seat_number", getSeatNumber())
                 .like(!StrUtil.isEmpty(getCameraId()), "camera_id", getCameraId())
                 .in(getXwAlarmIds() != null && getXwAlarmIds().size() > 0, "xw_alarm_id", getXwAlarmIds());
         return queryWrapper;

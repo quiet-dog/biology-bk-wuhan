@@ -12,4 +12,6 @@ public interface SmAlarmService extends IService<SmAlarmEntity> {
     public List<PingGuJieGuoSeriesDTO> getBaoJingCiShuTongJiByRecentWeek();
 
     public Integer getJinRiAlarmNum();
+
+    public Integer getTodayAlarmNum();
 }

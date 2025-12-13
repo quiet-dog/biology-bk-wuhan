@@ -30,6 +30,9 @@ public class NongDuDataQuery extends AbstractPageQuery<NongDuDataEntity> {
                         "SELECT device_sn FROM manage_jian_ce_device WHERE area like '%" + area + "%'")
                 .in(nongDuDataIds != null && nongDuDataIds.size() > 0, "nong_du_data_id", nongDuDataIds);
         ;
+
+        setOrderColumn("create_time");
+        setOrderDirection("descending");
         return queryWrapper;
     }
 

@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class XingWeiCacheDTO extends XingWeiDTO {
 
-    private Date createTime;
+    // private Date createTime;
+
+    private Long createTime;
 
     public XingWeiCacheDTO(XingWeiDTO xingWeiDTO) {
         if (xingWeiDTO != null) {

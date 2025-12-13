@@ -18,6 +18,8 @@ public class XunJianQuery extends AbstractPageQuery<XunJianEntity> {
     public QueryWrapper<XunJianEntity> addQueryCondition() {
         QueryWrapper<XunJianEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(!StrUtil.isEmpty(getXunJianPinLu()), "xun_jian_pin_lu", getXunJianPinLu());
+        setOrderColumn("create_time");
+        setOrderDirection("descending");
         return queryWrapper;
     }
 

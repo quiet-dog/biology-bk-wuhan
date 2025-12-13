@@ -54,6 +54,8 @@ public class XwAlarmDTO {
     @Schema(description = "行为报警ID")
     private Long xwAlarmId;
 
+    @Schema(description = "内容")
+    @ExcelColumn(name = "机位对应内容")
     private String content;
 
     @ExcelColumn(name = "报警时间")
@@ -62,6 +64,8 @@ public class XwAlarmDTO {
     private Date updateTime;
 
     private Long creatorId;
+
+    private String area;
 
     public XwAlarmDTO(XwAlarmEntity entity) {
         if (entity != null) {
@@ -89,6 +93,15 @@ public class XwAlarmDTO {
             XwDeviceEntity xwDeviceEntity = new XwDeviceEntity().selectOne(queryWrapper);
             if (xwDeviceEntity != null) {
                 setContent(xwDeviceEntity.getContent());
+            }
+        }
+
+        if (getSeatNumber() != null) {
+            QueryWrapper<XwDeviceEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("seat_number", getSeatNumber());
+            XwDeviceEntity xwDeviceEntity = new XwDeviceEntity().selectOne(queryWrapper);
+            if (xwDeviceEntity != null) {
+                setArea(xwDeviceEntity.getContent());
             }
         }
 

@@ -77,7 +77,7 @@ public class XwAlarmApplicationService {
         Date now = new Date();
         if (xingWeiCacheDTO != null && xingWeiCacheDTO.getCreateTime() != null) {
             // 判断当前时间是否超过2分钟,如果超过2分钟,则继续往下进行,如果还在2分钟内,直接return
-            if (now.getTime() - xingWeiCacheDTO.getCreateTime().getTime() > 2 * 60 * 1000) {
+            if (now.getTime() - xingWeiCacheDTO.getCreateTime() < 2 * 60 * 1000) {
                 return;
             }
 
@@ -94,11 +94,12 @@ public class XwAlarmApplicationService {
         command.setPicPathOrg(xingWeiDTO.getPicPathOrg());
         command.setSeatNumber(xingWeiDTO.getSeatNumber());
         command.setTimeStamp(xingWeiDTO.getTimeStampAsMillis());
+        XingWeiCacheDTO xDto = new XingWeiCacheDTO(xingWeiDTO);
+        xDto.setCreateTime(now.getTime());
+        CacheCenter.xwXingWeiCache.set(xingWeiDTO.getSeatNumber(), xDto);
+
         create(command);
 
-        XingWeiCacheDTO xDto = new XingWeiCacheDTO(xingWeiDTO);
-        xDto.setCreateTime(now);
-        CacheCenter.xwXingWeiCache.set(xingWeiDTO.getSeatNumber(), xDto);
         System.out.println("接收行为数据成功================ xingWeiDTO: " + xingWeiDTO);
     }
 

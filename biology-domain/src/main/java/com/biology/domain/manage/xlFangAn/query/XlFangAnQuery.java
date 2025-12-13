@@ -26,6 +26,8 @@ public class XlFangAnQuery extends AbstractPageQuery<XlFangAnEntity> {
         queryWrapper
                 .like(!StrUtil.isEmpty(getName()), "name", getName())
                 .in(getXlFangAnIds() != null && getXlFangAnIds().size() > 0, "xl_fang_an_id", getXlFangAnIds());
+        setOrderColumn("create_time");
+        setOrderDirection("descending");
         return queryWrapper;
     }
 

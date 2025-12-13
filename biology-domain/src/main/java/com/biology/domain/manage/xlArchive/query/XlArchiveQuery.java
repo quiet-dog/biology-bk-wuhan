@@ -33,6 +33,8 @@ public class XlArchiveQuery extends AbstractPageQuery<XlArchiveEntity> {
                 .in(getUserIds() != null && getUserIds().size() > 0, "user_id", getUserIds())
                 .in(getXlArchiveIds() != null && getXlArchiveIds().size() > 0, "xl_archive_id", getXlArchiveIds());
 
+        setOrderColumn("create_time");
+        setOrderDirection("descending");
         return qWrapper;
     }
 

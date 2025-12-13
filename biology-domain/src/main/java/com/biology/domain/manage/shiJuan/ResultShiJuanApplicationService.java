@@ -42,7 +42,9 @@ import com.biology.domain.manage.shiJuan.query.PingGuJieGuoFenXiQuery;
 import com.biology.domain.manage.shiJuan.query.ResultShiJuanQuery;
 import com.biology.domain.manage.shiJuan.query.ShiJuanQuery;
 import com.biology.domain.manage.xlArchive.db.XlArchiveEntity;
+import com.biology.domain.manage.xlArchive.db.XlArchiveService;
 import com.biology.domain.manage.xlArchive.model.XlArchiveFactory;
+import com.biology.domain.manage.xlArchive.model.XlArchiveModel;
 import com.biology.domain.manage.xlFangAn.db.XlFangAnEntity;
 import com.biology.infrastructure.user.AuthenticationUtils;
 import com.biology.infrastructure.user.web.SystemLoginUser;
@@ -60,6 +62,8 @@ public class ResultShiJuanApplicationService {
     private final ShiJuanService rShiJuanService;
 
     private final XlArchiveFactory xlArchiveFactory;
+
+    private final XlArchiveService xlArchiveService;
 
     public void create(AddResultShiJuanCommand command) {
         ResultShiJuanModel resultShiJuanModel = resultShiJuanFactory.create();
@@ -239,12 +243,12 @@ public class ResultShiJuanApplicationService {
         rModel.setLastTime(timestamp);
 
         rModel.updateById();
-        if (!rModel.getCePing().equals("正常范围") && rModel.getCePing().equals("无明显焦虑症状")
+        if (!rModel.getCePing().equals("正常范围") && !rModel.getCePing().equals("无明显焦虑症状")
                 && !rModel.getCePing().equals("无明显抑郁症状")) {
             UpdateWrapper<XlArchiveEntity> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq("user_id", rModel.getUserId()) // WHERE 条件
                     .set("status", "重点关注"); // 设置更新字段
-            new XlArchiveEntity().update(updateWrapper);
+            xlArchiveService.update(updateWrapper);
         }
 
         // else {

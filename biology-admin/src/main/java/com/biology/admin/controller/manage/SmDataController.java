@@ -92,4 +92,5 @@ public class SmDataController extends BaseController {
         Object result = smDataApplicationService.getSmDataOnlineHistory(query);
         return ResponseDTO.ok(result);
     }
+
 }
