@@ -79,6 +79,13 @@ public class NongDuDataDTO {
             if (nongDuDeviceEntity != null) {
                 setArea(nongDuDeviceEntity.getArea());
             }
+        } else {
+            QueryWrapper<NongDuDeviceEntity> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("device_sn", "deviceSn");
+            NongDuDeviceEntity nongDuDeviceEntity = new NongDuDeviceEntity().selectOne(queryWrapper);
+            if (nongDuDeviceEntity != null) {
+                setArea(nongDuDeviceEntity.getArea());
+            }
         }
     }
 }
