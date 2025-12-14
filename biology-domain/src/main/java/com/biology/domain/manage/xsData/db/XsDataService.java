@@ -7,5 +7,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface XsDataService extends IService<XsDataEntity> {
 
-    public List<Map<String, Object>> selectIsOnlineHistory(Long xsDeviceId, String startTime, String endTime);
+    public List<Map<String, Object>> selectIsOnlineHistory(String xsDeviceId, String startTime, String endTime);
 }

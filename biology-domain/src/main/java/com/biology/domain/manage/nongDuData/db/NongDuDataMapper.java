@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Param;
 public interface NongDuDataMapper extends BaseMapper<NongDuDataEntity> {
 
         @Select("SELECT DATE_FORMAT(m.minute, '%Y-%m-%d %H:%i') AS minute," +
-                        "CASE WHEN COUNT(d.xs_device_id) > 0 THEN 1 ELSE 0 END AS is_online " +
+                        "CASE WHEN COUNT(d.working_status) > 0 THEN 1 ELSE 0 END AS is_online " +
                         "FROM ( " +
                         "  SELECT TIMESTAMP(#{startTime}) + INTERVAL (a.a + b.a*10 + c.a*100 + d.a*1000) MINUTE AS minute "
                         +

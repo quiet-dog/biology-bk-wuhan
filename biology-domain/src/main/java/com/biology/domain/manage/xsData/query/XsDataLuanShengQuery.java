@@ -12,5 +12,5 @@ public class XsDataLuanShengQuery {
     private String endTime;
 
     @Schema(description = "设备ID")
-    private Long xsDeviceId;
+    private String xsDeviceId;
 }

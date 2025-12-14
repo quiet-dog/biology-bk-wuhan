@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 public class XsDataServiceImpl extends ServiceImpl<XsDataMapper, XsDataEntity> implements XsDataService {
 
     @Override
-    public List<Map<String, Object>> selectIsOnlineHistory(Long xsDeviceId, String startTime, String endTime) {
+    public List<Map<String, Object>> selectIsOnlineHistory(String xsDeviceId, String startTime, String endTime) {
         return baseMapper.selectIsOnlineHistory(xsDeviceId, startTime, endTime);
     }
 }
