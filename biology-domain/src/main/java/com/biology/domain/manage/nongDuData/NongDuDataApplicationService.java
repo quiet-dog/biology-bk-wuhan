@@ -111,6 +111,10 @@ public class NongDuDataApplicationService {
         if (query.getDeviceSn() == null) {
             return nongDuDataService.selectIsOnlineHistoryIsNull(query.getStartTime(), query.getEndTime());
         } else {
+
+            if (query.getDeviceSn() != null && query.getDeviceSn().equals("deviceSn")) {
+                return nongDuDataService.selectIsOnlineHistoryIsNull(query.getStartTime(), query.getEndTime());
+            }
             return nongDuDataService.selectIsOnlineHistory(query.getDeviceSn(), query.getStartTime(),
                     query.getEndTime());
         }
