@@ -86,6 +86,7 @@ public class NongDuDataDTO {
             if (nongDuDeviceEntity != null) {
                 setArea(nongDuDeviceEntity.getArea());
             }
+            setDeviceSn("deviceSn");
         }
     }
 }
