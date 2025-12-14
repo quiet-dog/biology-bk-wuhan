@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.biology.common.annotation.ExcelColumn;
 import com.biology.common.annotation.ExcelSheet;
+import com.biology.domain.manage.jianCeDevice.db.JianCeDeviceEntity;
 import com.biology.domain.manage.nongDuData.db.NongDuDataEntity;
 import com.biology.domain.manage.nongDuDevice.db.NongDuDeviceEntity;
 
@@ -73,16 +74,16 @@ public class NongDuDataDTO {
         }
 
         if (getDeviceSn() != null) {
-            QueryWrapper<NongDuDeviceEntity> queryWrapper = new QueryWrapper<>();
+            QueryWrapper<JianCeDeviceEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("device_sn", getDeviceSn());
-            NongDuDeviceEntity nongDuDeviceEntity = new NongDuDeviceEntity().selectOne(queryWrapper);
+            JianCeDeviceEntity nongDuDeviceEntity = new JianCeDeviceEntity().selectOne(queryWrapper);
             if (nongDuDeviceEntity != null) {
                 setArea(nongDuDeviceEntity.getArea());
             }
         } else {
-            QueryWrapper<NongDuDeviceEntity> queryWrapper = new QueryWrapper<>();
+            QueryWrapper<JianCeDeviceEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("device_sn", "deviceSn");
-            NongDuDeviceEntity nongDuDeviceEntity = new NongDuDeviceEntity().selectOne(queryWrapper);
+            JianCeDeviceEntity nongDuDeviceEntity = new JianCeDeviceEntity().selectOne(queryWrapper);
             if (nongDuDeviceEntity != null) {
                 setArea(nongDuDeviceEntity.getArea());
             }
