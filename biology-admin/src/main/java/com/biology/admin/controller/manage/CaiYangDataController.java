@@ -93,8 +93,9 @@ public class CaiYangDataController extends BaseController {
     }
 
     @PostMapping("/getCaiYangDataOnlineHistory")
-    public Object getCaiYangDataOnlineHistory(CayYangLuanSheng query) {
-        return caiYangDataApplicationService.getCaiYangDataOnlineHistory(query);
+    public ResponseDTO<Object> getCaiYangDataOnlineHistory(CayYangLuanSheng query) {
+        Object result = caiYangDataApplicationService.getCaiYangDataOnlineHistory(query);
+        return ResponseDTO.ok(result);
     }
 
 }
