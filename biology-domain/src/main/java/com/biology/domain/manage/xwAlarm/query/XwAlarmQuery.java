@@ -29,6 +29,9 @@ public class XwAlarmQuery extends AbstractPageQuery<XwAlarmEntity> {
         queryWrapper.like(!StrUtil.isEmpty(getSeatNumber()), "seat_number", getSeatNumber())
                 .like(!StrUtil.isEmpty(getCameraId()), "camera_id", getCameraId())
                 .in(getXwAlarmIds() != null && getXwAlarmIds().size() > 0, "xw_alarm_id", getXwAlarmIds());
+
+        setOrderColumn("create_time");
+        setOrderDirection("descending");
         return queryWrapper;
     }
 
