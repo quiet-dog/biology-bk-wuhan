@@ -25,7 +25,7 @@ public interface NongDuDataMapper extends BaseMapper<NongDuDataEntity> {
                         "        UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) c, " +
                         "       (SELECT 0 a UNION SELECT 1) d " +
                         ") m " +
-                        "LEFT JOIN manage_xs_data d ON d.device_sn = #{deviceSn} " +
+                        "LEFT JOIN manage_nong_du_data d ON d.device_sn = #{deviceSn} " +
                         " AND d.create_time >= m.minute " +
                         " AND d.create_time < m.minute + INTERVAL 1 MINUTE " +
                         "WHERE m.minute BETWEEN #{startTime} AND #{endTime} " +
