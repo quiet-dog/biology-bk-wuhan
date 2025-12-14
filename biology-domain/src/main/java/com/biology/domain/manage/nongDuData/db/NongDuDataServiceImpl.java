@@ -17,6 +17,11 @@ public class NongDuDataServiceImpl extends ServiceImpl<NongDuDataMapper, NongDuD
         }
 
         @Override
+        public List<Map<String, Object>> selectIsOnlineHistoryIsNull(String startTime, String endTime) {
+                return baseMapper.selectIsOnlineHistoryIsNull(startTime, endTime);
+        }
+
+        @Override
         public Integer getAlarmCount(String startTime, String endTime, String deviceSn) {
                 return baseMapper.getAlarmCount(startTime, endTime, deviceSn);
         }

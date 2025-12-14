@@ -108,7 +108,12 @@ public class NongDuDataApplicationService {
     }
 
     public Object getNongDuDataOnlineHistory(NongDuDataLuanShengQuery query) {
-        return nongDuDataService.selectIsOnlineHistory(query.getDeviceSn(), query.getStartTime(), query.getEndTime());
+        if (query.getDeviceSn() == null) {
+            return nongDuDataService.selectIsOnlineHistoryIsNull(query.getStartTime(), query.getEndTime());
+        } else {
+            return nongDuDataService.selectIsOnlineHistory(query.getDeviceSn(), query.getStartTime(),
+                    query.getEndTime());
+        }
     }
 
     public Object getNongDuDataAlarmCount(String startTime, String endTime, List<String> deviceSn) {
