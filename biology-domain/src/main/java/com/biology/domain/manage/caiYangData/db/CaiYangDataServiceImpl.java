@@ -1,5 +1,8 @@
 package com.biology.domain.manage.caiYangData.db;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,7 +13,7 @@ public class CaiYangDataServiceImpl extends ServiceImpl<CaiYangDataMapper, CaiYa
                 implements CaiYangDataService {
 
         @Override
-        public Object getCaiYangDataOnlineHistory(CayYangLuanSheng query) {
+        public List<Map<String, Object>> getCaiYangDataOnlineHistory(CayYangLuanSheng query) {
                 return baseMapper.selectIsOnlineHistory(query.getDeviceSn(), query.getStartTime(),
                                 query.getEndTime());
         }
