@@ -37,6 +37,11 @@ public interface SmAlarmMapper extends BaseMapper<SmAlarmEntity> {
         })
         Integer getJinRiAlarmNum();
 
+        @Select({
+                        "SELECT COUNT(*) from manage_xw_alarm where DATE(create_time) = CURDATE() and flag = 1"
+        })
+        Integer getJinRiXwAlarmNum();
+
         // 统计今日报警的数量
         @Select({
                         "SELECT COUNT(sm_alarm_id) from manage_sm_alarm where DATE(create_time) = CURDATE()"

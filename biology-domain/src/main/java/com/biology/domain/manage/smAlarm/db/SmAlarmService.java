@@ -13,5 +13,7 @@ public interface SmAlarmService extends IService<SmAlarmEntity> {
 
     public Integer getJinRiAlarmNum();
 
+    public Integer getJinRiXwAlarmNum();
+
     public Integer getTodayAlarmNum();
 }

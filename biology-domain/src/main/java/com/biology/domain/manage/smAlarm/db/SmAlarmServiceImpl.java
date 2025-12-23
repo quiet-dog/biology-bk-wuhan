@@ -23,6 +23,10 @@ public class SmAlarmServiceImpl extends ServiceImpl<SmAlarmMapper, SmAlarmEntity
         return baseMapper.getJinRiAlarmNum();
     }
 
+    public Integer getJinRiXwAlarmNum() {
+        return baseMapper.getJinRiXwAlarmNum();
+    }
+
     public Integer getTodayAlarmNum() {
         return baseMapper.getTodayAlarmNum();
     }

@@ -123,7 +123,15 @@ public class SmAlarmApplicationService {
     public Map<String, Object> getJinRiAlarmNum() {
         Map<String, Object> result = new HashMap<>();
         Integer num = smAlarmService.getJinRiAlarmNum();
-        result.put("num", num);
+        Integer xwNum = smAlarmService.getJinRiXwAlarmNum();
+        Integer total = 0;
+        if (num != null) {
+            total += num;
+        }
+        if (xwNum != null) {
+            total += xwNum;
+        }
+        result.put("num", total);
         return result;
     }
 
