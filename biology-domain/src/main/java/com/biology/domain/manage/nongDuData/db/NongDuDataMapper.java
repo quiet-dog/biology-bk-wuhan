@@ -60,4 +60,10 @@ public interface NongDuDataMapper extends BaseMapper<NongDuDataEntity> {
         @Select("SELECT COUNT(nong_du_data_id) FROM manage_nong_du_data WHERE create_time BETWEEN #{startTime} AND #{endTime} AND alarm = 1 AND device_sn = #{deviceSn}")
         public Integer getAlarmCount(@Param("startTime") String startTime, @Param("endTime") String endTime,
                         @Param("deviceSn") String deviceSn);
+
+        // 今日报警数量
+        @Select({
+                        "SELECT COUNT(nong_du_data_id) FROM manage_nong_du_data WHERE DATE(create_time) = CURDATE() AND alarm = 1"
+        })
+        public Integer getJinRiBaoJing();
 }

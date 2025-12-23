@@ -1,6 +1,7 @@
 package com.biology.admin.controller.manage;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -100,6 +101,11 @@ public class NongDuDataController extends BaseController {
         Object result = nongDuDataApplicationService.getNongDuDataAlarmCount(query.getStartTime(), query.getEndTime(),
                 query.getDeviceSnList());
         return ResponseDTO.ok(result);
+    }
+
+    @GetMapping("/getJinRiBaoJing")
+    public ResponseDTO<Map<String, Object>> getJinRiBaoJing() {
+        return ResponseDTO.ok(nongDuDataApplicationService.getJinRiBaoJing());
     }
 
 }

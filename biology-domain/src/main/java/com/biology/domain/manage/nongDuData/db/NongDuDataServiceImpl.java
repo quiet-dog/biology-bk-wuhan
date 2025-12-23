@@ -25,4 +25,9 @@ public class NongDuDataServiceImpl extends ServiceImpl<NongDuDataMapper, NongDuD
         public Integer getAlarmCount(String startTime, String endTime, String deviceSn) {
                 return baseMapper.getAlarmCount(startTime, endTime, deviceSn);
         }
+
+        @Override
+        public Integer getJinRiBaoJing() {
+                return baseMapper.getJinRiBaoJing();
+        }
 }

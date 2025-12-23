@@ -128,4 +128,11 @@ public class NongDuDataApplicationService {
         }
         return result;
     }
+
+    public Map<String, Object> getJinRiBaoJing() {
+        Map<String, Object> result = new HashMap<>();
+        Integer num = nongDuDataService.getJinRiBaoJing();
+        result.put("num", num);
+        return result;
+    }
 }

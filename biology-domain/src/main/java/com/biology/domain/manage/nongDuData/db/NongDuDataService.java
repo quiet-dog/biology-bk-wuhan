@@ -12,4 +12,6 @@ public interface NongDuDataService extends IService<NongDuDataEntity> {
     public List<Map<String, Object>> selectIsOnlineHistoryIsNull(String startTime, String endTime);
 
     public Integer getAlarmCount(String startTime, String endTime, String deviceSn);
+
+    public Integer getJinRiBaoJing();
 }
