@@ -495,8 +495,13 @@ public class TaskApplicationService {
 
     }
 
-    @Scheduled(cron = "*/1 * * * * ?")
+    @Scheduled(cron = "1 0 0 * * ?")
     public void taskPerSecond() {
+        equipmentDataService.createNowTable();
+    }
+
+    @Scheduled(cron = "0 */30 * * * ?")
+    public void taskEvery30Minutes() {
         equipmentDataService.createNowTable();
     }
 
