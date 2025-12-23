@@ -518,7 +518,8 @@ public class TaskApplicationService {
         // // === 处理“水” ===
         QueryWrapper<DianShuiEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("type", "水")
-                .apply("DATE(create_time) = CURDATE()");
+                .apply("DATE(create_time) = CURDATE()")
+                .last("LIMIT 1");
 
         DianShuiEntity waterEntity = dianShuiService.getBaseMapper().selectOne(queryWrapper);
 
@@ -532,14 +533,14 @@ public class TaskApplicationService {
             System.out.println("插入水数据");
         } else {
             waterEntity.setWaterValue(shui);
-            dianShuiService.updateById(waterEntity);
-            System.out.println("更新水数据");
+            waterEntity.updateById();
         }
 
         // === 处理“电” ===
         QueryWrapper<DianShuiEntity> queryWrapper2 = new QueryWrapper<>();
         queryWrapper2.eq("type", "电")
-                .apply("DATE(create_time) = CURDATE()");
+                .apply("DATE(create_time) = CURDATE()")
+                .last("LIMIT 1");
 
         DianShuiEntity electricEntity = dianShuiService.getBaseMapper().selectOne(queryWrapper2);
 
@@ -555,7 +556,7 @@ public class TaskApplicationService {
             System.out.println("插入电数据");
         } else {
             electricEntity.setElectricityValue(dian);
-            dianShuiService.updateById(electricEntity);
+            electricEntity.updateById();
             System.out.println("更新电数据");
         }
     }

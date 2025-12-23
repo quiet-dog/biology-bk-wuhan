@@ -46,6 +46,7 @@ import com.biology.domain.manage.environment.dto.EnvironmentDTO;
 import com.biology.domain.manage.environment.dto.EnvironmentStatisticsDTO;
 import com.biology.domain.manage.event.db.EventEntity;
 import com.biology.domain.manage.event.dto.EventDTO;
+import com.biology.infrastructure.config.MyBatisConfig;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
