@@ -71,8 +71,7 @@ public class EmergencyEventServiceImpl extends ServiceImpl<EmergencyEventMapper,
                 result.put("xdata", xdata);
                 result.put("handle", handle);
                 result.put("unHandle", unHandle);
-                // result.put("source", list);
-                // result.put("query", query);
+
                 return result;
         }
 }
