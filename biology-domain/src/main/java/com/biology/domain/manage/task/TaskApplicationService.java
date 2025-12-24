@@ -69,7 +69,6 @@ import com.biology.domain.manage.xunJian.db.XunJianService;
 import com.biology.domain.manage.xunJian.model.XunJianFactory;
 import com.biology.domain.manage.xunJianHistory.db.XunJianHistoryEntity;
 
-import cn.hutool.core.bean.BeanUtil;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -561,7 +560,6 @@ public class TaskApplicationService {
         }
     }
 
-    // @Scheduled(cron = "0 0/10 * * * ?")
     @Scheduled(cron = "*/10 * * * * ?")
     public void tongJiEquipmentRunTime() {
         List<Long> equipmentIds = equipmentService.getAllIds();

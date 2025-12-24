@@ -29,7 +29,7 @@ public interface DoorMapper extends BaseMapper<DoorEntity> {
         // + " AND door_date < UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY)"
         // + " AND enter_status = #{enterStatus} Group by par")
         @Select("SELECT COUNT(*) as count FROM (SELECT 1 FROM manage_door WHERE door_date >= UNIX_TIMESTAMP(CURDATE()) * 1000"
-                        + " AND door_date < UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY) * 1000"
+                        + " AND DATE(create_time) = CURDATE()"
                         + " AND enter_status = #{enterStatus} Group by name, department) AS t")
         public Integer getChuQinLvDay(String enterStatus);
 }
