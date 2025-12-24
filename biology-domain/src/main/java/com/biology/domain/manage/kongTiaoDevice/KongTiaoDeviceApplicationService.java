@@ -68,7 +68,7 @@ public class KongTiaoDeviceApplicationService {
     public KongTiaoDataDTO getKongTiaoDataFirst(String deviceSn) {
         // 查询最后一条的数据
         QueryWrapper<KongTiaoDataEntity> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("device_sn", deviceSn).last("LIMIT 1");
+        queryWrapper.eq("device_sn", deviceSn).last("LIMIT 1").orderByDesc("create_time");
         KongTiaoDataEntity one = kongTiaoDataService.getBaseMapper().selectOne(queryWrapper);
         return new KongTiaoDataDTO(one);
     }
